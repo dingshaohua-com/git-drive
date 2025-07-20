@@ -63,7 +63,7 @@
 							<h3 class="text-2xl font-bold text-gray-900">链接GIT仓库</h3>
 						</div>
 						<p class="text-gray-600 text-lg leading-relaxed">
-							充分利用各大仓库平台免费空间，存储您的文件，支持链接不限制多个仓库
+							充分利用<strong>各大仓库平台</strong>的免费空间来存储您的文件，支持链接多个仓库。
 						</p>
 					</div>
 					<div class="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
@@ -74,7 +74,7 @@
 							<h3 class="text-2xl font-bold text-gray-900">管理仓库资源</h3>
 						</div>
 						<p class="text-gray-600 text-lg leading-relaxed">
-							对仓库资源进行管理，可直接对其增删文件，对比使用GIT工具提交，更加便捷
+							对仓库资源直接进行增删等管理，您不必在使用GIT工具提交，更加方便易用！
 						</p>
 					</div>
 					<div class="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
@@ -85,7 +85,7 @@
 							<h3 class="text-2xl font-bold text-gray-900">文件直连</h3>
 						</div>
 						<p class="text-gray-600 text-lg leading-relaxed">
-							直接显示文件直连地址，便于您在各个场景使用，如图床、配置文件等等
+							直接显示文件直连地址，便于您在各个场景使用：如图床、配置文件等等！
 						</p>
 					</div>
 				</div>
