@@ -7,6 +7,7 @@ export interface User {
   nickname: string;
   email: string;
   avatar?: string;
+  isLoading: boolean;
 }
 
 // Store状态类型
@@ -21,7 +22,8 @@ function createUserStore() {
         id: '',
         nickname: '',
         email: '',
-        avatar: ''
+        avatar: '',
+        isLoading: false
       };
     }
 
@@ -29,7 +31,8 @@ function createUserStore() {
       id: '',
       nickname: '',
       email: '',
-      avatar: ''
+      avatar: '',
+      isLoading: false
     };
   };
 
@@ -55,13 +58,13 @@ function createUserStore() {
 
     // 同步用户信息
     sync: async () => {
-      // update(state => ({ ...state, isLoading: true }));
+      update(state => ({ ...state, isLoading: true }));
 
       try {
         const res = await api.user.me();
         update(state => {
           if (browser) localStorage.setItem('user', JSON.stringify(res));
-          return { ...state, ...res };
+          return { ...state, ...res, isLoading: false };
         });
         return res.data;
       } catch (error) {

@@ -18,13 +18,16 @@
 
   // 获取当前登录用户信息
   const currentUser = $derived(
-    $auth.isAuthenticated
+    $auth.isAuthenticated && $user.nickname
       ? $user
       : {
-          name: '未登录',
+          nickname: '未登录',
           avatar: null,
         },
   );
+
+  // 检查是否正在加载用户数据
+  const isLoading = $derived($auth.isLoading || !$auth.isAuthenticated || !$user.nickname);
 
   // 导航到指定页面
   const navigateTo = (href: string) => {
@@ -97,9 +100,9 @@
       <!-- 桌面端用户操作 -->
       <div class="hidden md:flex items-center">
         <div class="relative user-dropdown">
-          <button onclick={toggleUserDropdown} class="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+          <button onclick={toggleUserDropdown} class="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors duration-200 min-w-[120px]">
             <!-- 用户头像 -->
-            <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+            <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
               {#if currentUser.avatar}
                 <img src={currentUser.avatar} alt="用户头像" class="w-8 h-8 rounded-full" />
               {:else}
@@ -107,9 +110,15 @@
               {/if}
             </div>
             <!-- 用户名 -->
-            <span class="text-gray-700 font-medium">{currentUser.nickname}</span>
+            <span class="text-gray-700 font-medium min-w-[60px] text-left">
+              {#if isLoading}
+                <div class="w-12 h-4 bg-gray-200 rounded animate-pulse"></div>
+              {:else}
+                {currentUser.nickname}
+              {/if}
+            </span>
             <!-- 下拉箭头 -->
-            <i class="ri-arrow-down-s-line text-gray-500 transition-transform duration-200 {userDropdownOpen ? 'rotate-180' : ''}"></i>
+            <i class="ri-arrow-down-s-line text-gray-500 transition-transform duration-200 {userDropdownOpen ? 'rotate-180' : ''} flex-shrink-0"></i>
           </button>
 
           <!-- 用户下拉菜单 -->
@@ -160,16 +169,28 @@
         <!-- 移动端用户信息 -->
         <div class="mt-4 pt-4 border-t border-gray-100">
           <div class="flex items-center space-x-3 px-4 py-3 mb-3">
-            <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+            <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
               {#if currentUser.avatar}
                 <img src={currentUser.avatar} alt="用户头像" class="w-10 h-10 rounded-full" />
               {:else}
                 <i class="ri-user-line text-white text-lg"></i>
               {/if}
             </div>
-            <div>
-              <div class="font-medium text-gray-900">{currentUser.nickname}</div>
-              <div class="text-sm text-gray-500">已登录</div>
+            <div class="flex-1 min-w-0">
+              <div class="font-medium text-gray-900">
+                {#if isLoading}
+                  <div class="w-16 h-4 bg-gray-200 rounded animate-pulse"></div>
+                {:else}
+                  {currentUser.nickname}
+                {/if}
+              </div>
+              <div class="text-sm text-gray-500">
+                {#if isLoading}
+                  <div class="w-12 h-3 bg-gray-200 rounded animate-pulse mt-1"></div>
+                {:else}
+                  已登录
+                {/if}
+              </div>
             </div>
           </div>
           <div class="space-y-1">

@@ -3,7 +3,7 @@
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import { browser } from '$app/environment';
-  import { auth } from '@/lib/stores/auth';
+  import { auth, user } from '@/lib/stores';
 
   // 不需要登录的页面路径
   const publicPaths = ['/', '/login'];
@@ -44,7 +44,7 @@
   });
 </script>
 
-{#if $auth.isLoading}
+{#if $auth.isLoading || $user.isLoading}
   <!-- 加载状态 -->
   <div class="min-h-screen flex items-center justify-center bg-gray-50">
     <div class="text-center">
