@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { auth } from '$lib/stores/auth';
 
 	// 导航菜单项
 	const menuItems = [
@@ -12,18 +13,28 @@
 	// 用户操作菜单项
 	const userMenuItems = [
 		{ name: '个人中心', href: '/profile', icon: 'ri-user-line' },
-		{ name: '退出登录', href: '/', icon: 'ri-logout-box-line' }
+		{ name: '退出登录', href: '/logout', icon: 'ri-logout-box-line' }
 	];
 
-	// 模拟当前登录用户信息（实际项目中应该从store或props获取）
-	const currentUser = {
-		name: '张三',
-		avatar: null // 可以设置为用户头像URL
+	// 获取当前登录用户信息
+	$: currentUser = $auth.user || {
+		name: '未登录',
+		avatar: null
 	};
 
 	// 导航到指定页面
 	const navigateTo = (href: string) => {
 		goto(href);
+	};
+
+	// 处理用户操作
+	const handleUserAction = (href: string) => {
+		if (href === '/logout') {
+			auth.logout();
+			goto('/');
+		} else {
+			navigateTo(href);
+		}
 	};
 
 	// 检查当前页面是否激活
@@ -108,7 +119,7 @@
 							{#each userMenuItems as item}
 								<button
 									onclick={() => {
-										navigateTo(item.href);
+										handleUserAction(item.href);
 										closeUserDropdown();
 									}}
 									class="w-full flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors duration-200"
@@ -169,7 +180,7 @@
 						{#each userMenuItems as item}
 							<button
 								onclick={() => {
-									navigateTo(item.href);
+									handleUserAction(item.href);
 									mobileMenuOpen = false;
 								}}
 								class="w-full flex items-center space-x-3 px-4 py-3 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg font-medium transition-colors duration-200"

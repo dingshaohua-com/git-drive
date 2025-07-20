@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import type { QuickLoginType, LoginFieldType } from '$lib/types/auth';
+	import { auth } from '$lib/stores/auth';
 
 	let quickLoginType = $state<QuickLoginType | null>('email');
 	let isCodeSent = $state(false);
@@ -14,21 +15,27 @@
 	const onLogin = async (event: Event) => {
 		event.preventDefault();
 		try {
-			let token: string;
+			// 模拟登录成功
+			let userName = '用户';
 			if (quickLoginType === 'password') {
-				// const res = await api.root.login(formData);
-				// token = res.token;
+				userName = formData.account || '用户';
 				console.log('Password login:', formData);
 			} else {
 				const loginData =
 					quickLoginType === 'email'
 						? { email: formData.email, code: formData.code }
 						: { phone: formData.phone, code: formData.code };
-				// const res = await api.root.login(loginData);
-				// token = res.token;
+				userName = formData.email || formData.phone || '用户';
 				console.log('Code login:', loginData);
 			}
-			// dispatch(setToken(token));
+			
+			// 调用认证store的登录方法
+			auth.login({
+				id: Date.now().toString(),
+				name: userName,
+				email: formData.email
+			});
+			
 			goto('/shelf');
 		} catch (error) {
 			alert('登录失败，请检查账号密码或验证码');

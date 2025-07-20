@@ -1,5 +1,8 @@
-<script>
+<script lang="ts">
   import '../app.css';
+  import AuthGuard from '$lib/components/AuthGuard.svelte';
 </script>
 
-<slot />
+<AuthGuard>
+  <slot />
+</AuthGuard>

@@ -1,0 +1,59 @@
+<script lang="ts">
+	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
+	import { auth } from '$lib/stores/auth';
+
+	// 不需要登录的页面路径
+	const publicPaths = ['/', '/login'];
+
+	// 检查当前路径是否需要登录
+	const isPublicPath = (path: string) => {
+		return publicPaths.includes(path);
+	};
+
+	// 检查是否需要重定向
+	const checkAuth = () => {
+		const currentPath = $page.url.pathname;
+		
+		// 如果当前路径不需要登录，直接显示
+		if (isPublicPath(currentPath)) {
+			return;
+		}
+
+		// 如果未登录且当前路径需要登录，直接重定向到登录页
+		if (!$auth.isAuthenticated) {
+			goto('/login');
+			return;
+		}
+	};
+
+	// 监听认证状态和路径变化
+	$: if ($auth.isAuthenticated !== undefined) {
+		checkAuth();
+	}
+
+	// 监听路径变化
+	$: if ($page.url.pathname) {
+		checkAuth();
+	}
+
+	onMount(() => {
+		console.log(111222333);
+		
+		checkAuth();
+	});
+</script>
+
+{#if $auth.isLoading}
+	<!-- 加载状态 -->
+	<div class="min-h-screen flex items-center justify-center bg-gray-50">
+		<div class="text-center">
+			<div class="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+			<p class="text-gray-600">加载中...</p>
+		</div>
+	</div>
+{:else}
+	<!-- 正常显示页面内容 -->
+	<slot />
+{/if} 
