@@ -36,7 +36,7 @@
 				email: formData.email
 			});
 			
-			goto('/shelf');
+			goto('/shelf', { replaceState: true });
 		} catch (error) {
 			alert('登录失败，请检查账号密码或验证码');
 		}

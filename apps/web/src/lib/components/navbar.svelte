@@ -31,7 +31,8 @@
 	const handleUserAction = (href: string) => {
 		if (href === '/logout') {
 			auth.logout();
-			goto('/');
+			// 替换当前页面，而不是添加新条目。
+			goto('/', { replaceState: true });
 		} else {
 			navigateTo(href);
 		}

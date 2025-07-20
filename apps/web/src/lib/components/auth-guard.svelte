@@ -23,7 +23,7 @@
 
 		// 如果未登录且当前路径需要登录，直接重定向到登录页
 		if (!$auth.isAuthenticated) {
-			goto('/login');
+			goto('/login', { replaceState: true });
 			return;
 		}
 	};
