@@ -12,7 +12,7 @@
 	// 用户操作菜单项
 	const userMenuItems = [
 		{ name: '个人中心', href: '/profile', icon: 'ri-user-line' },
-		{ name: '退出登录', href: '/logout', icon: 'ri-logout-box-line' }
+		{ name: '退出登录', href: '/', icon: 'ri-logout-box-line' }
 	];
 
 	// 模拟当前登录用户信息（实际项目中应该从store或props获取）

@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 
 	const goToRepository = () => {
-		goto('/shelf');
+		goto('/home');
 	};
 </script>
 
