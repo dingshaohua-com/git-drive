@@ -5,15 +5,15 @@
   "main": "index.js",
   "scripts": {
     "start: web": "turbo dev --filter=web",
-    "start: server": "turbo dev --filter=server"
+    "start: server": "turbo dev --filter=server",
+    "prisma: gen": "turbo run prisma --filter=server"
   },
-  "keywords": [
-    
-  ],
+  "keywords": [],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.12.1",
   "devDependencies": {
+    "chalk": "^5.4.1",
     "turbo": "^2.5.5"
   },
   "pnpm": {

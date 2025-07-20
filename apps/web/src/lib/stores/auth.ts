@@ -1,17 +1,11 @@
 import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
+import '$lib/api';
 
-// 用户信息类型
-export interface User {
-	id: string;
-	name: string;
-	email?: string;
-	avatar?: string;
-}
 
 // 认证状态类型
 export interface AuthState {
-	user: User | null;
+	token: string | null;
 	isAuthenticated: boolean;
 	isLoading: boolean;
 }
@@ -21,14 +15,13 @@ function createAuthStore() {
 	// 从localStorage获取初始状态
 	const getInitialState = (): AuthState => {
 		if (browser) {
-			const stored = localStorage.getItem('auth');
-			if (stored) {
+			const token = localStorage.getItem('token');
+			if (token) {
 				try {
-					const parsed = JSON.parse(stored);
 					return {
-						user: parsed.user,
-						isAuthenticated: !!parsed.user,
-						isLoading: false
+						token,
+						isAuthenticated: !!token,
+						isLoading: false,
 					};
 				} catch (e) {
 					console.error('Failed to parse auth from localStorage:', e);
@@ -36,9 +29,9 @@ function createAuthStore() {
 			}
 		}
 		return {
-			user: null,
+			token: null,
 			isAuthenticated: false,
-			isLoading: false
+			isLoading: false,
 		};
 	};
 
@@ -46,52 +39,59 @@ function createAuthStore() {
 
 	return {
 		subscribe,
-		
+
 		// 登录
-		login: (user: User) => {
-			const authState: AuthState = {
-				user,
-				isAuthenticated: true,
-				isLoading: false
-			};
-			
-			if (browser) {
-				localStorage.setItem('auth', JSON.stringify({ user }));
+		login: async (params: any) => {
+			update(state => ({ ...state, isLoading: true }));
+
+			try {
+				const res = await api.root.login(params);
+				console.log('res:', res.token);
+
+				// 只更新token，保持其他状态不变
+				update(state => {
+					const authState = {
+						...state,
+						token: res.token,
+						isAuthenticated: !!res.token, // 如果有token就认为已认证
+						isLoading: false,
+					};
+
+					if (browser) {
+						localStorage.setItem('token', res.token);
+					}
+
+					return authState;
+				});
+				return res.token;
+			} catch (error) {
+				update(state => ({ ...state, isLoading: false }));
+				throw error;
 			}
-			
-			set(authState);
 		},
-		
+
 		// 登出
 		logout: () => {
 			if (browser) {
-				localStorage.removeItem('auth');
+				localStorage.clear();
 			}
-			
+
 			set({
-				user: null,
+				token: null,
 				isAuthenticated: false,
-				isLoading: false
+				isLoading: false,
 			});
 		},
-		
-		// 更新用户信息
-		updateUser: (userData: Partial<User>) => {
-			update(state => {
-				if (state.user) {
-					const updatedUser = { ...state.user, ...userData };
-					const authState = { ...state, user: updatedUser };
-					
-					if (browser) {
-						localStorage.setItem('auth', JSON.stringify({ user: updatedUser }));
-					}
-					
-					return authState;
-				}
-				return state;
-			});
+
+		// 获取当前token
+		getToken: () => {
+			let currentToken: string | null = null;
+			subscribe(state => {
+				currentToken = state.token;
+			})();
+			return currentToken;
 		},
-		
+
 		// 设置加载状态
 		setLoading: (isLoading: boolean) => {
 			update(state => ({ ...state, isLoading }));

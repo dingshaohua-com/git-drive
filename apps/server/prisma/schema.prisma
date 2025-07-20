@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model book {
+  id          Int       @id @default(autoincrement())
+  name        String?   @db.VarChar(255)
+  sort        Int?
+  des         String?   @db.VarChar(255)
+  cover       String?   @db.VarChar(255)
+  create_time DateTime? @default(now()) @db.Timestamp(0)
+  shelf_id    Int
+  visibility  String?   @db.VarChar(255)
+  shelf       shelf     @relation(fields: [shelf_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "book_ibfk_1")
+  doc         doc[]
+
+  @@index([shelf_id], map: "type_id")
+}
+
+model doc {
+  id          Int       @id @default(autoincrement())
+  name        String?   @db.VarChar(255)
+  des         String?   @db.LongText
+  book_id     Int
+  sort        Int?
+  create_time DateTime? @db.Timestamp(0)
+  pid         Int?
+  visibility  String?   @default("public") @db.VarChar(255)
+  book        book      @relation(fields: [book_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "doc_ibfk_1")
+
+  @@index([book_id], map: "book_id")
+}
+
+model shelf {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(255)
+  sort        Int?
+  des         String?  @db.VarChar(255)
+  create_time DateTime @default(now()) @db.Timestamp(0)
+  user_id     Int
+  book        book[]
+  user        user     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "shelf_ibfk_1")
+
+  @@index([id], map: "id")
+  @@index([user_id], map: "user_id")
+}
+
+model user {
+  id       Int     @id @default(autoincrement())
+  email    String? @db.VarChar(255)
+  password String? @db.VarChar(255)
+  qq       Int?
+  role     String? @db.VarChar(255)
+  username String? @db.VarChar(255)
+  des      String? @db.VarChar(255)
+  nickname String? @db.VarChar(255)
+  avatar   String? @db.VarChar(255)
+  shelf    shelf[]
+}

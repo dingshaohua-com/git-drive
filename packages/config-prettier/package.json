@@ -1,0 +1,13 @@
+{
+  "name": "@repo/config-prettier",
+  "version": "0.0.1",
+  "description": "Prettier configuration for the monorepo",
+  "main": "base.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.9.0",
+  "peerDependencies": {
+    "prettier-plugin-sort-imports": "^1.8.7"
+  }
+}
