@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import context from '../utils/reques-context';
+import context from '../middleware/req-ctx/helper';
 
 const prisma = new PrismaClient();
 export const queryOne = async (params) => {

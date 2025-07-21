@@ -39,6 +39,7 @@ interface Api {
 	},
 	gitToken: {
 		list: (params?: any) => Promise<any>;
+		add: (params: { token: string }) => Promise<any>;
 	}
 }
 declare global {

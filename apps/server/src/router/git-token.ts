@@ -1,5 +1,5 @@
 import Router from '@koa/router';
-import { queryList } from '../service/git-token';
+import { queryList,create } from '../service/git-token';
 import JsonResult from '../utils/json-result';
 // import _ from 'lodash';
 
@@ -14,6 +14,11 @@ router.get('/list', async (ctx) => {
   const query = ctx.query as any;
   const res =  await queryList(query);
   ctx.body = res ? JsonResult.success(res) : JsonResult.failed('未找到数据');
+});
+
+router.post('/', async (ctx) => {
+  const results = await create({ data: ctx.request.body });
+  ctx.body = JsonResult.success(results);
 });
 
 // router.get('/', async (ctx) => {

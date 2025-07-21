@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { redis } from './redis';
-import context from '../utils/reques-context';
+import context from './req-ctx/helper';
 
 const redisJwt = async (ctx, next) => {
   // 跳过不需要验证的路径
@@ -12,8 +12,6 @@ const redisJwt = async (ctx, next) => {
     try {
       // 校验jwt token签名
       const info = jwt.verify(token, process.env.JWT_SECRET);
-
-      
 
       // 检查Redis中是否存在该token
       const tokenData = await redis.get(`token:${token}`);

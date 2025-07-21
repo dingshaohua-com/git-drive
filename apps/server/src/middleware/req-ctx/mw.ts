@@ -1,9 +1,9 @@
-import context from '../utils/reques-context.ts';
+import helper from './helper.ts';
 
 export default function requestContextMiddleware() {
   return async (ctx, next) => {
     await new Promise((resolve, reject) => {
-      context.run(() => {
+      helper.run(() => {
         next().then(resolve).catch(reject);
       });
     });
