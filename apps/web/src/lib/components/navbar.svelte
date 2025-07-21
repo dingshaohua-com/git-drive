@@ -5,8 +5,8 @@
 
   // 导航菜单项
   const menuItems = [
-    { name: '首页', href: '/', icon: 'ri-home-line' },
-    { name: '所有仓库', href: '/all-rep', icon: 'ri-git-repository-line' },
+    { name: '首页', href: '/home', icon: 'ri-heart-line' },
+    { name: '所有', href: '/all', icon: 'ri-github-line' },
     // { name: '设置', href: '/about', icon: 'ri-settings-3-line' },
   ];
 
@@ -47,7 +47,7 @@
 
   // 检查当前页面是否激活
   const isActive = (href: string) => {
-    return page.url.pathname === href;
+    return page.url.pathname === href || page.url.pathname.startsWith(href + '/');
   };
 
   // 切换移动端菜单
@@ -90,7 +90,13 @@
       <!-- 桌面端导航菜单 -->
       <nav class="hidden md:flex items-center space-x-8">
         {#each menuItems as item}
-          <button onclick={() => navigateTo(item.href)} class="flex items-center space-x-2 text-gray-600 hover:text-gray-900 font-medium transition-colors duration-200 {isActive(item.href) ? 'text-blue-600' : ''}">
+          <button
+            onclick={() => navigateTo(item.href)}
+            class="cursor-pointer flex items-center space-x-2 font-medium transition-colors duration-200 px-3 py-2 rounded-lg
+              {isActive(item.href)
+                ? 'text-blue-600 bg-blue-50 font-bold shadow'
+                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}"
+          >
             <i class="{item.icon} text-lg"></i>
             <span>{item.name}</span>
           </button>
