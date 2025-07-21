@@ -19,6 +19,8 @@ spawnSync('pnpm dlx', ['prisma', 'db', 'pull'], {
   shell: true,      // 允许使用 shell 语法（如 &&、> 等）
 });
 
+// pnpm dlx prisma db pull
+
 
 // 生成客户端代码（用户表操作，通常被放置在node_modules/.prisma/client目录下）
 // spawnSync('npx', ['prisma', 'generate'], {
@@ -31,5 +33,6 @@ spawnSync('pnpm dlx', ['prisma', 'generate'], {
   stdio: 'inherit', // 继承父进程的输入输出（显示日志）
   shell: true,      // 允许使用 shell 语法（如 &&、> 等）
 });
+// pnpm dlx prisma generate
 
 

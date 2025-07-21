@@ -36,6 +36,9 @@ interface Api {
 	// 其他模块...
 	user: {
 		me: () => Promise<User>;
+	},
+	gitToken: {
+		list: (params?: any) => Promise<any>;
 	}
 }
 declare global {

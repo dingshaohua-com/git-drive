@@ -6,8 +6,8 @@
   // 导航菜单项
   const menuItems = [
     { name: '首页', href: '/', icon: 'ri-home-line' },
-    { name: '仓库', href: '/shelf', icon: 'ri-git-repository-line' },
-    { name: '设置', href: '/about', icon: 'ri-settings-3-line' },
+    { name: '所有仓库', href: '/all-rep', icon: 'ri-git-repository-line' },
+    // { name: '设置', href: '/about', icon: 'ri-settings-3-line' },
   ];
 
   // 用户操作菜单项
