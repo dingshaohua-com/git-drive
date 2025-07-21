@@ -3,7 +3,7 @@
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import { browser } from '$app/environment';
-  import { auth, user } from '@/lib/stores';
+  import { auth, user } from '$lib/stores';
 
   // 不需要登录的页面路径
   const publicPaths = ['/', '/login'];

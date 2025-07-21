@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import type { QuickLoginType, LoginFieldType } from '@/lib/types/auth';
-  import { auth, user } from '@/lib/stores';
+  import type { QuickLoginType, LoginFieldType } from '$lib/types/auth';
+  import { auth, user } from '$lib/stores';
 
   let quickLoginType = $state<QuickLoginType | null>('email');
   let isCodeSent = $state(false);

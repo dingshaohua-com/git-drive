@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
-  import { auth, user } from '@/lib/stores';
+  import { auth, user } from '$lib/stores';
 
   // 导航菜单项
   const menuItems = [
