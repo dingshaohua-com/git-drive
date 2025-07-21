@@ -1,5 +1,6 @@
 <script lang="ts">
 import Navigation from '../../lib/components/navbar.svelte';
+import AuthGuard from '../../lib/components/auth-guard.svelte';
   import { onMount } from 'svelte';
 
 let currentPath = $state('');
@@ -7,18 +8,11 @@ let files = $state<any[]>([]);
 let loadingFiles = $state(false);
 let deleting = $state('');
 let viewMode = $state<'list' | 'grid'>('list');
-let gitTokens = $state<any[]>([]);
-let showTokenTip = $state<boolean>(false);
-let gitTokenLoading = $state(true);
 
 
 onMount(() => {
-  gitTokenLoading = true;
   api.gitToken.list().then((res) => {
-    gitTokens = res || [];
-    showTokenTip = !gitTokens || gitTokens.length === 0;
-  }).finally(() => {
-    gitTokenLoading = false;
+    console.log(res);
   });
 });
 
@@ -109,29 +103,7 @@ function getFileIcon(item: any) {
 }
 </script>
 
-{#if gitTokenLoading}
-  <div class="min-h-screen bg-gray-50 flex flex-col items-center justify-center">
-    <Navigation />
-    <div class="flex-1 flex flex-col items-center justify-center w-full">
-      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-400 mb-6"></div>
-      <div class="text-pink-500 font-semibold text-lg">正在加载 Token 信息...</div>
-    </div>
-  </div>
-{:else if showTokenTip}
-  <div class="min-h-screen bg-gray-50">
-    <Navigation />
-    <div class="flex flex-col items-center justify-center min-h-[60vh] px-4 sm:px-0">
-      <div class="bg-pink-100 border-2 border-pink-300 rounded-2xl shadow-lg p-8 max-w-md w-full flex flex-col items-center">
-        <div class="text-5xl mb-4">🐱‍👓</div>
-        <div class="text-lg font-semibold text-pink-700 mb-2">喵呜~ 你还没有添加 Git Token</div>
-        <div class="text-pink-600 mb-6 text-center">为了正常使用文件管理等功能，请先添加一个 Git Token 吧！</div>
-        <a href="/git-token" class="inline-block px-6 py-2 bg-pink-400 hover:bg-pink-500 text-white font-bold rounded-full shadow transition-colors duration-200">
-          去添加 Token
-        </a>
-      </div>
-    </div>
-  </div>
-{:else}
+<AuthGuard>
   <div class="min-h-screen bg-gray-50">
     <Navigation />
     <div class="py-8">
@@ -233,10 +205,10 @@ function getFileIcon(item: any) {
                           {/if}
                           <button
                             onclick={() => handleDeleteFile(item)}
-                            disabled={deleting === item.path}
+                            disabled={$deleting === item.path}
                             class="px-2 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200 disabled:bg-gray-100 disabled:text-gray-400 transition-colors whitespace-nowrap"
                           >
-                            {deleting === item.path ? '删除中' : '删除'}
+                            {$deleting === item.path ? '删除中' : '删除'}
                           </button>
                         </div>
                       </div>
@@ -276,10 +248,10 @@ function getFileIcon(item: any) {
                           {/if}
                           <button
                             onclick={() => handleDeleteFile(item)}
-                            disabled={deleting === item.path}
+                            disabled={$deleting === item.path}
                             class="px-1.5 py-0.5 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200 disabled:bg-gray-100 disabled:text-gray-400 transition-colors"
                           >
-                            {deleting === item.path ? '删除中' : '删除'}
+                            {$deleting === item.path ? '删除中' : '删除'}
                           </button>
                         </div>
                       </div>
@@ -293,4 +265,4 @@ function getFileIcon(item: any) {
       </div>
     </div>
   </div>
-{/if}
+</AuthGuard>
