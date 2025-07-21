@@ -22,6 +22,4 @@ model user {
 model git_token {
   token String? @db.VarChar(255)
   uid   Int     @id
-
-  @@map("git-token")
 }
