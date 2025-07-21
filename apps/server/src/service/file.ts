@@ -8,6 +8,50 @@ const OWNER = "dingshaohua-com";
 const REPO = "img-host";
 const BRANCH = "main";
 
+
+// 配置 Axios 实例用于 GitHub API
+const getGithubApi = (GIT_TOKEN)=>{
+  return axios.create({
+    baseURL: 'https://api.github.com',
+    headers: {
+      'Authorization': `token ${GIT_TOKEN}`,
+      'User-Agent': 'Koa-GitHub-API-Client'
+    }
+  });
+}
+
+
+// 获取用户信息
+export async function getGithubUserInfo(token) {
+  const githubApi = getGithubApi(token);
+  const res = await githubApi.get('/user');
+  console.log(token, res,1111);
+  
+  return res.data;
+
+  
+  // const res = await fetch('https://api.github.com/user', {
+  //   headers: {
+  //     Authorization: `Bearer ${token}`,
+  //     'User-Agent': 'git-drive-app'
+  //   }
+  // });
+  // if (!res.ok) throw new Error('Failed to fetch user info');
+  // return res.json();
+}
+
+// 获取用户仓库列表
+export async function getGithubRepos(token) {
+  const res = await fetch('https://api.github.com/user/repos?per_page=100', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'User-Agent': 'git-drive-app'
+    }
+  });
+  if (!res.ok) throw new Error('Failed to fetch repos');
+  return res.json();
+}
+
 export const getRepDir = async () => {
   try {
     const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents`;

@@ -17,18 +17,29 @@
   let addError = $state('');
 
 
+  const getUserInfo = async (tokens: any[]) => {
+    for (const item of tokens) {
+      console.log(item.token,1111);
+      await api.file.getUserInfo({
+        token: item.token,
+      });
+      
+    }
+    // const res = await api.gitToken.list();
+    // gitTokens = res || [];
+    // showTokenTip = !gitTokens || gitTokens.length === 0; 
+  };
+
   const syncGitToken = async () => {
     gitTokenLoading = true;
-    api.gitToken
-      .list()
-      .then((res) => {
-        gitTokens = res || [];
-        showTokenTip = !gitTokens || gitTokens.length === 0;
-      })
-      .finally(() => {
-        gitTokenLoading = false;
-      });
-  }
+    const res = await api.gitToken.list();
+    gitTokens = res || [];
+    showTokenTip = !gitTokens || gitTokens.length === 0;
+    gitTokenLoading = false;
+    if (gitTokens.length > 0) {
+      getUserInfo(gitTokens);
+    }
+  };
 
   onMount(() => {
     syncGitToken();
@@ -160,7 +171,7 @@
         <div class="text-5xl mb-4">🐱‍👓</div>
         <div class="text-lg font-semibold text-pink-700 mb-2">喵呜~ 你还没有添加 Git Token</div>
         <div class="text-pink-600 mb-6 text-center">为了正常使用文件管理等功能，请先添加一个 Git Token 吧！</div>
-        <span onclick={() => (defaultModal = true)} class="inline-block px-6 py-2 bg-pink-400 hover:bg-pink-500 text-white font-bold rounded-full shadow transition-colors duration-200"> 去添加 Token </span>
+        <span onclick={() => (defaultModal = true)} class="inline-block px-6 py-2 bg-pink-400 hover:bg-pink-500 text-white font-bold rounded-full shadow transition-colors duration-200 cursor-pointer"> 去添加 Token </span>
       </div>
     </div>
   </div>

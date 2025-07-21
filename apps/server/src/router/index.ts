@@ -1,5 +1,5 @@
 import userRouter from "./user.ts";
-// import fileRouter from "./file.ts";
+import fileRouter from "./file.ts";
 import rootRouter from "./root.ts";
 import gitTokenRouter from "./git-token.ts";
 import combineRouters from "koa-combine-routers";
@@ -10,7 +10,7 @@ const router = combineRouters(
   rootRouter,
   userRouter,
   gitTokenRouter,
-  // fileRouter,
+  fileRouter,
 );
 
 export default router;

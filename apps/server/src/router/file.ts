@@ -1,11 +1,20 @@
 import Router from "@koa/router";
 import JsonResult from "../utils/json-result";
-import { upload, getRepDir, getDirectoryFiles, deleteFile, getDirectoryTree } from "../service/file";
+import { upload, getRepDir, getDirectoryFiles, deleteFile, getDirectoryTree, getGithubUserInfo } from "../service/file";
 
 const router = new Router({ prefix: "/api/file" });
+
 router.get("/", async (ctx, next) => {
   ctx.body = "Hello this is file uploader";
 });
+
+// 获取用户信息
+router.get("/user-info", async (ctx) => {
+  const { token } = ctx.query;
+  const res = await getGithubUserInfo(token);
+  ctx.body = JsonResult.success(res);
+});
+
 
 // 获取仓库目录
 router.get("/dir", async (ctx) => {
