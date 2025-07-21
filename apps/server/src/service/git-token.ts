@@ -11,11 +11,8 @@ export const queryList = async (params) => {
 };
 
 export const create = async (params) => {
-   const user = context.get('user');
-
-   console.log(user);
-   
-   params.user_id = user.id;
+   const userId = context.get('userId');
+   params.data.uid = userId;
   const results = await prisma.git_token.create(params);
   return results;
 };

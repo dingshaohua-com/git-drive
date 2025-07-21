@@ -16,7 +16,8 @@
   let addLoading = $state(false);
   let addError = $state('');
 
-  onMount(() => {
+
+  const syncGitToken = async () => {
     gitTokenLoading = true;
     api.gitToken
       .list()
@@ -27,6 +28,10 @@
       .finally(() => {
         gitTokenLoading = false;
       });
+  }
+
+  onMount(() => {
+    syncGitToken();
   });
 
   let defaultModal = $state(false);
@@ -118,8 +123,6 @@
   }
 
   async function handleAddToken(event?: Event) {
-    console.log(123);
-
     if (event) event.preventDefault();
     addError = '';
     if (!tokenValue.trim()) {
@@ -127,39 +130,12 @@
       return;
     }
     addLoading = true;
-
-   
-
     try {
       await api.gitToken.add({
         token: tokenValue,
       });
-
-      // // 假设后端接口为 /git-token，POST { name, token }
-      // const res = await fetch('/api/git-token', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ name: tokenName, token: tokenValue }),
-      // });
-      // const result = await res.json();
-      // if (result.code === 0) {
-      //   // 添加成功，刷新 token 列表
-      //   defaultModal = false;
-      //   tokenName = '';
-      //   tokenValue = '';
-      //   gitTokenLoading = true;
-      //   api.gitToken
-      //     .list()
-      //     .then((res) => {
-      //       gitTokens = res || [];
-      //       showTokenTip = !gitTokens || gitTokens.length === 0;
-      //     })
-      //     .finally(() => {
-      //       gitTokenLoading = false;
-      //     });
-      // } else {
-      //   addError = result.msg || '添加失败';
-      // }
+      defaultModal = false;
+      syncGitToken();
     } catch (e) {
       addError = '网络错误或服务器异常';
     } finally {

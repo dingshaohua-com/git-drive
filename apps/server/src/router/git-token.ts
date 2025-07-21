@@ -3,7 +3,7 @@ import { queryList,create } from '../service/git-token';
 import JsonResult from '../utils/json-result';
 // import _ from 'lodash';
 
-const router = new Router({ prefix: '/git-token' });
+const router = new Router({ prefix: '/api/git-token' });
 
 // router.get('/', (ctx) => {
 //   ctx.body = 'i am user';
@@ -17,6 +17,8 @@ router.get('/list', async (ctx) => {
 });
 
 router.post('/', async (ctx) => {
+  console.log('ctx.state.userId',ctx.state.userId);
+  
   const results = await create({ data: ctx.request.body });
   ctx.body = JsonResult.success(results);
 });

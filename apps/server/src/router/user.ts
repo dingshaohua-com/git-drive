@@ -3,7 +3,7 @@ import { queryOne, update } from '../service/user';
 import JsonResult from '../utils/json-result';
 // import _ from 'lodash';
 
-const router = new Router({ prefix: '/user' });
+const router = new Router({ prefix: '/api/user' });
 
 // router.get('/', (ctx) => {
 //   ctx.body = 'i am user';

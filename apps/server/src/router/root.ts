@@ -2,7 +2,7 @@ import Router from '@koa/router';
 import JsonResult from '../utils/json-result.ts';
 import { login, sendCode } from '../service/root';
 
-const router = new Router({ prefix: '' });
+const router = new Router({ prefix: '/api' });
 
 console.log('root router');
 

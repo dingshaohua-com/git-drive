@@ -6,26 +6,19 @@ import { bodyParser } from '@koa/bodyparser';
 import reqCtxMw from './middleware/req-ctx/mw.ts';
 import feRouterBack from './middleware/fe-router-back';
 import path from 'path';
+import redisJwt from './middleware/redis-jwt.ts';
 
 const app = new Koa();
+
 app.use(bodyParser());
-// app.use(staticServer('./www'));
-app.use(staticServer(path.join(__dirname, 'www')));
-
+app.use(staticServer(path.join(__dirname, 'www'))); // app.use(staticServer('./www'));
 app.use(feRouterBack());
-
-// 创建上下文容器中间件
-app.use(reqCtxMw());
-
-// 3. 自定义中间件：解析 token 并挂载 payload 到 ctx 和 context上
-// app.use(userMount);
-
-// 4. 路由
-app.use(router());
+app.use(reqCtxMw()); // 创建上下文容器中间件
+app.use(redisJwt);
+app.use(router()); // 路由
 
 app.listen(3000, '0.0.0.0', () => {
   console.log(`
     ${chalk.green('➜')}  ${chalk.bold('后端服务已启动:')}   ${chalk.blue('http://localhost:3000')}
     `);
-  // console.log("后端服务已启动：http://localhost:3000");
 });

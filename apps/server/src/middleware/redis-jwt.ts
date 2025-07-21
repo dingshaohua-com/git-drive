@@ -23,6 +23,7 @@ const redisJwt = async (ctx, next) => {
 
       ctx.state.userId = info.id;
       context.set('userId', ctx.state.userId);
+      
     } catch (err) {
       ctx.status = 401;
       ctx.body = { msg: 'Token无效' };
