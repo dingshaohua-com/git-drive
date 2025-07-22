@@ -56,6 +56,8 @@ function createUserStore() {
     //   update(state => ({ ...state, isLoading }));
     // },
 
+    update: (user: User) => update(state => ({ ...state, ...user })),
+
     // 同步用户信息
     sync: async () => {
       update(state => ({ ...state, isLoading: true }));

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
+  import {user} from "$lib/stores"
 
   // 状态管理
   let loading = $state(false);
@@ -8,24 +8,6 @@
   let formData = $state({
     username: '',
   });
-
-  // 模拟API调用
-  const api = {
-    user: {
-      put: async (data: any): Promise<{ id: string; username: string; email: string }> => {
-        // 模拟API调用
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve({
-              id: '1',
-              username: data.username,
-              email: 'user@example.com',
-            });
-          }, 1000);
-        });
-      },
-    },
-  };
 
   // 处理设置用户名
   const handleSetAccount = async (event: Event) => {
@@ -56,10 +38,10 @@
       });
 
       // 这里可以添加store更新逻辑
-      // dispatch(setLoginUser(updatedUser));
+      user.update(updatedUser);
 
-      alert('用户名设置成功！');
-      goto('/' + updatedUser.username);
+      // alert('用户名设置成功！');
+      goto('/');
     } catch (error) {
       alert('设置失败，请重试');
     } finally {
