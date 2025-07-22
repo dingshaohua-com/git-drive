@@ -30,6 +30,12 @@
       goto('/login', { replaceState: true });
       return;
     }
+
+    // 如果已登录但未设置用户名，跳转到set-uname
+    if ($auth.isAuthenticated && (!$user.nickname || $user.nickname === '') && currentPath !== '/set-uname') {
+      goto('/set-uname', { replaceState: true });
+      return;
+    }
   };
 
   // 监听认证状态和路径变化

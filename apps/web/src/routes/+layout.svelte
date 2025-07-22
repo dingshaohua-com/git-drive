@@ -3,6 +3,7 @@
   import AuthGuard from '$lib/components/auth-guard.svelte';
   import '$lib/api';
   import { onMount } from 'svelte';
+  import GlobalToast from '$lib/components/global-toast.svelte';
 
   // 页面加载状态
   let isPageReady = $state(false);
@@ -26,6 +27,7 @@
     </AuthGuard>
   </div>
 {/if}
+<GlobalToast />
 
 <style>
   @keyframes fade-in {

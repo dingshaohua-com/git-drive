@@ -23,3 +23,9 @@ model git_token {
   token String? @db.VarChar(255)
   uid   Int     @id
 }
+
+model repo {
+  id    Int     @id
+  uid   Int
+  rname String? @db.VarChar(255)
+}

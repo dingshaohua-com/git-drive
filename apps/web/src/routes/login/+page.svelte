@@ -2,6 +2,7 @@
   import { goto } from '$app/navigation';
   import type { QuickLoginType, LoginFieldType } from '$lib/types/auth';
   import { auth, user } from '$lib/stores';
+  import { error } from '$lib/toast';
 
   let quickLoginType = $state<QuickLoginType | null>('email');
   let isCodeSent = $state(false);
@@ -24,13 +25,13 @@
 
     if (quickLoginType === 'email') {
       if (!formData.email) {
-        alert('请输入邮箱地址');
+        error('请输入邮箱地址');
         return;
       }
       loginData = { email: formData.email };
     } else if (quickLoginType === 'sms') {
       if (!formData.phone) {
-        alert('请输入手机号');
+        error('请输入手机号');
         return;
       }
       loginData = { phone: formData.phone };
@@ -52,7 +53,7 @@
         }
       }, 1000);
     } catch (error) {
-      alert('验证码发送失败');
+      error('验证码发送失败');
     }
   };
 
