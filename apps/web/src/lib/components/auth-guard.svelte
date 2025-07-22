@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import { browser } from '$app/environment';
@@ -44,10 +43,6 @@
       checkAuth();
     }
   });
-
-  onMount(() => {
-    checkAuth();
-  });
 </script>
 
 {#if $auth.isLoading || $user.isLoading}
@@ -58,7 +53,12 @@
       <p class="text-gray-600">加载中...</p>
     </div>
   </div>
-{:else}
-  <!-- 正常显示页面内容 -->
+  <!-- 不需要权限的正常显示页面内容 -->
+{:else if isPublicPath(page.url.pathname)}
   <slot />
+  <!-- 需要权限的页面内容展示时机：需要等待鉴权完成 && 存在用户名字段或者正在设置用户名页面 -->
+{:else if $auth.isAuthenticated && ($user.nickname || page.url.pathname === '/set-uname')}
+  <slot />
+<!-- {:else}
+  <div>鉴权中...</div> -->
 {/if}
