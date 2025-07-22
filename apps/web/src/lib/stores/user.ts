@@ -1,4 +1,4 @@
-import { writable, derived } from 'svelte/store';
+import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
 
 // 用户信息类型
@@ -18,7 +18,7 @@ function createUserStore() {
     if (browser) {
       const userStorage = localStorage.getItem('user');
 
-      return userStorage ? JSON.parse(userStorage) : {
+      return userStorage ? {...JSON.parse(userStorage), isLoading: false} : {
         id: '',
         nickname: '',
         email: '',

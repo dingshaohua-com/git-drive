@@ -15,8 +15,14 @@
   const onLogin = async (event: Event) => {
     event.preventDefault();
     await auth.login(formData);
-    await user.sync();
+    const userInfo = await user.sync();
     goto('/home', { replaceState: true });
+    // 判断用户信息
+    // if (!userInfo.nickname || userInfo.nickname === '') {
+    //   goto('/set-uname', { replaceState: true });
+    // } else {
+    //   goto('/home', { replaceState: true });
+    // }
   };
 
   // 发送验证码
