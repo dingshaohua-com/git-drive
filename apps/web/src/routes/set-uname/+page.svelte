@@ -104,7 +104,7 @@
 
       <!-- 个人主页预览 -->
       <div class=" bg-blue-50 border border-blue-200 rounded-md px-4 py-3 mb-6 text-blue-300 text-sm">
-        <div class="text-opacity-1">用户名将用于您个人仓库前缀，比如 <code class="bg-blue-100 px-1 rounded ">name—xxx</code></div>
+        <div class="text-opacity-1">用户名同时也将用于您个人仓库前缀，比如 <code class="bg-blue-100 px-1 rounded ">name—xxx</code></div>
       </div>
 
       <button type="submit" disabled={loading} class="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white font-medium py-3 px-4 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
