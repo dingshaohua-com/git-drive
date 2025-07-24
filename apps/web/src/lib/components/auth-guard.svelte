@@ -25,23 +25,28 @@
 
     // 如果当前路径不需要登录，直接显示
     if (checkPublicPath(page.url.pathname)) {
+      console.log(111);
+      
       return;
     }
 
     // 如果未登录且当前路径需要登录，直接重定向到登录页
     if (!$auth.isAuthenticated) {
+      console.log(222);
       goto('/login', { replaceState: true });
       return;
     }
 
     // 如果已登录但未设置用户名，跳转到set-uname
     if (!$me.username && page.url.pathname !== '/set-uname') {
+      console.log(333);
       goto('/set-uname', { replaceState: true });
       return;
     }
 
     // 如果在 /set-uname 页面，且已经有 username，跳转到 /home
     if (page.url.pathname === '/set-uname' && $me.username) {
+      console.log(444);
       goto('/home', { replaceState: true });
       return;
     }
@@ -80,10 +85,12 @@
   <!-- 不需要权限的正常显示页面内容 -->
 {:else if checkPublicPath(page.url.pathname)}
   <!-- <slot /> -->
+  <div class="text-center text-amber-300 h-100 w-100 fixed top-0 left-0 z-100">1111</div>
   {@render children()}
   <!-- 需要权限的页面内容展示时机：需要等待鉴权完成 && 存在用户名字段或者正在设置用户名页面（如果不判断路由则会导致先到其它路由再回set-uname） -->
 {:else if $auth.isAuthenticated && ($me.username || page.url.pathname === '/set-uname')}
   <!-- <slot /> -->
+  <div class="text-center text-amber-300 h-100 w-100 fixed top-0 left-0 z-100">2222</div>
   {@render children()}
   <!-- {:else}
   <div>鉴权中...</div> -->

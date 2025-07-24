@@ -1,8 +1,9 @@
 // init.ts
 import axios from 'axios';
 import { auth } from '../stores';
+import { error } from '$lib/toast';
 
-const isDev = import.meta.env.MODE==='development';
+// const isDev = import.meta.env.MODE==='development';
 
 const getFileNameFromUrl = (url: string): string | null => {
   const match = url.match(/([^/]+)\.([^/]+)?$/); // 使用正则表达式匹配文件名（不包括扩展名）
