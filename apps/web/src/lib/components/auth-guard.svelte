@@ -82,16 +82,11 @@
       <p class="text-gray-600">加载中...</p>
     </div>
   </div>
-  <!-- 不需要权限的正常显示页面内容 -->
-{:else if checkPublicPath(page.url.pathname)}
-  <!-- <slot /> -->
-  <div class="text-center text-amber-300 h-100 w-100 fixed top-0 left-0 z-100">1111</div>
-  {@render children()}
-  <!-- 需要权限的页面内容展示时机：需要等待鉴权完成 && 存在用户名字段或者正在设置用户名页面（如果不判断路由则会导致先到其它路由再回set-uname） -->
-{:else if $auth.isAuthenticated && ($me.username || page.url.pathname === '/set-uname')}
-  <!-- <slot /> -->
-  <div class="text-center text-amber-300 h-100 w-100 fixed top-0 left-0 z-100">2222</div>
-  {@render children()}
-  <!-- {:else}
-  <div>鉴权中...</div> -->
+{:else}
+  <!-- 只要不是 loading，才进入后续鉴权和页面渲染 -->
+  {#if checkPublicPath(page.url.pathname)}
+    {@render children()}
+  {:else if $auth.isAuthenticated && ($me.username || page.url.pathname === '/set-uname')}
+    {@render children()}
+  {/if}
 {/if}
