@@ -4,45 +4,30 @@
   import '$lib/api';
   import { onMount } from 'svelte';
   import GlobalToast from '$lib/components/global-toast.svelte';
+  import { page } from '$app/state';
 
-  // 页面加载状态
-  let isPageReady = $state(false);
 
   let { children } = $props();
 
-  onMount(() => {
-    // 页面加载完成后延迟1秒显示内容
-    setTimeout(() => {
-      isPageReady = true;
-    }, 300);
-  });
+  // 检查当传入路径是否需要登录（默认检查当前路径）
+  const checkPublicPath = (path: string) => {
+    // 当前路径（不要写默认的，必须用地方传，否则会失去响应式）
+    // const currentPath = page.url.pathname;
+    // 不需要登录的页面路径
+    const publicPaths = ['/', '/login'];
+    return publicPaths.includes(path);
+  };
 </script>
 
-{#if !isPageReady}
-  <!-- 简单的加载遮罩 -->
-  <div class="fixed inset-0 bg-white z-50"></div>
-{:else}
-  <!-- 页面内容缓慢出现动画 -->
-  <div class="animate-fade-in">
+<!-- 页面内容缓慢出现动画 -->
+<div class="animate-fade-in">
+  <!-- 公开页不包裹 AuthGuard -->
+  {#if checkPublicPath(page.url.pathname)}
+    {@render children()}
+  {:else}
     <AuthGuard>
-      <!-- <slot /> -->
       {@render children()}
     </AuthGuard>
-  </div>
-{/if}
+  {/if}
+</div>
 <GlobalToast />
-
-<style>
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
-  .animate-fade-in {
-    animation: fade-in 0.5s ease-out;
-  }
-</style>

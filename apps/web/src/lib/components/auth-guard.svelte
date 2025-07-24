@@ -7,28 +7,12 @@
 
   let { children } = $props();
 
-  // 检查当传入路径是否需要登录（默认检查当前路径）
-  const checkPublicPath = (path: string) => {
-    // 当前路径（不要写默认的，必须用地方传，否则会失去响应式）
-    // const currentPath = page.url.pathname;
-    // 不需要登录的页面路径
-    const publicPaths = ['/', '/login'];
-    return publicPaths.includes(path);
-  };
-
   // 检查是否需要重定向
   const checkAuth = () => {
     console.log('执行了');
 
     // 只在客户端执行重定向逻辑
     if (!browser) return;
-
-    // 如果当前路径不需要登录，直接显示
-    if (checkPublicPath(page.url.pathname)) {
-      console.log(111);
-      
-      return;
-    }
 
     // 如果未登录且当前路径需要登录，直接重定向到登录页
     if (!$auth.isAuthenticated) {
@@ -54,7 +38,7 @@
 
   let mounted = false;
   onMount(async () => {
-    if ($auth.isAuthenticated && !checkPublicPath(page.url.pathname)) {
+    if ($auth.isAuthenticated) {
       await me.sync();
     }
     // 后续这里不执行，交给effect监听路由变化去做
@@ -68,7 +52,7 @@
   // 监听认证状态和路径变化
   $effect(() => {
     // 只在需要登录的页面才执行 checkAuth
-    if (!checkPublicPath(page.url.pathname) && mounted) {
+    if (mounted) {
       checkAuth();
     }
   });
@@ -84,9 +68,7 @@
   </div>
 {:else}
   <!-- 只要不是 loading，才进入后续鉴权和页面渲染 -->
-  {#if checkPublicPath(page.url.pathname)}
-    {@render children()}
-  {:else if $auth.isAuthenticated && ($me.username || page.url.pathname === '/set-uname')}
+  {#if $auth.isAuthenticated && ($me.username || page.url.pathname === '/set-uname')}
     {@render children()}
   {/if}
 {/if}

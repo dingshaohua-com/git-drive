@@ -35,12 +35,9 @@
       const updatedUser = await api.me.put({
         ...formData,
       });
-
       // 这里可以添加store更新逻辑
       me.update(updatedUser);
-
-      // alert('用户名设置成功！');
-      goto('/', { replaceState: true });
+      goto('/home', { replaceState: true });
     } catch (error) {
       alert('设置失败，请重试');
     } finally {
