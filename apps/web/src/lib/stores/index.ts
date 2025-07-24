@@ -1,3 +1,3 @@
 // 导出所有store
 export * from './auth';
-export * from './user';
+export * from './me';

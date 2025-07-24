@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import type { QuickLoginType, LoginFieldType } from '$lib/types/auth';
-  import { auth, user } from '$lib/stores';
+  import { auth, me } from '$lib/stores';
   import { error } from '$lib/toast';
 
   let quickLoginType = $state<QuickLoginType | null>('email');
@@ -15,10 +15,10 @@
   const onLogin = async (event: Event) => {
     event.preventDefault();
     await auth.login(formData);
-    const userInfo = await user.sync();
+    const meInfo = await me.sync();
     goto('/home', { replaceState: true });
     // 判断用户信息
-    // if (!userInfo.nickname || userInfo.nickname === '') {
+    // if (!meInfo.nickname || meInfo.nickname === '') {
     //   goto('/set-uname', { replaceState: true });
     // } else {
     //   goto('/home', { replaceState: true });

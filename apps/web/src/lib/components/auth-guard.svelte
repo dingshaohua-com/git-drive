@@ -2,25 +2,29 @@
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import { browser } from '$app/environment';
-  import { auth, user } from '$lib/stores';
+  import { auth, me } from '$lib/stores';
+  import { onMount } from 'svelte';
 
-  // 不需要登录的页面路径
-  const publicPaths = ['/', '/login'];
+  let { children } = $props();
 
-  // 检查当前路径是否需要登录
-  const isPublicPath = (path: string) => {
+  // 检查当传入路径是否需要登录（默认检查当前路径）
+  const checkPublicPath = (path: string) => {
+    // 当前路径（不要写默认的，必须用地方传，否则会失去响应式）
+    // const currentPath = page.url.pathname;
+    // 不需要登录的页面路径
+    const publicPaths = ['/', '/login'];
     return publicPaths.includes(path);
   };
 
   // 检查是否需要重定向
   const checkAuth = () => {
+    console.log('执行了');
+    
     // 只在客户端执行重定向逻辑
     if (!browser) return;
 
-    const currentPath = page.url.pathname;
-
     // 如果当前路径不需要登录，直接显示
-    if (isPublicPath(currentPath)) {
+    if (checkPublicPath(page.url.pathname)) {
       return;
     }
 
@@ -31,21 +35,40 @@
     }
 
     // 如果已登录但未设置用户名，跳转到set-uname
-    if ($auth.isAuthenticated && (!$user.nickname || $user.nickname === '') && currentPath !== '/set-uname') {
-      goto('/set-uname', { replaceState: true });
+    // console.log(123);
+
+    const isNeedSetUname = !$me.username && page.url.pathname !== '/set-uname';
+    // console.log($me.username, page.url.pathname);
+    if (isNeedSetUname) {
+    //   setTimeout(() => {
+
+        goto('/set-uname', { replaceState: true });
+    //   }, 5000);
+
       return;
     }
   };
 
+  let mounted = false;
+  onMount(async () => {
+    mounted = true;
+    if ($auth.isAuthenticated && !checkPublicPath(page.url.pathname)) {
+      await me.sync();
+    }
+    checkAuth();
+
+  });
+
   // 监听认证状态和路径变化
   $effect(() => {
-    if ((browser && !$auth.isAuthenticated) || page.url.pathname) {
+    // 只在需要登录的页面才执行 checkAuth
+    if (!checkPublicPath(page.url.pathname) && mounted) {
       checkAuth();
     }
   });
 </script>
 
-{#if $auth.isLoading || $user.isLoading}
+{#if $auth.isLoading || $me.isLoading}
   <!-- 加载状态 -->
   <div class="min-h-screen flex items-center justify-center bg-gray-50">
     <div class="text-center">
@@ -54,11 +77,13 @@
     </div>
   </div>
   <!-- 不需要权限的正常显示页面内容 -->
-{:else if isPublicPath(page.url.pathname)}
-  <slot />
+{:else if checkPublicPath(page.url.pathname)}
+  <!-- <slot /> -->
+  {@render children()}
   <!-- 需要权限的页面内容展示时机：需要等待鉴权完成 && 存在用户名字段或者正在设置用户名页面 -->
-{:else if $auth.isAuthenticated && ($user.nickname || page.url.pathname === '/set-uname')}
-  <slot />
-<!-- {:else}
+{:else if $auth.isAuthenticated && ($me.username || page.url.pathname === '/set-uname')}
+  <!-- <slot /> -->
+  {@render children()}
+  <!-- {:else}
   <div>鉴权中...</div> -->
 {/if}

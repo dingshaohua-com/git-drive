@@ -2,25 +2,27 @@ import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
 
 // 用户信息类型
-export interface User {
+export interface Me {
   id: string;
   nickname: string;
   email: string;
   avatar?: string;
   isLoading: boolean;
+  username?: string;
 }
 
 // Store状态类型
-// 创建user store
-function createUserStore() {
+// 创建 Me store
+function createMeStore() {
   // 从localStorage获取初始状态
-  const getInitialState = (): User => {
+  const getInitialState = (): Me => {
     if (browser) {
-      const userStorage = localStorage.getItem('user');
+      const meStorage = localStorage.getItem('me');
 
-      return userStorage ? {...JSON.parse(userStorage), isLoading: false} : {
+      return meStorage ? {...JSON.parse(meStorage), isLoading: false} : {
         id: '',
         nickname: '',
+        username:'',
         email: '',
         avatar: '',
         isLoading: false
@@ -30,13 +32,14 @@ function createUserStore() {
     return {
       id: '',
       nickname: '',
+      username:'',
       email: '',
       avatar: '',
       isLoading: false
     };
   };
 
-  const { subscribe, set, update } = writable<User>(getInitialState());
+  const { subscribe, set, update } = writable<Me>(getInitialState());
 
   return {
     subscribe,
@@ -46,9 +49,9 @@ function createUserStore() {
     logout: () => {
       // if (browser) {
       //   localStorage.removeItem('token');
-      //   localStorage.removeItem('loginUser');
+      //   localStorage.removeItem('loginMe');
       // }
-      // set({ token: null, loginUser: null, isLoading: false });
+      // set({ token: null, loginMe: null, isLoading: false });
     },
 
     // 设置加载状态
@@ -56,23 +59,23 @@ function createUserStore() {
     //   update(state => ({ ...state, isLoading }));
     // },
 
-    update: (user: User) => update(state => ({ ...state, ...user })),
+    update: (me: Me) => update(state => ({ ...state, ...me })),
 
     // 同步用户信息
     sync: async () => {
       update(state => ({ ...state, isLoading: true }));
 
       try {
-        const res = await api.user.me();
+        const res = await api.me.get();
         update(state => {
-          if (browser) localStorage.setItem('user', JSON.stringify(res));
+          if (browser) localStorage.setItem('me', JSON.stringify(res));
           return { ...state, ...res, isLoading: false };
         });
         return res.data;
       } catch (error) {
         if (browser) {
           localStorage.removeItem('token');
-          localStorage.removeItem('loginUser');
+          localStorage.removeItem('loginMe');
         }
 
         throw error;
@@ -81,4 +84,4 @@ function createUserStore() {
   };
 }
 
-export const user = createUserStore();
+export const me = createMeStore();

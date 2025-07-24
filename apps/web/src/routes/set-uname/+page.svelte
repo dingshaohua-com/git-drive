@@ -1,6 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import {user} from "$lib/stores"
+  import {me} from "$lib/stores"
 
   // 状态管理
   let loading = $state(false);
@@ -37,10 +37,10 @@
       });
 
       // 这里可以添加store更新逻辑
-      user.update(updatedUser);
+      me.update(updatedUser);
 
       // alert('用户名设置成功！');
-      goto('/');
+      goto('/', { replaceState: true });
     } catch (error) {
       alert('设置失败，请重试');
     } finally {

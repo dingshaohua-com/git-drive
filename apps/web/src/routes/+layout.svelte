@@ -8,6 +8,8 @@
   // 页面加载状态
   let isPageReady = $state(false);
 
+  let { children } = $props();
+
   onMount(() => {
     // 页面加载完成后延迟1秒显示内容
     setTimeout(() => {
@@ -23,7 +25,8 @@
   <!-- 页面内容缓慢出现动画 -->
   <div class="animate-fade-in">
     <AuthGuard>
-      <slot />
+      <!-- <slot /> -->
+      {@render children()}
     </AuthGuard>
   </div>
 {/if}
