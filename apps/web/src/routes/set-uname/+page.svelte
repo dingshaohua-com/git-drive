@@ -32,7 +32,7 @@
 
     loading = true;
     try {
-      const updatedUser = await api.user.put({
+      const updatedUser = await api.me.put({
         ...formData,
       });
 

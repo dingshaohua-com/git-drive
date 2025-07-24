@@ -49,11 +49,15 @@
 
   let mounted = false;
   onMount(async () => {
-    mounted = true;
     if ($auth.isAuthenticated && !checkPublicPath(page.url.pathname)) {
       await me.sync();
     }
-    checkAuth();
+    // 后续这里不执行，交给effect监听路由变化去做
+    if(!mounted){
+      checkAuth();
+    }
+   
+    mounted = true;
   });
 
   // 监听认证状态和路径变化
