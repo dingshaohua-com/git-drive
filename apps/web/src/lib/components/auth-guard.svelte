@@ -19,7 +19,7 @@
   // 检查是否需要重定向
   const checkAuth = () => {
     console.log('执行了');
-    
+
     // 只在客户端执行重定向逻辑
     if (!browser) return;
 
@@ -35,16 +35,14 @@
     }
 
     // 如果已登录但未设置用户名，跳转到set-uname
-    // console.log(123);
+    if (!$me.username && page.url.pathname !== '/set-uname') {
+      goto('/set-uname', { replaceState: true });
+      return;
+    }
 
-    const isNeedSetUname = !$me.username && page.url.pathname !== '/set-uname';
-    // console.log($me.username, page.url.pathname);
-    if (isNeedSetUname) {
-    //   setTimeout(() => {
-
-        goto('/set-uname', { replaceState: true });
-    //   }, 5000);
-
+    // 如果在 /set-uname 页面，且已经有 username，跳转到 /home
+    if (page.url.pathname === '/set-uname' && $me.username) {
+      goto('/home', { replaceState: true });
       return;
     }
   };
@@ -56,7 +54,6 @@
       await me.sync();
     }
     checkAuth();
-
   });
 
   // 监听认证状态和路径变化
@@ -80,7 +77,7 @@
 {:else if checkPublicPath(page.url.pathname)}
   <!-- <slot /> -->
   {@render children()}
-  <!-- 需要权限的页面内容展示时机：需要等待鉴权完成 && 存在用户名字段或者正在设置用户名页面 -->
+  <!-- 需要权限的页面内容展示时机：需要等待鉴权完成 && 存在用户名字段或者正在设置用户名页面（如果不判断路由则会导致先到其它路由再回set-uname） -->
 {:else if $auth.isAuthenticated && ($me.username || page.url.pathname === '/set-uname')}
   <!-- <slot /> -->
   {@render children()}
