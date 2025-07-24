@@ -74,7 +74,7 @@
   });
 </script>
 
-{#if $auth.isLoading || $me.isLoading}
+{#if $auth.isLoading }
   <!-- 加载状态 -->
   <div class="min-h-screen flex items-center justify-center bg-gray-50">
     <div class="text-center">

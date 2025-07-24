@@ -15,7 +15,9 @@
   const onLogin = async (event: Event) => {
     event.preventDefault();
     await auth.login(formData);
-    await me.sync();
+    // await me.sync();
+    console.log('登录成功');
+    
     goto('/home', { replaceState: true });
   };
 

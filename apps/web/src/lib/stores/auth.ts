@@ -1,6 +1,7 @@
 import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
 import '$lib/api';
+import { me as meStore } from '.';
 
 
 // 认证状态类型
@@ -45,25 +46,26 @@ function createAuthStore() {
 			update(state => ({ ...state, isLoading: true }));
 
 			try {
-				const res = await api.root.login(params);
-				console.log('res:', res.token);
+				const {token, me} = await api.root.login(params);
+				
+				meStore.update(me);
 
 				// 只更新token，保持其他状态不变
 				update(state => {
 					const authState = {
 						...state,
-						token: res.token,
-						isAuthenticated: !!res.token, // 如果有token就认为已认证
+						token: token,
+						isAuthenticated: true, // 如果有token就认为已认证
 						isLoading: false,
 					};
 
 					if (browser) {
-						localStorage.setItem('token', res.token);
+						localStorage.setItem('token', token);
 					}
 
 					return authState;
 				});
-				return res.token;
+				return token;
 			} catch (error) {
 				update(state => ({ ...state, isLoading: false }));
 				throw error;

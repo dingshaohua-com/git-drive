@@ -1,6 +1,8 @@
 import Router from '@koa/router';
 import JsonResult from '../utils/json-result.ts';
 import { login, sendCode } from '../service/root';
+import { queryOne } from '../service/user';
+import reqCtx from '../middleware/req-ctx/helper';
 
 const router = new Router({ prefix: '/api' });
 
@@ -16,7 +18,9 @@ router.post('/login', async (ctx, next) => {
   const bodyParams = ctx.request.body;
   try {
     const token = await login(bodyParams);
-    ctx.body = JsonResult.success({token})
+    const userId = reqCtx.get('userId');
+    const me = await queryOne({ id: userId });
+    ctx.body = JsonResult.success({token, me})
   } catch (error) {
     ctx.body = JsonResult.failed(error.message);
   }
