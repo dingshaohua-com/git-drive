@@ -33,7 +33,6 @@
     loading = true;
     try {
       const updatedUser = await api.user.put({
-        id: '1', // 模拟用户ID
         ...formData,
       });
 
