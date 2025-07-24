@@ -3,7 +3,7 @@ import fs from "fs";
 import axios from "axios";
 
 // 配置
-const GITHUB_TOKEN = "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";
+const GITHUB_TOKEN = "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";
 const OWNER = "dingshaohua-com";
 const REPO = "img-host";
 const BRANCH = "main";

@@ -5,7 +5,8 @@
   import { onMount } from 'svelte';
   import GlobalToast from '$lib/components/global-toast.svelte';
   import { page } from '$app/state';
-
+  import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
+  const queryClient = new QueryClient();
 
   let { children } = $props();
 
@@ -19,8 +20,7 @@
   };
 </script>
 
-<!-- 页面内容缓慢出现动画 -->
-<div class="animate-fade-in">
+<QueryClientProvider client={queryClient}>
   <!-- 公开页不包裹 AuthGuard -->
   {#if checkPublicPath(page.url.pathname)}
     {@render children()}
@@ -29,5 +29,5 @@
       {@render children()}
     </AuthGuard>
   {/if}
-</div>
-<GlobalToast />
+  <GlobalToast />
+</QueryClientProvider>

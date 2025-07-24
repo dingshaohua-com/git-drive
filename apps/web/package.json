@@ -37,6 +37,7 @@
 	"dependencies": {
 		"@repo/config-prettier": "workspace:*",
 		"@tailwindcss/vite": "^4.1.11",
+		"@tanstack/svelte-query": "^5.83.0",
 		"axios": "^1.10.0",
 		"remixicon": "^4.6.0",
 		"tailwindcss": "^4.1.11"
