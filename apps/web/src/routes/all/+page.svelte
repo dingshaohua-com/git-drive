@@ -117,17 +117,25 @@
                       <i class="ri-arrow-left-line text-lg"></i>
                     </button>
                   {/if}
-
                   <button onclick={() => fetchFiles(currentPath)} class="cursor-pointer p-1 text-sm bg-gray-100 text-gray-600 rounded hover:bg-gray-200 transition-colors">
                     <i class="ri-refresh-line text-lg"></i>
                   </button>
                 </div>
                 <div class="flex items-center space-x-2">
-                  <button onclick={() => (viewMode = 'list')} class="px-3 py-2 text-sm rounded transition-colors {viewMode === 'list' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}"> 列表 </button>
-                  <button onclick={() => (viewMode = 'grid')} class="px-3 py-2 text-sm rounded transition-colors {viewMode === 'grid' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}"> 网格 </button>
+                  <button onclick={() => (viewMode = 'list')} class="p-2 text-sm rounded transition-colors {viewMode === 'list' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}"> 列表 </button>
+                  <button onclick={() => (viewMode = 'grid')} class="p-2 text-sm rounded transition-colors {viewMode === 'grid' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}"> 网格 </button>
+                  <button title="新建文件" class="cursor-pointer p-1 rounded hover:bg-blue-100 transition-colors" onclick={() => alert('新建文件功能待实现')}>
+                    <i class="ri-file-add-line text-xl text-blue-600"></i>
+                  </button>
+                  <button title="新建文件夹" class="cursor-pointer p-1 rounded hover:bg-green-100 transition-colors" onclick={() => alert('新建文件夹功能待实现')}>
+                    <i class="ri-folder-add-line text-xl text-green-600"></i>
+                  </button>
+                  <button title="上传文件" class="cursor-pointer p-1 rounded hover:bg-purple-100 transition-colors" onclick={() => alert('上传文件功能待实现')}>
+                    <i class="ri-upload-2-line text-xl text-purple-600"></i>
+                  </button>
                 </div>
               </div>
-              <div class="mt-3 flex items-center space-x-2 text-sm text-gray-600">
+              <div class="mt-3 flex items-center flex-wrap text-sm text-gray-600">
                 {#each getBreadcrumbs(currentPath) as crumb, index (crumb.path)}
                   <div class="flex items-center">
                     {#if index > 0}<span class="mx-2">/</span>{/if}
