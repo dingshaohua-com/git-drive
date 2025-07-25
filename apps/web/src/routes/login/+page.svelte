@@ -39,23 +39,26 @@
       loginData = { phone: formData.phone };
     }
 
+    // 立即开始倒计时
+    isCodeSent = true;
+    let count = 60;
+    countdown = count;
+    const timer = setInterval(() => {
+      count--;
+      countdown = count;
+      if (count === 0) {
+        clearInterval(timer);
+        isCodeSent = false;
+      }
+    }, 1000);
+
     try {
       await api.root.sendCode(loginData);
-      isCodeSent = true;
-
-      // 开始倒计时
-      let count = 60;
-      countdown = count;
-      const timer = setInterval(() => {
-        count--;
-        countdown = count;
-        if (count === 0) {
-          clearInterval(timer);
-          isCodeSent = false;
-        }
-      }, 1000);
-    } catch (error) {
+    } catch (e) {
       error('验证码发送失败');
+      clearInterval(timer);
+      isCodeSent = false;
+      countdown = 0;
     }
   };
 
