@@ -2,7 +2,7 @@
 import axios from "axios";
 
 // 配置
-const GITHUB_TOKEN = "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";
+const GITHUB_TOKEN = "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";
 const OWNER = "ghub-drive";
 // const REPO = "img-host";
 const BRANCH = "main";

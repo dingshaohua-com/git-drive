@@ -3,6 +3,7 @@ import JsonResult from "../utils/json-result";
 import { createGithubFolder } from "../service/ghub";
 import { createGithubRepo } from "../service/ghub";
 import { listGithubRepos } from "../service/ghub";
+import { getRepDir } from "../service/file";
 
 
 const router = new Router({ prefix: "/api/ghub" });
@@ -47,5 +48,14 @@ router.get("/repos", async (ctx) => {
     ctx.body = JsonResult.failed(e.message || "获取仓库列表失败");
   }
 });
+
+// 获取仓库目录
+router.get("/repo", async (ctx) => {
+  const { repoName } = ctx.query;
+  const res = await getRepDir(repoName);
+  ctx.body = JsonResult.success(res);
+});
+
+
 
 export default router;

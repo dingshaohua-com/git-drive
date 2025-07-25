@@ -9,6 +9,11 @@ export const repo = {
     },
     add: (params: any) => {
         return axios.post('/ghub/repo', params);
+    },
+    get: (params: any) => {
+        return axios.get('/ghub/repo', { params });
     }
 }
+
+
 
