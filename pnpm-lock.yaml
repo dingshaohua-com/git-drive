@@ -17,9 +17,6 @@ importers:
 
   apps/server:
     dependencies:
-      '@koa/bodyparser':
-        specifier: ^6.0.0
-        version: 6.0.0(koa@3.0.0)
       '@koa/cors':
         specifier: ^5.0.0
         version: 5.0.0
@@ -423,12 +420,6 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.29':
     resolution: {integrity: sha512-uw6guiW/gcAGPDhLmd77/6lW8QLeiV5RUTsAX46Db6oLhGaVj4lhnPwb184s1bkc8kdVg/+h988dro8GRDpmYQ==}
-
-  '@koa/bodyparser@6.0.0':
-    resolution: {integrity: sha512-CjM/tiisZHBA9iVkOOyj/ocLCNJTbpLsIUjCbVkrx5rkUOZlsFf/qSbXzAbY2SNJTMl0VtKgVen6SZdjaCfVhA==}
-    engines: {node: '>= 18'}
-    peerDependencies:
-      koa: '>=2'
 
   '@koa/cors@5.0.0':
     resolution: {integrity: sha512-x/iUDjcS90W69PryLDIMgFyV21YLTnG9zOpPXS7Bkt2b8AsY3zZsIpOLBkYr9fBcF3HbkKaER5hOBZLfpLgYNw==}
@@ -2394,14 +2385,6 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.4
-
-  '@koa/bodyparser@6.0.0(koa@3.0.0)':
-    dependencies:
-      '@types/co-body': 6.1.3
-      co-body: 6.2.0
-      koa: 3.0.0
-      lodash.merge: 4.6.2
-      type-is: 2.0.1
 
   '@koa/cors@5.0.0':
     dependencies:

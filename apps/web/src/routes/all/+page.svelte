@@ -4,6 +4,7 @@
   import { createQuery } from '@tanstack/svelte-query';
   import { Button } from 'flowbite-svelte';
   import { formatFileSize, getFileIcon, getBreadcrumbs } from './helper';
+  import toast from '$lib/toast';
 
   // 定义查询
   // const query = createQuery({
@@ -34,15 +35,16 @@
     } else {
       const pathParts = itemPath.split('/').filter((p: string) => p);
       const isRepo = pathParts.length === 1;
+      
       if (isRepo) {
         loading = true;
         const res = await api.repo.get({ repoName: pathParts.at(0) });
-        console.log(123, res.empty);
-        list = res.files;
+        list = res;
         currentPath = itemPath; // 关键：进入仓库时设置 currentPath
         loading = false;
         return;
       }
+     
     }
 
     // currentPath = path;
@@ -100,6 +102,36 @@
     // currentPath = path;
     // fetchFiles(path);
   }
+
+  let uploadInput: HTMLInputElement | null = null;
+
+  function triggerUpload() {
+    uploadInput?.click();
+  }
+
+  async function handleUploadFile(event: Event) {
+    const files = (event.target as HTMLInputElement).files;
+    if (!files || files.length === 0) return;
+    const file = files[0];
+
+    const formData = new FormData();
+    formData.append('file', file);
+    // 可选：传递当前目录
+    formData.append('path', currentPath);
+
+    loading = true;
+    try {
+      // 假设你的后端上传接口为 /api/file/upload
+      const res = await api.repo.upload(formData);
+      const result = await res.json();
+     toast.success('上传成功');
+    } catch (e) {
+      toast.error('上传出错');
+    }
+    loading = false;
+    // 清空 input
+    if (uploadInput) uploadInput.value = '';
+  }
 </script>
 
 <div class="min-h-screen bg-gray-50 flex flex-col items-center justify-center">
@@ -130,9 +162,15 @@
                   <button title="新建文件夹" class="cursor-pointer p-1 rounded hover:bg-green-100 transition-colors" onclick={() => alert('新建文件夹功能待实现')}>
                     <i class="ri-folder-add-line text-xl text-green-600"></i>
                   </button>
-                  <button title="上传文件" class="cursor-pointer p-1 rounded hover:bg-purple-100 transition-colors" onclick={() => alert('上传文件功能待实现')}>
+                  <button title="上传文件" class="cursor-pointer p-1 rounded hover:bg-purple-100 transition-colors" onclick={triggerUpload}>
                     <i class="ri-upload-2-line text-xl text-purple-600"></i>
                   </button>
+                  <input
+                    type="file"
+                    bind:this={uploadInput}
+                    class="hidden"
+                    onchange={handleUploadFile}
+                  />
                 </div>
               </div>
               <div class="mt-3 flex items-center flex-wrap text-sm text-gray-600">

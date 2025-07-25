@@ -6,7 +6,7 @@ import JsonResult from "../utils/json-result";
 // import { listGithubRepos } from "../service/ghub";
 import { getRepDir } from "../service/file";
 import rootRouter from "./root";
-import { queryList, queryOne } from "../service/repo";
+import { queryList, queryOne, upload } from "../service/repo";
 
 const router = new Router({ prefix: "/api/repo" });
 
@@ -26,6 +26,15 @@ rootRouter.get("/repos", async (ctx) => {
 router.get("/", async (ctx) => {
     const { repoName } = ctx.query;
     const res = await queryOne(repoName);
+    ctx.body = JsonResult.success(res);
+});
+
+// 上传文件
+router.post("/upload", async (ctx) => {
+    const { file } = ctx.request.files;
+    const { path } = ctx.request.body; // 从 body 中获取 path 参数
+    
+    const res = await upload(file, path);
     ctx.body = JsonResult.success(res);
 });
 
