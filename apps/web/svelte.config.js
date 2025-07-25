@@ -20,9 +20,10 @@ const config = {
   compilerOptions: {
     warningFilter: (warning) => {
       // 忽略 a11y 相关警告
-      if (warning.code === 'a11y_consider_explicit_label') return false;
+      if (warning.code.indexOf( 'a11y') > -1) return false;
       return true;
     },
+    // a11y: false
   },
 };
 

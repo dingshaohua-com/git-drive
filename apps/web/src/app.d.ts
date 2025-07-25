@@ -37,7 +37,8 @@ interface Api {
 	user: {
 		me: () => Promise<User>;
 	},
-	gitToken: {
+	repo: {
+		get: (params: { repoName: string }) => Promise<any>;
 		list: (params?: any) => Promise<any>;
 		add: (params: { token: string }) => Promise<any>;
 	}

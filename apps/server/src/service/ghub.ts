@@ -1,35 +1,5 @@
 
 import { PrismaClient } from "@prisma/client";
-import axios from "axios";
-
-// 配置
-const GITHUB_TOKEN = "";
-const OWNER = "ghub-drive";
-// const REPO = "img-host";
-const BRANCH = "main";
-
-
-const prisma = new PrismaClient();
-const getGithubToken = async ()=>{
-  if(!GITHUB_TOKEN){
-    const api = prisma.app.findFirst();
-    const res = await api.get("/user");
-    return res.data;
-  }
-  return GITHUB_TOKEN;
-}
-
-// 配置 Axios 实例用于 GitHub API
-const getGhubApi = async ()=>{
-  const token = await getGithubToken();
-  return axios.create({
-    baseURL: 'https://api.github.com',
-    headers: {
-      'Authorization': `token ${token}`,
-      'User-Agent': 'Koa-GitHub-API-Client'
-    }
-  });
-}
 
 
 /**
@@ -112,21 +82,6 @@ export async function createGithubFolder(repo: string, path: string) {
   return { success: true, path: filePath };
 }
 
-/**
- * 创建 GitHub 仓库
- * @param {string} repoName 仓库名
- * @param {string} [description] 描述
- * @param {boolean} [isPrivate] 是否私有
- * @returns {Promise<any>}
- */
-export async function createGithubRepo(repoName: string, description: string = "") {
-  const api = getGithubApi(GITHUB_TOKEN);
-  const res = await api.post(`/user/repos`, {
-    name: repoName,
-    description,
-    private: false
-  });
-  return res.data;
-}
+
 
 
