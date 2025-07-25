@@ -7,6 +7,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model app {
+  gtoken String @db.VarChar(255)
+  id     Int    @id @default(autoincrement())
+}
+
+model repo {
+  id    Int     @id
+  uid   Int
+  rname String? @db.VarChar(255)
+}
+
 model user {
   id       Int     @id @default(autoincrement())
   email    String? @db.VarChar(255)
@@ -17,15 +28,4 @@ model user {
   des      String? @db.VarChar(255)
   nickname String? @db.VarChar(255)
   avatar   String? @db.VarChar(255)
-}
-
-model git_token {
-  token String? @db.VarChar(255)
-  uid   Int     @id
-}
-
-model repo {
-  id    Int     @id
-  uid   Int
-  rname String? @db.VarChar(255)
 }

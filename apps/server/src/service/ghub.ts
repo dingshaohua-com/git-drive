@@ -1,23 +1,58 @@
 
+import { PrismaClient } from "@prisma/client";
 import axios from "axios";
 
 // 配置
-const GITHUB_TOKEN = "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";
+const GITHUB_TOKEN = "";
 const OWNER = "ghub-drive";
 // const REPO = "img-host";
 const BRANCH = "main";
 
 
+const prisma = new PrismaClient();
+const getGithubToken = async ()=>{
+  if(!GITHUB_TOKEN){
+    const api = prisma.app.findFirst();
+    const res = await api.get("/user");
+    return res.data;
+  }
+  return GITHUB_TOKEN;
+}
+
 // 配置 Axios 实例用于 GitHub API
-const getGithubApi = (GIT_TOKEN)=>{
+const getGhubApi = async ()=>{
+  const token = await getGithubToken();
   return axios.create({
     baseURL: 'https://api.github.com',
     headers: {
-      'Authorization': `token ${GIT_TOKEN}`,
+      'Authorization': `token ${token}`,
       'User-Agent': 'Koa-GitHub-API-Client'
     }
   });
 }
+
+
+/**
+ * 获取当前账号下的仓库列表，支持名称模糊搜索
+ * @param {string} [keyword] 仓库名关键字（可选）
+ * @returns {Promise<any[]>}
+ */
+export const listGithubRepos = async (keyword: string = "") => {
+  const api = await getGhubApi();
+  console.log('哈哈', api);
+  
+  // 获取所有仓库（默认最多100个，如需更多可做分页）
+  const res = await api.get("/user/repos?per_page=100");
+  let repos = res.data;
+  if (keyword) {
+    const lower = keyword.toLowerCase();
+    repos = repos.filter((repo: any) => repo.name.toLowerCase().includes(lower));
+  }
+  return repos;
+}
+
+
+
 
 
 /**
@@ -28,6 +63,8 @@ const getGithubApi = (GIT_TOKEN)=>{
  * @returns {Promise<any>}
  */
 export async function createGithubFolder(repo: string, path: string) {
+
+
   const api = getGithubApi(GITHUB_TOKEN);
   const filePath = path.endsWith("/") ? path + ".gitkeep" : path + "/.gitkeep";
   const content = ""; // 空内容
@@ -92,19 +129,4 @@ export async function createGithubRepo(repoName: string, description: string = "
   return res.data;
 }
 
-/**
- * 获取当前账号下的仓库列表，支持名称模糊搜索
- * @param {string} [keyword] 仓库名关键字（可选）
- * @returns {Promise<any[]>}
- */
-export async function listGithubRepos(keyword: string = "") {
-  const api = getGithubApi(GITHUB_TOKEN);
-  // 获取所有仓库（默认最多100个，如需更多可做分页）
-  const res = await api.get("/user/repos?per_page=100");
-  let repos = res.data;
-  if (keyword) {
-    const lower = keyword.toLowerCase();
-    repos = repos.filter((repo: any) => repo.name.toLowerCase().includes(lower));
-  }
-  return repos;
-}
+

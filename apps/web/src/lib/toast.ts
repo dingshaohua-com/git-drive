@@ -7,3 +7,9 @@ export function success(msg: string, duration?: number) {
 export function error(msg: string, duration?: number) {
   (window as any).toast?.error(msg, duration);
 } 
+
+export default {
+  info,
+  success,
+  error,
+};

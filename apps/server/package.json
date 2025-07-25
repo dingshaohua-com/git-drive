@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@repo/config-prettier": "workspace:*",
-    "@types/node": "^22.15.14",
+    "@types/node": "^22.16.5",
     "chalk": "^5.4.1",
     "tsx": "^4.19.4"
   }

@@ -1,7 +1,7 @@
 // init.ts
 import axios from 'axios';
 import { auth } from '../stores';
-import { error } from '$lib/toast';
+import toast from '$lib/toast';
 
 // const isDev = import.meta.env.MODE==='development';
 
@@ -47,7 +47,7 @@ axios.interceptors.response.use(
     const res = response.data;
 
     if (res.code === 1) {
-      alert(res.msg);
+      toast.error(res.msg);
       return Promise.reject(res.msg);
     } else {
       return res.data;
@@ -55,7 +55,7 @@ axios.interceptors.response.use(
   },
   (error) => {
     if (error.status === 401) {
-      alert('登录失效，即将跳转至登录');
+      toast.error('登录失效，即将跳转至登录');
       // 清除认证状态
       auth.logout();
       setTimeout(() => {

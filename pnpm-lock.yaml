@@ -67,7 +67,7 @@ importers:
         specifier: workspace:*
         version: link:../../packages/config-prettier
       '@types/node':
-        specifier: ^22.15.14
+        specifier: ^22.16.5
         version: 22.16.5
       chalk:
         specifier: ^5.4.1
