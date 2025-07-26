@@ -42,8 +42,8 @@ export const sendCode = async (params) => {
     const verifyCode = Math.floor(Math.random() * 1000000)
       .toString()
       .padStart(6, '0');
-    // 发送验证码 // 存储邮箱验证码（30分钟过期）
-    const res = await redis.set(`email:${email}`, verifyCode, 'EX', 60 * 30);
+    // 发送验证码 // 存储邮箱验证码（8 小时过期）
+    const res = await redis.set(`email:${email}`, verifyCode, 'EX', 60 * 60 * 8);
     console.log(res);
     return sendMail(email, verifyCode);
   } else if (phone) {

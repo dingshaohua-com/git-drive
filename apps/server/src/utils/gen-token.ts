@@ -23,8 +23,8 @@ const genToken = async (payload) => {
 
   const token = jwt.sign(payload, process.env.JWT_SECRET);
 
-  // 30分钟过期时间:只在Redis中控制过期时间
-  await redis.set(`token:${token}`, JSON.stringify(payload), 'EX', 60 * 30);
+  // 8小时过期时间:只在Redis中控制过期时间
+  await redis.set(`token:${token}`, JSON.stringify(payload), 'EX', 60 * 60 * 8);
   return token;
 };
 

@@ -41,7 +41,8 @@ interface Api {
 		get: (params: { repoName: string }) => Promise<any>;
 		list: (params?: any) => Promise<any>;
 		add: (params: { token: string }) => Promise<any>;
-	}
+		upload: (params: any) => Promise<any>;
+	},
 }
 declare global {
 	var api: Api;
