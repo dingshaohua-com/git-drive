@@ -16,6 +16,7 @@
 //   }
 
 import fs from "fs";
+import { Buffer } from "buffer";
 import { BRANCH, getGhubApi, OWNER } from "../utils/ghub-helper";
 
 
@@ -113,7 +114,7 @@ export const createFolder = async (
   const directory = pathParts.slice(1).join('/');
 
   // 确保路径以 .gitkeep 结尾
-  const filePath = directory + ".gitkeep";
+  const filePath = directory + "/.gitkeep";
   const content = ""; // 空内容
   const base64Content = Buffer.from(content, 'utf-8').toString('base64');
 

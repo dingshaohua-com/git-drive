@@ -34,3 +34,38 @@ export const getBreadcrumbs = (currentPath: string) => {
     }
     return breadcrumbs;
   }
+
+
+  /**
+ * 解析 GitHub URL，提取 repo / branch / path
+ * @param {string} url GitHub 文件/目录 URL
+ * @returns {{owner:string, repo:string, branch:string, path:string}}
+ * @throws {Error} 当 URL 格式不符合预期时
+ */
+export const parseGitHubUrl = (url: string)=> {
+  // 去掉 hash、query
+  const clean = url.split(/[?#]/)[0];
+
+  // 匹配规则：
+  // https://github.com/OWNER/REPO/(blob|tree)/BRANCH[/PATH]
+  const m = clean.match(
+    /^https:\/\/github\.com\/([^/]+)\/([^/]+)\/(?:blob|tree)\/([^/]+)(?:\/(.*))?$/i
+  );
+  if (!m) {
+    throw new Error('Invalid GitHub URL format');
+  }
+
+  const [, owner, repo, branch, path = ''] = m;
+  return { owner, repo, branch, path };
+}
+
+// /* ===== 使用示例 ===== */
+// const url1 = 'https://github.com/ghub-drive/one/blob/main/cc.gitkeep';
+// const url2 = 'https://github.com/microsoft/vscode/tree/main/src/vs/editor';
+// console.log(parseGitHubUrl(url1));
+// // => { owner: 'ghub-drive', repo: 'one', branch: 'main', path: 'cc.gitkeep' }
+
+// console.log(parseGitHubUrl(url2));
+// // => { owner: 'microsoft', repo: 'vscode', branch: 'main', path: 'src/vs/editor' }
+
+

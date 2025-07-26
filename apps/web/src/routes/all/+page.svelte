@@ -1,5 +1,6 @@
 <script lang="ts">
   import EditRepoModal from '$lib/components/edit-repo-modal.svelte';
+  import CreateFolderModal from '$lib/components/create-folder-modal.svelte';
   import Navigation from '$lib/components/navbar.svelte';
   import { formatFileSize, getFileIcon, getBreadcrumbs } from './helper';
   import toast from '$lib/toast';
@@ -7,30 +8,35 @@
   let loading = $state(false);
   let list = $state([]);
   let showEditRepoModal = $state(false);
+  let showCreateFolderModal = $state(false);
   let currentPath = $state('');
+
+  // https://github.com/ghub-drive/one/blob/main/cc.gitkeep
 
   const syncAnyLevel = async (path: string = '') => {
     loading = true;
-    const pathParts = path.split('/').filter((p: string) => p);
+    currentPath = currentPath + '/' + path;
+    console.log(111, currentPath);
+
+    const pathParts = currentPath.split('/').filter((p: string) => p);
     const justIsRepo = pathParts.length === 1;
     const repoName = pathParts.at(0) as string;
-    currentPath = path;
-    // 判断是否获取仓库列表（如果为空，则是）
-    if (path) {
+
+    // 判断是否获取仓库列表（如果为'/'，则是）
+    if (currentPath === '/') {
+      list = await api.repo.list();
+    } else {
       // 是否获取仓库文件列表，还是获取仓库某个文件夹下的文件列表
       if (justIsRepo) {
         list = await api.repo.get({ repoName });
-      }else{
-
+      } else {
+        // alert(123);
       }
-    } else {
-      list = await api.repo.list();
     }
     loading = false;
   };
 
   syncAnyLevel();
-
 
   function goBack() {
     const pathParts = currentPath.split('/').filter((p: string) => p);
@@ -68,6 +74,11 @@
     // 清空 input
     if (uploadInput) uploadInput.value = '';
   }
+
+  // 创建文件夹成功后的回调
+  function handleFolderCreated() {
+    syncAnyLevel(currentPath);
+  }
 </script>
 
 <div class="min-h-screen bg-gray-50 flex flex-col items-center justify-center">
@@ -81,7 +92,7 @@
               <!-- 工具栏 -->
               <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-2">
-                  {#if currentPath}
+                  {#if currentPath !== '/'}
                     <button onclick={goBack} class="cursor-pointer p-1 text-sm bg-gray-100 text-gray-600 rounded hover:bg-gray-200 disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors">
                       <i class="ri-arrow-left-line text-lg"></i>
                     </button>
@@ -96,7 +107,7 @@
                       <i class="ri-file-add-line text-xl text-blue-600"></i>
                     </button>
                   {:else}
-                    <button title="新建文件夹" class="cursor-pointer p-1 rounded hover:bg-green-100 transition-colors" onclick={() => alert('新建文件夹功能待实现')}>
+                    <button title="新建文件夹" class="cursor-pointer p-1 rounded hover:bg-green-100 transition-colors" onclick={() => (showCreateFolderModal = true)}>
                       <i class="ri-folder-add-line text-xl text-green-600"></i>
                     </button>
                     <button title="上传文件" class="cursor-pointer p-1 rounded hover:bg-purple-100 transition-colors" onclick={triggerUpload}>
@@ -136,7 +147,7 @@
                   <div class="flex flex-wrap gap-4">
                     {#each list as item (item.path)}
                       <div class="w-24 border border-gray-200 rounded-lg p-2 hover:bg-gray-50 transition-colors">
-                        <div class="flex flex-col items-center cursor-pointer" onclick={() => syncAnyLevel(item.path)}>
+                        <div class="flex flex-col items-center cursor-pointer" onclick={() => syncAnyLevel(item.html_url)}>
                           <i class="{getFileIcon(item)} text-3xl"></i>
                           <div class="mt-1 w-full text-center">
                             <p class="text-xs font-medium text-gray-900 truncate" title={item.name}>
@@ -171,3 +182,4 @@
   </div>
 </div>
 <EditRepoModal visible={showEditRepoModal} />
+<CreateFolderModal bind:visible={showCreateFolderModal} {currentPath} onSuccess={handleFolderCreated} />
