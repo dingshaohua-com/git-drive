@@ -134,20 +134,24 @@
               </div>
               <hr class="my-2 border-gray-200" />
               <!-- 文件列表 -->
-              <div class="p-4">
+              <div class="p-4 relative min-h-60">
                 {#if loading}
-                  <div class="text-center py-12 text-gray-500">
-                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-                    加载中...
+                  <div class="absolute inset-0 bg-white/88 flex items-center justify-center z-10">
+                    <div class="text-center text-gray-500">
+                      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                      加载中...
+                    </div>
                   </div>
-                {:else if list.length === 0}
+                {/if}
+                
+                {#if list.length === 0 && !loading}
                   <div class="text-center py-12 text-gray-500">
                     <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
                     </svg>
                     <p>此目录为空</p>
                   </div>
-                {:else}
+                {:else if list.length > 0}
                   <div class="flex flex-wrap gap-4">
                     {#each list as item (item.path)}
                       <div class="w-24 border border-gray-200 rounded-lg p-2 hover:bg-gray-50 transition-colors">
@@ -164,15 +168,6 @@
                             {/if}
                           </div>
                         </div>
-                        <!-- <div class="mt-3 flex justify-center space-x-1">
-                            {#if item.type === 'file'}
-                              <a href={item.download_url} target="_blank" class="px-1.5 py-0.5 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors"> 查看 </a>
-                              <button onclick={() => navigator.clipboard.writeText(item.download_url)} class="px-1.5 py-0.5 text-xs bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"> 复制 </button>
-                            {/if}
-                            <button onclick={() => handleDeleteFile(item)} disabled={deleting === item.path} class="px-1.5 py-0.5 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200 disabled:bg-gray-100 disabled:text-gray-400 transition-colors">
-                              {deleting === item.path ? '删除中' : '删除'}
-                            </button>
-                          </div> -->
                       </div>
                     {/each}
                   </div>
