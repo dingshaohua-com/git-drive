@@ -3,6 +3,7 @@
 import fs from "fs";
 import { Buffer } from "buffer";
 import { BRANCH, getGhubApi, OWNER } from "../utils/ghub-helper";
+import { toProxyUrl } from "../utils/proxy-ghub";
 
 
 /**
@@ -57,7 +58,10 @@ export const queryOne = async (repo: string, path: string) => {
 
     res.data.forEach((item: any) => {
       delete item._links;
+      item.down_url = toProxyUrl(item.download_url)
     });
+
+   
 
     return res.data;
   } catch (e: any) {

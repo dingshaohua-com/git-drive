@@ -8,8 +8,17 @@
   import { uploadFile, triggerFileUpload } from '$lib/utils/file-uploader';
   import copyToClipboard from '$lib/utils/copy-helper';
 
+  interface Item {
+    name: string;
+    path: string;
+    html_url: string;
+    download_url: string;
+    type: string;
+    size: number;
+    down_url:string;
+  }
   let loading = $state(false);
-  let list = $state<Array<{name:string, path: string, html_url: string, download_url: string, type: string, size: number}>>([]);
+  let list = $state<Array<Item>>([]);
   let showEditRepoModal = $state(false);
   let showCreateFolderModal = $state(false);
   let current = $state({
@@ -67,7 +76,7 @@
   };
 
   const handleShare = (item: any) => {
-    copyToClipboard(item.download_url);
+    copyToClipboard(item.down_url);
     toast.success('分享链接已复制');
   };
 
@@ -76,6 +85,18 @@
   };
   const handleRepoCreated = () => {
     syncAnyLevel('https://github.com/ghub-drive');
+  };
+
+  const clickItem = (item: Item) => {
+    if (item.type === 'file') {
+      handleShare(item);
+      setTimeout(()=>{
+        window.open(item.down_url);
+      },1000)
+     
+    } else {
+      syncAnyLevel(item.html_url);
+    }
   };
 </script>
 
@@ -163,7 +184,7 @@
                       <ContextMenu>
                         {#snippet children()}
                           <div class="w-24 h-20 border border-gray-200 rounded-lg p-2 hover:bg-gray-50 transition-colors">
-                            <div class="flex flex-col items-center cursor-pointer" onclick={() => syncAnyLevel(item.html_url)}>
+                            <div class="flex flex-col items-center cursor-pointer" onclick={() => clickItem(item)}>
                               <i class="{getFileIcon(item)} text-3xl"></i>
                               <div class="mt-1 w-full text-center">
                                 <p class="text-xs font-medium text-gray-900 truncate" title={item.name}>
@@ -207,5 +228,5 @@
     </div>
   </div>
 </div>
-<EditRepoModal visible={showEditRepoModal} onSuccess={handleRepoCreated}/>
+<EditRepoModal visible={showEditRepoModal} onSuccess={handleRepoCreated} />
 <CreateFolderModal bind:visible={showCreateFolderModal} currentPath={current.htmlUrl} onSuccess={handleFolderCreated} />

@@ -9,8 +9,8 @@ import path from 'path';
 import redisJwt from './middleware/redis-jwt.ts';
 import fs from 'fs';
 import os from 'os';
+import dayjs from 'dayjs'
 
-import { getTimeStr } from "./utils/time-helper";
 
 // 定义上传路径（最好不要配置到项目中，否则会跟随代码部署而被清空）
 const uploadDir = path.join(os.tmpdir(), "git-drive-uploads"); // 系统临时目录（跨平台兼容）
@@ -28,12 +28,12 @@ app.use(
       keepExtensions: true, // 保留文件扩展名
       maxFieldsSize: 2 * 1024 * 1024, // 字段大小限制为2MB
       onFileBegin: (name, file: any) => {
-        const timeString = getTimeStr();
         const ext = path.extname(file.originalFilename);
-        file.newFilename = timeString + ext;
+        // file.newFilename = timeString + ext;
+        file.newFilename = dayjs().format('YYYYMMDDHHmmss') + ext;
         file.filepath = path.join(
           uploadDir,
-          file.newFilename // 例如: 20230515_143045789.jpg
+          file.newFilename // 例如: 20250728005457.jpg
         );
       }, // 传入的文件自定义名称
     },
