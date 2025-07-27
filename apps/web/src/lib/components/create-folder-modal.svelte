@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { Button, Modal } from "flowbite-svelte";
+  import { parseGitHubUrl } from '../../routes/all/helper';
   import toast from '$lib/toast';
+  import { Button, Modal } from 'flowbite-svelte';
 
   let { visible = $bindable(), currentPath = '', onSuccess } = $props();
   let addError = $state('');
@@ -14,7 +15,7 @@
       addError = '文件夹名称不能为空';
       return;
     }
-    
+
     // 验证文件夹名称格式
     const invalidChars = /[<>:"/\\|?*]/;
     if (invalidChars.test(folderName)) {
@@ -23,12 +24,14 @@
     }
 
     addLoading = true;
+    const { repo, path } = parseGitHubUrl(currentPath);
     try {
       // 这里需要调用创建文件夹的 API
       await api.repo.createFolder({
-        path: currentPath+'/' + folderName.trim()
+        repo,
+        path: path + '/' + folderName.trim(),
       });
-      
+
       toast.success('文件夹创建成功');
       visible = false;
       folderName = ''; // 重置表单
@@ -37,7 +40,6 @@
       if (onSuccess) {
         onSuccess();
       }
-      
     } catch (e) {
       console.error(e);
       addError = '创建失败，请重试';
@@ -59,19 +61,13 @@
   <form onsubmit={onSubmit} class="flex flex-col gap-4 p-2">
     <div class="flex flex-col gap-1">
       <label class="font-medium text-gray-700">文件夹名称</label>
-      <input 
-        class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-300" 
-        placeholder="请输入文件夹名称" 
-        bind:value={folderName} 
-        required 
-        autofocus
-      />
+      <input class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-300" placeholder="请输入文件夹名称" bind:value={folderName} required autofocus />
     </div>
-    
+
     {#if addError}
       <div class="text-red-500 text-sm">{addError}</div>
     {/if}
-    
+
     <div class="flex justify-end gap-2 mt-2">
       <button
         type="button"

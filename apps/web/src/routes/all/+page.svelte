@@ -16,11 +16,7 @@
     isRoot: false,
   });
 
-  // https://github.com/ghub-drive/one/blob/main/cc.gitkeep
-
-  console.log();
-
-  const syncAnyLevel = async (htmlUrl: string = '') => {
+  const syncAnyLevel = async (htmlUrl: string) => {
     const { owner, repo, branch, path, isRoot } = parseGitHubUrl(htmlUrl);
     current.path = path;
     current.repo = repo;
@@ -32,8 +28,6 @@
       list = await api.repo.list();
     } else {
       list = await api.repo.get({ repo, path });
-
-      console.log(222);
     }
     loading = false;
   };
@@ -80,7 +74,7 @@
 
   // 创建文件夹成功后的回调
   function handleFolderCreated() {
-    syncAnyLevel(currentPath);
+    syncAnyLevel(current.htmlUrl)
   }
 </script>
 
@@ -122,15 +116,27 @@
               </div>
               <!-- 面包屑 -->
               <div class="mt-3 flex items-center flex-wrap text-sm text-gray-600 h-6">
-                {#if current.repo}/{current.repo}/{/if}{current.path}
-                <!-- {#each getBreadcrumbs(currentPath) as crumb, index (crumb.path)}
-                  <div class="flex items-center">
-                    {#if index > 0}<span class="mx-2">/</span>{/if}
-                    <button onclick={() => syncAnyLevel(crumb.path)} class="hover:text-blue-600 transition-colors {index === getBreadcrumbs(currentPath).length - 1 ? 'font-medium text-gray-900' : ''}">
-                      {crumb.name}
-                    </button>
-                  </div>
-                {/each} -->
+                {#if current.isRoot}
+                  <span class="font-medium text-gray-900">仓库列表</span>
+                {:else}
+                  <button onclick={() => syncAnyLevel('https://github.com/ghub-drive')} class="hover:text-blue-600 transition-colors"> 仓库列表 </button>
+                  <span class="mx-2">/</span>
+                  <button onclick={() => syncAnyLevel(buildGitHubUrl({ repo: current.repo }))} class="hover:text-blue-600 transition-colors {!current.path ? 'font-medium text-gray-900' : ''}">
+                    {current.repo}
+                  </button>
+                  {#if current.path}
+                    {#each current.path.split('/').filter((p) => p) as segment, index}
+                      <span class="mx-2">/</span>
+                      {@const segmentPath = current.path
+                        .split('/')
+                        .slice(0, index + 1)
+                        .join('/')}
+                      <button onclick={() => syncAnyLevel(buildGitHubUrl({ repo: current.repo, path: segmentPath, type: 'tree' }))} class="hover:text-blue-600 transition-colors {index === current.path.split('/').filter((p) => p).length - 1 ? 'font-medium text-gray-900' : ''}">
+                        {segment}
+                      </button>
+                    {/each}
+                  {/if}
+                {/if}
               </div>
               <hr class="my-2 border-gray-200" />
               <!-- 文件列表 -->
@@ -143,7 +149,7 @@
                     </div>
                   </div>
                 {/if}
-                
+
                 {#if list.length === 0 && !loading}
                   <div class="text-center py-12 text-gray-500">
                     <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -181,4 +187,4 @@
   </div>
 </div>
 <EditRepoModal visible={showEditRepoModal} />
-<!-- <CreateFolderModal bind:visible={showCreateFolderModal} {current.htmlUrl} onSuccess={handleFolderCreated} /> -->
+<CreateFolderModal bind:visible={showCreateFolderModal} currentPath={current.htmlUrl} onSuccess={handleFolderCreated} />

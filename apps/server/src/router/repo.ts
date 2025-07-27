@@ -59,9 +59,9 @@ router.post("/create-file", async (ctx) => {
 
 // 创建文件夹
 router.post("/create-folder", async (ctx) => {
-    const { path } = ctx.request.body;
+    const { path, repo } = ctx.request.body;
     try {
-        const result = await createFolder(path);
+        const result = await createFolder(path, repo);
         ctx.body = JsonResult.success(result);
     } catch (e: any) {
         ctx.body = JsonResult.failed(e.message || "创建文件夹失败");

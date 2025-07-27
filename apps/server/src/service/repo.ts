@@ -106,21 +106,18 @@ export const upload = async (file: any, path: string) => {
  * @returns {Promise<any>}
  */
 export const createFolder = async (
-  path: string
+  path, repo
 ) => {
   const api = await getGhubApi();
-  const pathParts = path.split('/').filter((p: string) => p);
-  const repoName = pathParts.at(0);
-  const directory = pathParts.slice(1).join('/');
 
   // 确保路径以 .gitkeep 结尾
-  const filePath = directory + "/.gitkeep";
+  const filePath = path + "/.gitkeep";
   const content = ""; // 空内容
   const base64Content = Buffer.from(content, 'utf-8').toString('base64');
 
-  const url = `/repos/${OWNER}/${repoName}/contents/${filePath}`;
+  const url = `/repos/${OWNER}/${repo}/contents/${filePath}`;
   const params = {
-    message: `Create folder: ${directory}`,
+    message: `Create folder: ${path}`,
     content: base64Content,
     branch: BRANCH,
   };
