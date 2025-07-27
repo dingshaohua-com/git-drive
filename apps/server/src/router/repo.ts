@@ -1,13 +1,21 @@
 
 import Router from "@koa/router";
 import JsonResult from "../utils/json-result";
-// import { createGithubFolder } from "../service/ghub";
-// import { queryList } from "../service/ghub";
-// import { listGithubRepos } from "../service/ghub";
 import rootRouter from "./root";
-import { queryList, queryOne, upload, createFile, createFolder, updateFile, deleteFile } from "../service/repo";
+import { queryList, queryOne, upload, create, remove, createGithubRepo } from "../service/repo";
 
 const router = new Router({ prefix: "/api/repo" });
+
+
+router.post("/repo", async (ctx) => {
+  const { repoName, description } = ctx.request.body;
+  try {
+    const result = await createGithubRepo(repoName, description);
+    ctx.body = JsonResult.success(result);
+  } catch (e) {
+    ctx.body = JsonResult.failed(e.message || "创建仓库失败");
+  }
+});
 
 
 rootRouter.get("/repos", async (ctx) => {
@@ -20,11 +28,11 @@ rootRouter.get("/repos", async (ctx) => {
     }
 });
 
-// 删除文件
+// 删除文件或文件夹
 router.delete("/", async (ctx) => {
     const { repo, path } = ctx.query;
     try {
-        const result = await deleteFile(repo, path);
+        const result = await remove(repo, path);
         ctx.body = JsonResult.success(result);
     } catch (e: any) {
         ctx.body = JsonResult.failed(e.message || "删除文件失败");
@@ -52,46 +60,46 @@ router.post("/upload", async (ctx) => {
 
 
 
-// 创建文件
-router.post("/create-file", async (ctx) => {
-    const { repoName, filePath, content, message, branch } = ctx.request.body;
-    if (!repoName || !filePath || content === undefined) {
-        ctx.body = JsonResult.failed("repoName、filePath 和 content 必填");
-        return;
-    }
-    try {
-        const result = await createFile(repoName, filePath, content, message, branch);
-        ctx.body = JsonResult.success(result);
-    } catch (e: any) {
-        ctx.body = JsonResult.failed(e.message || "创建文件失败");
-    }
-});
+// // 创建文件
+// router.post("/", async (ctx) => {
+//     const { repoName, filePath, content, message, branch } = ctx.request.body;
+//     if (!repoName || !filePath || content === undefined) {
+//         ctx.body = JsonResult.failed("repoName、filePath 和 content 必填");
+//         return;
+//     }
+//     try {
+//         const result = await create(repoName, filePath, content, message, branch);
+//         ctx.body = JsonResult.success(result);
+//     } catch (e: any) {
+//         ctx.body = JsonResult.failed(e.message || "创建文件失败");
+//     }
+// });
 
 // 创建文件夹
-router.post("/create-folder", async (ctx) => {
+router.post("/", async (ctx) => {
     const { path, repo } = ctx.request.body;
     try {
-        const result = await createFolder(path, repo);
+        const result = await create(path, repo);
         ctx.body = JsonResult.success(result);
     } catch (e: any) {
         ctx.body = JsonResult.failed(e.message || "创建文件夹失败");
     }
 });
 
-// 更新文件
-router.put("/update-file", async (ctx) => {
-    const { repoName, filePath, content, message, branch } = ctx.request.body;
-    if (!repoName || !filePath || content === undefined) {
-        ctx.body = JsonResult.failed("repoName、filePath 和 content 必填");
-        return;
-    }
-    try {
-        const result = await updateFile(repoName, filePath, content, message, branch);
-        ctx.body = JsonResult.success(result);
-    } catch (e: any) {
-        ctx.body = JsonResult.failed(e.message || "更新文件失败");
-    }
-});
+// // 更新文件
+// router.put("/update-file", async (ctx) => {
+//     const { repoName, filePath, content, message, branch } = ctx.request.body;
+//     if (!repoName || !filePath || content === undefined) {
+//         ctx.body = JsonResult.failed("repoName、filePath 和 content 必填");
+//         return;
+//     }
+//     try {
+//         const result = await updateFile(repoName, filePath, content, message, branch);
+//         ctx.body = JsonResult.success(result);
+//     } catch (e: any) {
+//         ctx.body = JsonResult.failed(e.message || "更新文件失败");
+//     }
+// });
 
 
 

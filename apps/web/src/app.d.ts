@@ -40,9 +40,9 @@ interface Api {
 	repo: {
 		get: (params: any) => Promise<any>;
 		list: (params?: any) => Promise<any>;
-		add: (params: { token: string }) => Promise<any>;
+		add: (params: any) => Promise<any>;
 		upload: (params: any) => Promise<any>;
-		createFolder: (params: any) => Promise<any>;
+		create: (params: any) => Promise<any>;
 		remove: (params: any) => Promise<void>;
 	},
 }

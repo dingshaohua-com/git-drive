@@ -25,11 +25,12 @@
 
     addLoading = true;
     const { repo, path } = parseGitHubUrl(currentPath);
+    console.log('文件夹的时候', currentPath, path);
     try {
       // 这里需要调用创建文件夹的 API
-      await api.repo.createFolder({
+      await api.repo.create({
         repo,
-        path: path + '/' + folderName.trim(),
+        path: path + (path?'/':'') + folderName.trim(),
       });
 
       toast.success('文件夹创建成功');

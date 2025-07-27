@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Button, Modal } from "flowbite-svelte";
 
-  let { visible } = $props();
+  let { visible, onSuccess } = $props();
   let defaultModal = $state(false);
   let addError = $state('');
   let addLoading = $state(false);
@@ -17,15 +17,15 @@
     }
     addLoading = true;
     try {
-      await api.ghub.repo.add({repoName, description:repoDesc}),
+      await api.repo.add({repoName, description:repoDesc}),
       visible = false;
-      // syncGitToken();
     } catch (e) {
       console.error(e);
       
       addError = '网络错误或服务器异常';
     } finally {
       addLoading = false;
+      onSuccess?.();
     }
   }
 

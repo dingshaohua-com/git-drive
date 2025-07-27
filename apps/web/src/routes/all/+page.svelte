@@ -6,9 +6,10 @@
   import { formatFileSize, getFileIcon, getBreadcrumbs, parseGitHubUrl, buildGitHubUrl, getParentGitHubUrl } from './helper';
   import toast from '$lib/toast';
   import { uploadFile, triggerFileUpload } from '$lib/utils/file-uploader';
+  import copyToClipboard from '$lib/utils/copy-helper';
 
   let loading = $state(false);
-  let list = $state([]);
+  let list = $state<Array<{name:string, path: string, html_url: string, download_url: string, type: string, size: number}>>([]);
   let showEditRepoModal = $state(false);
   let showCreateFolderModal = $state(false);
   let current = $state({
@@ -19,7 +20,7 @@
   });
 
   const syncAnyLevel = async (htmlUrl: string) => {
-    const { owner, repo, branch, path, isRoot } = parseGitHubUrl(htmlUrl);
+    const { repo, path, isRoot } = parseGitHubUrl(htmlUrl);
     current.path = path;
     current.repo = repo;
     current.htmlUrl = htmlUrl;
@@ -42,30 +43,40 @@
   }
 
   function triggerUpload() {
+    loading = true;
     triggerFileUpload({
       path: current.htmlUrl,
       onSuccess: () => {
         syncAnyLevel(current.htmlUrl);
-      }
+      },
     });
   }
 
   // 创建文件夹成功后的回调
   function handleFolderCreated() {
-    syncAnyLevel(current.htmlUrl)
-  }
-
-  const handleRename = (item: any) => {   
-
-  }
-
-  const handleDelete = async(item: any) => {   
-    console.log(item);
-    const { repo, path} = parseGitHubUrl(item.html_url);
-    await api.repo.remove({ repo, path});
     syncAnyLevel(current.htmlUrl);
   }
 
+  const handleRename = (item: any) => {};
+
+  const handleDelete = async (item: any) => {
+    loading = true;
+    const { repo, path } = parseGitHubUrl(item.html_url);
+    await api.repo.remove({ repo, path });
+    syncAnyLevel(current.htmlUrl);
+  };
+
+  const handleShare = (item: any) => {
+    copyToClipboard(item.download_url);
+    toast.success('分享链接已复制');
+  };
+
+  const createRepo = () => {
+    showEditRepoModal = true;
+  };
+  const handleRepoCreated = () => {
+    syncAnyLevel('https://github.com/ghub-drive');
+  };
 </script>
 
 <div class="min-h-screen bg-gray-50 flex flex-col items-center justify-center">
@@ -90,7 +101,7 @@
                 </div>
                 <div class="flex items-center space-x-2">
                   {#if current.isRoot}
-                    <button title="新建仓库" class="cursor-pointer p-1 rounded hover:bg-blue-100 transition-colors" onclick={() => alert('新建仓库功能待实现')}>
+                    <button title="新建仓库" class="cursor-pointer p-1 rounded hover:bg-blue-100 transition-colors" onclick={createRepo}>
                       <i class="ri-file-add-line text-xl text-blue-600"></i>
                     </button>
                   {:else}
@@ -139,16 +150,16 @@
                   </div>
                 {/if}
 
-                {#if list.filter(item => item.name !== '.gitkeep').length === 0 && !loading}
+                {#if list.filter((item) => item.name !== '.gitkeep').length === 0 && !loading}
                   <div class="text-center py-12 text-gray-500">
                     <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v9a2 2 0 01-2-2z" />
                     </svg>
                     <p>此目录为空</p>
                   </div>
-                {:else if list.filter(item => item.name !== '.gitkeep').length > 0}
+                {:else if list.filter((item) => item.name !== '.gitkeep').length > 0}
                   <div class="flex flex-wrap gap-4">
-                    {#each list.filter(item => item.name !== '.gitkeep') as item (item.path)}
+                    {#each list.filter((item) => item.name !== '.gitkeep') as item (item.path)}
                       <ContextMenu>
                         {#snippet children()}
                           <div class="w-24 h-20 border border-gray-200 rounded-lg p-2 hover:bg-gray-50 transition-colors">
@@ -167,22 +178,22 @@
                             </div>
                           </div>
                         {/snippet}
-                        
+
                         {#snippet menu()}
-                          <button 
-                            class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2 transition-colors"
-                            onclick={() => handleRename(item)}
-                          >
+                          <button class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2 transition-colors" onclick={() => handleRename(item)}>
                             <i class="ri-edit-line text-blue-500"></i>
                             <span>重命名</span>
                           </button>
-                          <button 
-                            class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2 transition-colors"
-                            onclick={() => handleDelete(item)}
-                          >
+                          <button class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2 transition-colors" onclick={() => handleDelete(item)}>
                             <i class="ri-delete-bin-line text-red-500"></i>
                             <span>删除</span>
                           </button>
+                          {#if item.type === 'file'}
+                            <button class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2 transition-colors" onclick={() => handleShare(item)}>
+                              <i class="ri-share-line text-red-500"></i>
+                              <span>分享</span>
+                            </button>
+                          {/if}
                         {/snippet}
                       </ContextMenu>
                     {/each}
@@ -195,7 +206,6 @@
       </div>
     </div>
   </div>
-
 </div>
-<EditRepoModal visible={showEditRepoModal} />
+<EditRepoModal visible={showEditRepoModal} onSuccess={handleRepoCreated}/>
 <CreateFolderModal bind:visible={showCreateFolderModal} currentPath={current.htmlUrl} onSuccess={handleFolderCreated} />
