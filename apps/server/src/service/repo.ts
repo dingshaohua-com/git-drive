@@ -245,11 +245,9 @@ export const updateFile = async (
 };
 
 /**
- * 删除 GitHub 仓库中的文件
+ * 删除 GitHub 仓库中的文件或文件夹
  * @param {string} repoName 仓库名
  * @param {string} filePath 文件路径
- * @param {string} [message] 提交信息
- * @param {string} [branch] 分支名，默认为 main
  * @returns {Promise<any>}
  */
 export const deleteFile = async (
@@ -259,21 +257,42 @@ export const deleteFile = async (
   const api = await getGhubApi();
 
   try {
-    // 先获取文件信息以获取 sha
+    // 先获取路径信息
     const getUrl = `/repos/${OWNER}/${repoName}/contents/${filePath}`;
-     console.log(111222, getUrl);
     const getRes = await api.get(getUrl);
-    const sha = getRes.data.sha;
-    const params = {
-      message: `Delete file ${filePath}`,
-      sha: sha,
-      branch: BRANCH,
-    };
-    const res = await api.delete(getUrl, { data: params });
-    return res.data;
+    
+    // 如果是文件夹（数组），递归删除所有文件
+    if (Array.isArray(getRes.data)) {
+      const deletePromises = getRes.data.map(async (item: any) => {
+        if (item.type === 'file') {
+          const params = {
+            message: `Delete file ${item.path}`,
+            sha: item.sha,
+            branch: BRANCH,
+          };
+          return api.delete(`/repos/${OWNER}/${repoName}/contents/${item.path}`, { data: params });
+        } else if (item.type === 'dir') {
+          // 递归删除子文件夹
+          return deleteFile(repoName, item.path);
+        }
+      });
+      
+      await Promise.all(deletePromises);
+      return { message: `Successfully deleted folder ${filePath}` };
+    } else {
+      // 删除单个文件
+      const sha = getRes.data.sha;
+      const params = {
+        message: `Delete file ${filePath}`,
+        sha: sha,
+        branch: BRANCH,
+      };
+      const res = await api.delete(getUrl, { data: params });
+      return res.data;
+    }
   } catch (error: any) {
-    console.error("删除文件失败:", error.response?.data || error.message);
-    throw new Error(`删除文件失败: ${error.response?.data?.message || error.message}`);
+    console.error("删除失败:", error.response?.data || error.message);
+    throw new Error(`删除失败: ${error.response?.data?.message || error.message}`);
   }
 };
 
