@@ -279,3 +279,78 @@ export const deleteFile = async (
     throw new Error(`删除文件失败: ${error.response?.data?.message || error.message}`);
   }
 };
+
+
+export const deleteFile1 = async (filePath: string) => {
+  try {
+    // 先获取文件信息以获取 sha
+    const getUrl = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${filePath}`;
+    const getRes = await axios.get(getUrl, {
+      headers: {
+        Authorization: `token ${GITHUB_TOKEN}`,
+        Accept: "application/vnd.github+json",
+        "User-Agent": "Node.js"
+      },
+    });
+
+    const sha = getRes.data.sha;
+
+    // 删除文件
+    const deleteUrl = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${filePath}`;
+    const deleteRes = await axios.delete(deleteUrl, {
+      headers: {
+        Authorization: `token ${GITHUB_TOKEN}`,
+        Accept: "application/vnd.github+json",
+        "User-Agent": "Node.js"
+      },
+      data: {
+        message: `delete file ${filePath}`,
+        sha: sha,
+        branch: BRANCH
+      }
+    });
+
+    return true;
+  } catch (error) {
+    console.error("删除文件失败:", error.response?.data || error.message);
+    throw new Error(`删除失败: ${error.response?.data?.message || error.message}`);
+  }
+};
+
+// 获取目录树结构（只获取目录，不获取文件）
+export const getDirectoryTree = async (directory = '', level = 0) => {
+  try {
+    // 防止递归过深
+    if (level > 10) return [];
+    
+    const url = directory 
+      ? `https://api.github.com/repos/${OWNER}/${REPO}/contents/${directory}`
+      : `https://api.github.com/repos/${OWNER}/${REPO}/contents`;
+    
+    const res = await axios.get(url, {
+      headers: {
+        Authorization: `token ${GITHUB_TOKEN}`,
+        Accept: "application/vnd.github+json",
+        "User-Agent": "Node.js"
+      },
+    });
+
+    // 只处理目录类型的项目
+    const directories = res.data.filter(item => item.type === 'dir');
+    
+    const dirTree = await Promise.all(directories.map(async item => {
+      const children = await getDirectoryTree(item.path, level + 1);
+      return {
+        name: item.name,
+        path: item.path,
+        children: children
+      };
+    }));
+
+    return dirTree;
+  } catch (error) {
+    console.error("获取目录树失败:", error.response?.data || error.message);
+    return [];
+  }
+};
+
