@@ -4,6 +4,7 @@
   import Navigation from '$lib/components/navbar.svelte';
   import { formatFileSize, getFileIcon, getBreadcrumbs, parseGitHubUrl, buildGitHubUrl, getParentGitHubUrl } from './helper';
   import toast from '$lib/toast';
+  import { uploadFile, triggerFileUpload } from '$lib/utils/file-uploader';
 
   let loading = $state(false);
   let list = $state([]);
@@ -35,41 +36,17 @@
   syncAnyLevel('https://github.com/ghub-drive');
 
   function goBack() {
-    //
     const parentPath = getParentGitHubUrl(current.htmlUrl);
-    console.log(9999, current.htmlUrl, parentPath);
-
     syncAnyLevel(parentPath);
   }
 
-  let uploadInput: HTMLInputElement | null = null;
-
   function triggerUpload() {
-    uploadInput?.click();
-  }
-
-  async function handleUploadFile(event: Event) {
-    const files = (event.target as HTMLInputElement).files;
-    if (!files || files.length === 0) return;
-    const file = files[0];
-
-    const formData = new FormData();
-    formData.append('file', file);
-    // 可选：传递当前目录
-    formData.append('path', currentPath);
-
-    loading = true;
-    try {
-      // 假设你的后端上传接口为 /api/file/upload
-      const res = await api.repo.upload(formData);
-      const result = await res.json();
-      toast.success('上传成功');
-    } catch (e) {
-      toast.error('上传出错');
-    }
-    loading = false;
-    // 清空 input
-    if (uploadInput) uploadInput.value = '';
+    triggerFileUpload({
+      path: current.htmlUrl,
+      onSuccess: () => {
+        syncAnyLevel(current.htmlUrl);
+      }
+    });
   }
 
   // 创建文件夹成功后的回调
@@ -110,7 +87,6 @@
                     <button title="上传文件" class="cursor-pointer p-1 rounded hover:bg-purple-100 transition-colors" onclick={triggerUpload}>
                       <i class="ri-upload-2-line text-xl text-purple-600"></i>
                     </button>
-                    <input type="file" bind:this={uploadInput} class="hidden" onchange={handleUploadFile} />
                   {/if}
                 </div>
               </div>

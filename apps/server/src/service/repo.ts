@@ -67,11 +67,7 @@ export const queryOne = async (repo: string, path: string) => {
   }
 }
 
-export const upload = async (file: any, path: string) => {
-
-  const pathParts = path.split('/').filter((p: string) => p);
-  const repoName = pathParts.at(0);
-  const directory = pathParts.slice(1).join('/');
+export const upload = async (file: any, path: string, repo: string) => {
 
   const { newFilename, filepath } = file;
   const api = await getGhubApi();
@@ -79,11 +75,7 @@ export const upload = async (file: any, path: string) => {
   // 读取文件并转 base64
   const fileBuffer = fs.readFileSync(filepath);
   const base64Content = fileBuffer.toString("base64");
-
-  // 拼接目标路径
-  const filePathInRepo = directory ? `${directory}/${newFilename}` : newFilename;
-
-  const url = `/repos/${OWNER}/${repoName}/contents/${filePathInRepo}`;
+  const url = `/repos/${OWNER}/${repo}/contents/${path}/${newFilename}`;
   const params = {
     message: `upload file ${newFilename}`,
     content: base64Content,

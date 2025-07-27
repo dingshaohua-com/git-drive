@@ -33,9 +33,9 @@ router.get("/", async (ctx) => {
 // 上传文件
 router.post("/upload", async (ctx) => {
     const { file } = ctx.request.files;
-    const { path } = ctx.request.body; // 从 body 中获取 path 参数
+    const { path, repo } = ctx.request.body; // 从 body 中获取 path 参数
     
-    const res = await upload(file, path);
+    const res = await upload(file, path, repo);
     ctx.body = JsonResult.success(res);
 });
 
