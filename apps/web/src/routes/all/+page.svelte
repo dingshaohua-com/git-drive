@@ -150,16 +150,16 @@
                   </div>
                 {/if}
 
-                {#if list.length === 0 && !loading}
+                {#if list.filter(item => item.name !== '.gitkeep').length === 0 && !loading}
                   <div class="text-center py-12 text-gray-500">
                     <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v9a2 2 0 01-2-2z" />
                     </svg>
                     <p>此目录为空</p>
                   </div>
-                {:else if list.length > 0}
+                {:else if list.filter(item => item.name !== '.gitkeep').length > 0}
                   <div class="flex flex-wrap gap-4">
-                    {#each list as item (item.path)}
+                    {#each list.filter(item => item.name !== '.gitkeep') as item (item.path)}
                       <div class="w-24 border border-gray-200 rounded-lg p-2 hover:bg-gray-50 transition-colors">
                         <div class="flex flex-col items-center cursor-pointer" onclick={() => syncAnyLevel(item.html_url)}>
                           <i class="{getFileIcon(item)} text-3xl"></i>
