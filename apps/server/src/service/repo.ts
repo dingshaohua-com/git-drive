@@ -255,65 +255,25 @@ export const updateFile = async (
 export const deleteFile = async (
   repoName: string,
   filePath: string,
-  message?: string,
-  branch: string = "main"
 ) => {
   const api = await getGhubApi();
 
   try {
     // 先获取文件信息以获取 sha
     const getUrl = `/repos/${OWNER}/${repoName}/contents/${filePath}`;
+     console.log(111222, getUrl);
     const getRes = await api.get(getUrl);
     const sha = getRes.data.sha;
-
     const params = {
-      message: message || `Delete file ${filePath}`,
+      message: `Delete file ${filePath}`,
       sha: sha,
-      branch: branch,
+      branch: BRANCH,
     };
-
     const res = await api.delete(getUrl, { data: params });
     return res.data;
   } catch (error: any) {
-    console.error("GitHub delete file error:", error.response?.data || error.message);
-    throw new Error(`删除文件失败: ${error.response?.data?.message || error.message}`);
-  }
-};
-
-
-export const deleteFile1 = async (filePath: string) => {
-  try {
-    // 先获取文件信息以获取 sha
-    const getUrl = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${filePath}`;
-    const getRes = await axios.get(getUrl, {
-      headers: {
-        Authorization: `token ${GITHUB_TOKEN}`,
-        Accept: "application/vnd.github+json",
-        "User-Agent": "Node.js"
-      },
-    });
-
-    const sha = getRes.data.sha;
-
-    // 删除文件
-    const deleteUrl = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${filePath}`;
-    const deleteRes = await axios.delete(deleteUrl, {
-      headers: {
-        Authorization: `token ${GITHUB_TOKEN}`,
-        Accept: "application/vnd.github+json",
-        "User-Agent": "Node.js"
-      },
-      data: {
-        message: `delete file ${filePath}`,
-        sha: sha,
-        branch: BRANCH
-      }
-    });
-
-    return true;
-  } catch (error) {
     console.error("删除文件失败:", error.response?.data || error.message);
-    throw new Error(`删除失败: ${error.response?.data?.message || error.message}`);
+    throw new Error(`删除文件失败: ${error.response?.data?.message || error.message}`);
   }
 };
 

@@ -4,7 +4,6 @@ import JsonResult from "../utils/json-result";
 // import { createGithubFolder } from "../service/ghub";
 // import { queryList } from "../service/ghub";
 // import { listGithubRepos } from "../service/ghub";
-import { getRepDir } from "../service/file";
 import rootRouter from "./root";
 import { queryList, queryOne, upload, createFile, createFolder, updateFile, deleteFile } from "../service/repo";
 
@@ -18,6 +17,17 @@ rootRouter.get("/repos", async (ctx) => {
         ctx.body = JsonResult.success(result);
     } catch (e) {
         ctx.body = JsonResult.failed(e.message || "获取仓库列表失败");
+    }
+});
+
+// 删除文件
+router.delete("/", async (ctx) => {
+    const { repo, path } = ctx.query;
+    try {
+        const result = await deleteFile(repo, path);
+        ctx.body = JsonResult.success(result);
+    } catch (e: any) {
+        ctx.body = JsonResult.failed(e.message || "删除文件失败");
     }
 });
 
@@ -83,20 +93,7 @@ router.put("/update-file", async (ctx) => {
     }
 });
 
-// 删除文件
-router.delete("/delete-file", async (ctx) => {
-    const { repoName, filePath, message, branch } = ctx.request.body;
-    if (!repoName || !filePath) {
-        ctx.body = JsonResult.failed("repoName 和 filePath 必填");
-        return;
-    }
-    try {
-        const result = await deleteFile(repoName, filePath, message, branch);
-        ctx.body = JsonResult.success(result);
-    } catch (e: any) {
-        ctx.body = JsonResult.failed(e.message || "删除文件失败");
-    }
-});
+
 
 // router.post("/", async (ctx) => {
 //     const { repoName, description } = ctx.request.body;

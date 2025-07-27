@@ -2,6 +2,7 @@
   import EditRepoModal from '$lib/components/edit-repo-modal.svelte';
   import CreateFolderModal from '$lib/components/create-folder-modal.svelte';
   import Navigation from '$lib/components/navbar.svelte';
+  import ContextMenu from '$lib/components/context-menu.svelte';
   import { formatFileSize, getFileIcon, getBreadcrumbs, parseGitHubUrl, buildGitHubUrl, getParentGitHubUrl } from './helper';
   import toast from '$lib/toast';
   import { uploadFile, triggerFileUpload } from '$lib/utils/file-uploader';
@@ -53,6 +54,18 @@
   function handleFolderCreated() {
     syncAnyLevel(current.htmlUrl)
   }
+
+  const handleRename = (item: any) => {   
+
+  }
+
+  const handleDelete = async(item: any) => {   
+    console.log(item);
+    const { repo, path} = parseGitHubUrl(item.html_url);
+    await api.repo.remove({ repo, path});
+    syncAnyLevel(current.htmlUrl);
+  }
+
 </script>
 
 <div class="min-h-screen bg-gray-50 flex flex-col items-center justify-center">
@@ -136,21 +149,42 @@
                 {:else if list.filter(item => item.name !== '.gitkeep').length > 0}
                   <div class="flex flex-wrap gap-4">
                     {#each list.filter(item => item.name !== '.gitkeep') as item (item.path)}
-                      <div class="w-24 border border-gray-200 rounded-lg p-2 hover:bg-gray-50 transition-colors">
-                        <div class="flex flex-col items-center cursor-pointer" onclick={() => syncAnyLevel(item.html_url)}>
-                          <i class="{getFileIcon(item)} text-3xl"></i>
-                          <div class="mt-1 w-full text-center">
-                            <p class="text-xs font-medium text-gray-900 truncate" title={item.name}>
-                              {item.name}
-                            </p>
-                            {#if item.type === 'file'}
-                              <p class="text-xs text-gray-500">
-                                {formatFileSize(item.size)}
-                              </p>
-                            {/if}
+                      <ContextMenu>
+                        {#snippet children()}
+                          <div class="w-24 h-20 border border-gray-200 rounded-lg p-2 hover:bg-gray-50 transition-colors">
+                            <div class="flex flex-col items-center cursor-pointer" onclick={() => syncAnyLevel(item.html_url)}>
+                              <i class="{getFileIcon(item)} text-3xl"></i>
+                              <div class="mt-1 w-full text-center">
+                                <p class="text-xs font-medium text-gray-900 truncate" title={item.name}>
+                                  {item.name}
+                                </p>
+                                {#if item.type === 'file'}
+                                  <p class="text-xs text-gray-500">
+                                    {formatFileSize(item.size)}
+                                  </p>
+                                {/if}
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
+                        {/snippet}
+                        
+                        {#snippet menu()}
+                          <button 
+                            class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2 transition-colors"
+                            onclick={() => handleRename(item)}
+                          >
+                            <i class="ri-edit-line text-blue-500"></i>
+                            <span>重命名</span>
+                          </button>
+                          <button 
+                            class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2 transition-colors"
+                            onclick={() => handleDelete(item)}
+                          >
+                            <i class="ri-delete-bin-line text-red-500"></i>
+                            <span>删除</span>
+                          </button>
+                        {/snippet}
+                      </ContextMenu>
                     {/each}
                   </div>
                 {/if}
@@ -161,6 +195,7 @@
       </div>
     </div>
   </div>
+
 </div>
 <EditRepoModal visible={showEditRepoModal} />
 <CreateFolderModal bind:visible={showCreateFolderModal} currentPath={current.htmlUrl} onSuccess={handleFolderCreated} />

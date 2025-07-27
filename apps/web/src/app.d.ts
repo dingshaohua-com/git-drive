@@ -43,6 +43,7 @@ interface Api {
 		add: (params: { token: string }) => Promise<any>;
 		upload: (params: any) => Promise<any>;
 		createFolder: (params: any) => Promise<any>;
+		remove: (params: any) => Promise<void>;
 	},
 }
 declare global {

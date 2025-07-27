@@ -18,6 +18,15 @@ export const createFolder = (params: any) => {
     return axios.post('/repo/create-folder', params);
 }
 
+// 删除文件
+export const remove = (params: {
+    repo: string;
+    path: string;
+}) => {
+    return axios.delete('/repo', {params});
+}
+
+
 // 创建文件
 // export const createFile = (params: {
 //     repoName: string;
@@ -39,15 +48,6 @@ export const createFolder = (params: any) => {
 //     return axios.put('/repo/update-file', params);
 // }
 
-// // 删除文件
-// export const deleteFile = (params: {
-//     repoName: string;
-//     filePath: string;
-//     message?: string;
-//     branch?: string;
-// }) => {
-//     return axios.delete('/repo/delete-file', { data: params });
-// }
 
 
 
