@@ -38,7 +38,7 @@ interface Api {
 		me: () => Promise<User>;
 	},
 	repo: {
-		get: (params: { repoName: string }) => Promise<any>;
+		get: (params: any) => Promise<any>;
 		list: (params?: any) => Promise<any>;
 		add: (params: { token: string }) => Promise<any>;
 		upload: (params: any) => Promise<any>;

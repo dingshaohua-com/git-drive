@@ -2,46 +2,49 @@
   import EditRepoModal from '$lib/components/edit-repo-modal.svelte';
   import CreateFolderModal from '$lib/components/create-folder-modal.svelte';
   import Navigation from '$lib/components/navbar.svelte';
-  import { formatFileSize, getFileIcon, getBreadcrumbs } from './helper';
+  import { formatFileSize, getFileIcon, getBreadcrumbs, parseGitHubUrl, buildGitHubUrl, getParentGitHubUrl } from './helper';
   import toast from '$lib/toast';
 
   let loading = $state(false);
   let list = $state([]);
   let showEditRepoModal = $state(false);
   let showCreateFolderModal = $state(false);
-  let currentPath = $state('');
+  let current = $state({
+    path: '',
+    repo: '',
+    htmlUrl: '',
+    isRoot: false,
+  });
 
   // https://github.com/ghub-drive/one/blob/main/cc.gitkeep
 
-  const syncAnyLevel = async (path: string = '') => {
+  console.log();
+
+  const syncAnyLevel = async (htmlUrl: string = '') => {
+    const { owner, repo, branch, path, isRoot } = parseGitHubUrl(htmlUrl);
+    current.path = path;
+    current.repo = repo;
+    current.htmlUrl = htmlUrl;
+    current.isRoot = isRoot;
     loading = true;
-    currentPath = currentPath + '/' + path;
-    console.log(111, currentPath);
-
-    const pathParts = currentPath.split('/').filter((p: string) => p);
-    const justIsRepo = pathParts.length === 1;
-    const repoName = pathParts.at(0) as string;
-
     // 判断是否获取仓库列表（如果为'/'，则是）
-    if (currentPath === '/') {
+    if (isRoot) {
       list = await api.repo.list();
     } else {
-      // 是否获取仓库文件列表，还是获取仓库某个文件夹下的文件列表
-      if (justIsRepo) {
-        list = await api.repo.get({ repoName });
-      } else {
-        // alert(123);
-      }
+      list = await api.repo.get({ repo, path });
+
+      console.log(222);
     }
     loading = false;
   };
 
-  syncAnyLevel();
+  syncAnyLevel('https://github.com/ghub-drive');
 
   function goBack() {
-    const pathParts = currentPath.split('/').filter((p: string) => p);
-    pathParts.pop();
-    const parentPath = pathParts.join('/');
+    //
+    const parentPath = getParentGitHubUrl(current.htmlUrl);
+    console.log(9999, current.htmlUrl, parentPath);
+
     syncAnyLevel(parentPath);
   }
 
@@ -92,17 +95,17 @@
               <!-- 工具栏 -->
               <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-2">
-                  {#if currentPath !== '/'}
+                  {#if !current.isRoot}
                     <button onclick={goBack} class="cursor-pointer p-1 text-sm bg-gray-100 text-gray-600 rounded hover:bg-gray-200 disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors">
                       <i class="ri-arrow-left-line text-lg"></i>
                     </button>
                   {/if}
-                  <button onclick={() => syncAnyLevel(currentPath)} class="cursor-pointer p-1 text-sm bg-gray-100 text-gray-600 rounded hover:bg-gray-200 transition-colors">
+                  <button onclick={() => syncAnyLevel(current.htmlUrl)} class="cursor-pointer p-1 text-sm bg-gray-100 text-gray-600 rounded hover:bg-gray-200 transition-colors">
                     <i class="ri-refresh-line text-lg"></i>
                   </button>
                 </div>
                 <div class="flex items-center space-x-2">
-                  {#if !currentPath}
+                  {#if current.isRoot}
                     <button title="新建仓库" class="cursor-pointer p-1 rounded hover:bg-blue-100 transition-colors" onclick={() => alert('新建仓库功能待实现')}>
                       <i class="ri-file-add-line text-xl text-blue-600"></i>
                     </button>
@@ -118,15 +121,16 @@
                 </div>
               </div>
               <!-- 面包屑 -->
-              <div class="mt-3 flex items-center flex-wrap text-sm text-gray-600">
-                {#each getBreadcrumbs(currentPath) as crumb, index (crumb.path)}
+              <div class="mt-3 flex items-center flex-wrap text-sm text-gray-600 h-6">
+                {#if current.repo}/{current.repo}/{/if}{current.path}
+                <!-- {#each getBreadcrumbs(currentPath) as crumb, index (crumb.path)}
                   <div class="flex items-center">
                     {#if index > 0}<span class="mx-2">/</span>{/if}
                     <button onclick={() => syncAnyLevel(crumb.path)} class="hover:text-blue-600 transition-colors {index === getBreadcrumbs(currentPath).length - 1 ? 'font-medium text-gray-900' : ''}">
                       {crumb.name}
                     </button>
                   </div>
-                {/each}
+                {/each} -->
               </div>
               <hr class="my-2 border-gray-200" />
               <!-- 文件列表 -->
@@ -182,4 +186,4 @@
   </div>
 </div>
 <EditRepoModal visible={showEditRepoModal} />
-<CreateFolderModal bind:visible={showCreateFolderModal} {currentPath} onSuccess={handleFolderCreated} />
+<!-- <CreateFolderModal bind:visible={showCreateFolderModal} {current.htmlUrl} onSuccess={handleFolderCreated} /> -->

@@ -109,7 +109,7 @@
 
           <div class="flex">
             <input bind:value={formData.code} placeholder="请输入验证码" required class="flex-1 px-4 py-3 rounded-l-lg border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:outline-none" />
-            <button type="button" onclick={sendCode} disabled={isCodeSent} class="w-24 bg-blue-500 text-white rounded-r-lg hover:bg-blue-600 disabled:bg-gray-400 px-2 text-sm">
+            <button type="button" onclick={sendCode} disabled={isCodeSent} class="cursor-pointer w-24 bg-blue-500 text-white rounded-r-lg hover:bg-blue-600 disabled:bg-gray-400 px-2 text-sm">
               {isCodeSent ? `${countdown}s` : '发送验证码'}
             </button>
           </div>
@@ -122,13 +122,13 @@
 
           <div class="flex">
             <input bind:value={formData.code} placeholder="请输入验证码" required class="flex-1 px-4 py-3 rounded-l-lg border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:outline-none" />
-            <button type="button" onclick={sendCode} disabled={isCodeSent} class="w-24 bg-blue-500 text-white rounded-r-lg hover:bg-blue-600 disabled:bg-gray-400 px-2 text-sm">
+            <button type="button" onclick={sendCode} disabled={isCodeSent} class="cursor-pointer w-24 bg-blue-500 text-white rounded-r-lg hover:bg-blue-600 disabled:bg-gray-400 px-2 text-sm">
               {isCodeSent ? `${countdown}s` : '发送验证码'}
             </button>
           </div>
         {/if}
 
-        <button type="submit" class="w-full h-12 bg-blue-500 hover:bg-blue-600 text-white border-blue-500 hover:border-blue-600 rounded-lg"> 登录 </button>
+        <button type="submit" class="w-full h-12 bg-blue-500 hover:bg-blue-600 text-white border-blue-500 hover:border-blue-600 rounded-lg cursor-pointer"> 登录 </button>
       </form>
     </div>
 

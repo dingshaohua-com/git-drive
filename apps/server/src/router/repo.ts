@@ -24,10 +24,11 @@ rootRouter.get("/repos", async (ctx) => {
 
 // 获取仓库目录
 router.get("/", async (ctx) => {
-    const { repoName } = ctx.query;
-    const res = await queryOne(repoName);
+    const { repo, path } = ctx.query;
+    const res = await queryOne(repo, path);
     ctx.body = JsonResult.success(res);
 });
+
 
 // 上传文件
 router.post("/upload", async (ctx) => {

@@ -42,9 +42,9 @@ export const queryList = async (keyword: string = "") => {
 }
 
 
-export const queryOne = async (repoName: string) => {
+export const queryOne = async (repo: string, path: string) => {
   const api = await getGhubApi();
-  const url = `/repos/${OWNER}/${repoName}/contents`;
+  const url = `/repos/${OWNER}/${repo}/contents/${path}`;
   try {
     const res = await api.get(url, {
       headers: {

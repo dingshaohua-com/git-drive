@@ -85,7 +85,7 @@
         <div class="text-opacity-1">用户名同时也将用于您个人仓库前缀，比如 <code class="bg-blue-100 px-1 rounded ">name—xxx</code></div>
       </div>
 
-      <button type="submit" disabled={loading} class="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white font-medium py-3 px-4 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+      <button type="submit" disabled={loading} class="cursor-pointer w-full bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white font-medium py-3 px-4 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
         {#if loading}
           <div class="flex items-center justify-center">
             <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
