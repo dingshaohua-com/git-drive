@@ -140,6 +140,18 @@ export const remove = async (
 ) => {
   const api = await getGhubApi();
 
+  // 如果 filePath 为空或者是根路径，则删除整个仓库
+  if (!filePath || filePath === '/' || filePath === '') {
+    try {
+      const url = `/repos/${OWNER}/${repoName}`;
+      await api.delete(url);
+      return { message: `Successfully deleted repository ${repoName}` };
+    } catch (error: any) {
+      console.error("删除仓库失败:", error.response?.data || error.message);
+      throw new Error(`删除仓库失败: ${error.response?.data?.message || error.message}`);
+    }
+  }
+
   try {
     // 先获取路径信息
     const getUrl = `/repos/${OWNER}/${repoName}/contents/${filePath}`;
@@ -175,6 +187,9 @@ export const remove = async (
       return res.data;
     }
   } catch (error: any) {
+    if (error.response && error.response.status === 404 && error.response.data?.message === "This repository is empty.") {
+      return { message: "Repository is empty, nothing to delete" };
+    }
     console.error("删除失败:", error.response?.data || error.message);
     throw new Error(`删除失败: ${error.response?.data?.message || error.message}`);
   }
@@ -364,11 +379,23 @@ export const updateFile = async (
   }
 };
 
-
-
-
-
-
+/**
+ * 删除整个 GitHub 仓库
+ * @param {string} repoName 仓库名
+ * @returns {Promise<any>}
+ */
+export const deleteRepo = async (repoName: string) => {
+  const api = await getGhubApi();
+  
+  try {
+    const url = `/repos/${OWNER}/${repoName}`;
+    const res = await api.delete(url);
+    return { message: `Successfully deleted repository ${repoName}` };
+  } catch (error: any) {
+    console.error("删除仓库失败:", error.response?.data || error.message);
+    throw new Error(`删除仓库失败: ${error.response?.data?.message || error.message}`);
+  }
+};
 
 // // 获取目录树结构（只获取目录，不获取文件）
 // export const getDirectoryTree = async (directory = '', level = 0) => {
