@@ -5,6 +5,16 @@ import { queryList, queryOne, upload, create, remove, createGithubRepo } from '.
 
 const router = new Router({ prefix: '/api/repo' });
 
+rootRouter.get('/repos', async (ctx) => {
+  const { keyword } = ctx.query;
+  try {
+    const result = await queryList((keyword as string) || '');
+    ctx.body = JsonResult.success(result);
+  } catch (e) {
+    ctx.body = JsonResult.failed(e.message || '获取仓库列表失败');
+  }
+});
+
 router.post('/repo', async (ctx) => {
   const { repoName, description } = ctx.request.body;
   try {
@@ -15,15 +25,7 @@ router.post('/repo', async (ctx) => {
   }
 });
 
-rootRouter.get('/repos', async (ctx) => {
-  const { keyword } = ctx.query;
-  try {
-    const result = await queryList((keyword as string) || '');
-    ctx.body = JsonResult.success(result);
-  } catch (e) {
-    ctx.body = JsonResult.failed(e.message || '获取仓库列表失败');
-  }
-});
+
 
 // 删除文件或文件夹
 router.delete('/', async (ctx) => {
