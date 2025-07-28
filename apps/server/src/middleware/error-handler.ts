@@ -18,6 +18,9 @@ const errorHandler = (): Middleware => {
         stack: error.stack,
       });
 
+      console.log(111222, error);
+      
+
       // 根据错误类型设置不同的响应
       if (error.status) {
         // Koa 内置错误（如 404, 401 等）
