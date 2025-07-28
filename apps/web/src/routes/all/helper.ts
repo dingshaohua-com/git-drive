@@ -97,6 +97,9 @@ export const buildCustomUrl = ({
     url += `/${path}`;
   }
 
+  console.log(11111, path);
+  
+
   return url;
 }
 
@@ -126,14 +129,14 @@ export const getParentPath = (currentPath: string) => {
  * @returns {string} 上一级自定义 URL
  */
 export const getParentCustomUrl = (currentUrl: string) => {
-  const { repoName, path } = parseCustomUrl(currentUrl);
+  const { repo, path } = parseCustomUrl(currentUrl);
 
   // 如果没有路径，说明在仓库根目录，返回根目录
   if (!path) return `https://file.dingshaohua.com`;
 
   const parentPath = getParentPath(path);
 
-  return `https://file.dingshaohua.com/${repoName}${parentPath ? '/' + parentPath : ''}`;
+  return `https://file.dingshaohua.com/${repo}${parentPath ? '/' + parentPath : ''}`;
 }
 
 // /* ===== 使用示例 ===== */
