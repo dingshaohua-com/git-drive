@@ -11,6 +11,9 @@ importers:
       chalk:
         specifier: ^5.4.1
         version: 5.4.1
+      prettier:
+        specifier: ^3.6.2
+        version: 3.6.2
       turbo:
         specifier: ^2.5.5
         version: 2.5.5
@@ -162,6 +165,9 @@ importers:
       prettier-plugin-sort-imports:
         specifier: ^1.8.7
         version: 1.8.8(typescript@5.7.3)
+      prettier-plugin-svelte:
+        specifier: ^3.4.0
+        version: 3.4.0(prettier@3.6.2)(svelte@5.36.8)
 
 packages:
 

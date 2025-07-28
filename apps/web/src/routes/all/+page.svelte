@@ -3,9 +3,9 @@
   import CreateFolderModal from '$lib/components/create-folder-modal.svelte';
   import Navigation from '$lib/components/navbar.svelte';
   import ContextMenu from '$lib/components/context-menu.svelte';
-  import { formatFileSize, getFileIcon, getBreadcrumbs, parseGitHubUrl, buildGitHubUrl, getParentGitHubUrl } from './helper';
+  import { formatFileSize, getFileIcon, parseGitHubUrl, buildGitHubUrl, getParentGitHubUrl } from './helper';
   import toast from '$lib/toast';
-  import { uploadFile, triggerFileUpload } from '$lib/utils/file-uploader';
+  import { triggerFileUpload } from '$lib/utils/file-uploader';
   import copyToClipboard from '$lib/utils/copy-helper';
 
   interface Item {
@@ -15,7 +15,7 @@
     download_url: string;
     type: string;
     size: number;
-    down_url:string;
+    down_url: string;
   }
   let loading = $state(false);
   let list = $state<Array<Item>>([]);
@@ -90,10 +90,9 @@
   const clickItem = (item: Item) => {
     if (item.type === 'file') {
       handleShare(item);
-      setTimeout(()=>{
+      setTimeout(() => {
         window.open(item.down_url);
-      },1000)
-     
+      }, 1000);
     } else {
       syncAnyLevel(item.html_url);
     }

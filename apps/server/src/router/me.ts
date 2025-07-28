@@ -1,6 +1,6 @@
+import _ from 'lodash';
 import Router from '@koa/router';
 import JsonResult from '../utils/json-result';
-import _ from 'lodash';
 import reqCtx from '../middleware/req-ctx/helper';
 import { queryOne, update } from '../service/user';
 
@@ -19,7 +19,7 @@ router.get('/', async (ctx) => {
 
 router.put('/', async (ctx) => {
   const bodyParams = _.cloneDeep(ctx.request.body);
-  bodyParams.id = reqCtx.get('userId');;
+  bodyParams.id = reqCtx.get('userId');
   const results = await update(bodyParams);
   ctx.body = JsonResult.success(results);
 });

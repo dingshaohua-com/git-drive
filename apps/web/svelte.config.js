@@ -25,6 +25,8 @@ const config = {
     },
     // a11y: false
   },
+
+  
 };
 
 export default config;
