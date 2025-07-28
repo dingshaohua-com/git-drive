@@ -28,7 +28,7 @@
     console.log('文件夹的时候', currentPath, path);
     try {
       // 这里需要调用创建文件夹的 API
-      await api.repo.create({
+      await api.repo.addFolder({
         repo,
         path: path + (path?'/':'') + folderName.trim(),
       });

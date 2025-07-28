@@ -10,6 +10,7 @@ import router from './router/index.ts';
 import redisJwt from './middleware/redis-jwt.ts';
 import reqCtxMw from './middleware/req-ctx/mw.ts';
 import feRouterBack from './middleware/fe-router-back';
+import errorHandler from './middleware/error-handler';
 
 // 定义上传路径（最好不要配置到项目中，否则会跟随代码部署而被清空）
 const uploadDir = path.join(os.tmpdir(), 'git-drive-uploads'); // 系统临时目录（跨平台兼容）
@@ -18,6 +19,8 @@ if (!fs.existsSync(uploadDir)) {
 }
 
 const app = new Koa();
+// 错误处理中间件必须最先注册
+app.use(errorHandler());
 app.use(koaBody());
 app.use(
   koaBody({

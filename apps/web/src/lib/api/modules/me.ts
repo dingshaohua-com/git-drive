@@ -1,7 +1,7 @@
 import axios from "axios";
 
-export const get = (...arg?:any) => {
-  return axios.get('/me' ,...arg);
+export const get = () => {
+  return axios.get('/me');
 };
 
 export const put = (params:any) => {

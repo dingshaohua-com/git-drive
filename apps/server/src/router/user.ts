@@ -1,7 +1,7 @@
 import Router from '@koa/router';
 import { queryOne, update } from '../service/user';
 import JsonResult from '../utils/json-result';
-// import _ from 'lodash';
+import _ from 'lodash';
 
 const router = new Router({ prefix: '/api/user' });
 

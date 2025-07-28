@@ -14,7 +14,7 @@ interface Api {
     get: (params: any) => Promise<any>;
     add: (params: any) => Promise<any>;
     remove: (params: any) => Promise<void>;
-    upload: (params: any) => Promise<any>;
+    uploadFile: (params: any) => Promise<any>;
     addFolder: (params: any) => Promise<any>;
   };
 }

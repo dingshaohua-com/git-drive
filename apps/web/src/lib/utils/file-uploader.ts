@@ -25,7 +25,7 @@ export const uploadFile = async (file: File, options: UploadOptions = {}) => {
     formData.append('repo', repo);
     formData.append('path', filePath);
 
-    const res = await globalThis.api.repo.upload(formData);
+    const res = await globalThis.api.repo.uploadFile(formData);
     
     toast.success('上传成功');
     onSuccess?.(res);

@@ -20,39 +20,13 @@ export const add = (params: any) => {
   return axios.post('/repo', params);
 };
 
-
-
-
-
 // 上传文件
-export const upload = (params: any) => {
-  return axios.post('/repo/upload', params);
+export const uploadFile = (params: any) => {
+  return axios.post('/repo/upload-file', params);
 };
-
-
 
 // 创建文件夹
 export const addFolder = (params: any) => {
-  return axios.post('/repo/folder', params);
+  return axios.post('/repo/add-folder', params);
 };
 
-// 创建文件
-// export const createFile = (params: {
-//     repoName: string;
-//     filePath: string;
-//     content: string;
-//     message?: string;
-// }) => {
-//     return axios.post('/repo/create-file', params);
-// }
-
-// // 更新文件
-// export const updateFile = (params: {
-//     repoName: string;
-//     filePath: string;
-//     content: string;
-//     message?: string;
-//     branch?: string;
-// }) => {
-//     return axios.put('/repo/update-file', params);
-// }
