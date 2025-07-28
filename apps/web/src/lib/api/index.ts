@@ -61,9 +61,12 @@ axios.interceptors.response.use(
       setTimeout(() => {
         location.href = '/login';
       }, 2000);
+    }else{
+      toast.error(error.message);
+      return Promise.reject(error);
     }
 
-    return Promise.reject(error);
+    
   },
 );
 

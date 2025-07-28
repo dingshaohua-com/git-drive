@@ -38,7 +38,7 @@ const errorHandler = (): Middleware => {
       } else {
         // 其他未知错误
         ctx.status = 500;
-        ctx.body = JsonResult.failed(error.message || '服务器内部错误');
+        ctx.body = JsonResult.failed( '服务器内部错误：' + error.message);
       }
     }
   };
