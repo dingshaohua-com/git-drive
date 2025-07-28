@@ -35,3 +35,7 @@ export const login = (params: LoginParams): Promise<LoginResponse> => {
 export const sendCode = (params: SendCodeParams): Promise<SendCodeResponse> => {
   return axios.post('/send-code', params);
 };
+
+export const logout = ()=>{
+   return axios.post('/logout');
+}

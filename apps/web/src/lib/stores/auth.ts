@@ -73,7 +73,8 @@ function createAuthStore() {
 		},
 
 		// 登出
-		logout: () => {
+		logout: async () => {
+			await api.root.logout();
 			if (browser) {
 				localStorage.clear();
 			}

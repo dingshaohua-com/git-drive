@@ -19,8 +19,12 @@ export const login = async (params) => {
       throw Error('暂未注册，请先注册！');
     }
   } else if (loginType === 'email' || loginType === 'phone') {
-    const code = await redis.get(`${loginType}:${params.email}`);
+    const redisKey = `${loginType}:${params.email || params.phone}`;
+    const code = await redis.get(redisKey);
     if (code === codeTemp) {
+      // 验证成功后立即删除验证码
+      await redis.del(redisKey);
+      
       if (user) {
         return genToken({ id: user.id });
       } else {
