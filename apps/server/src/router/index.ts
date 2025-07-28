@@ -1,8 +1,9 @@
-import meRouter from './me.ts';
-import rootRouter from './root.ts';
-import userRouter from './user.ts';
-import repoRouter from './repo.ts';
+import meRouter from './me';
+import rootRouter from './root';
+import userRouter from './user';
+import repoRouter from './repo';
 import combineRouters from 'koa-combine-routers';
+
 
 const router = combineRouters(
   meRouter as any,

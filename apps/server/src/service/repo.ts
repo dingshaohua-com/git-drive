@@ -1,4 +1,4 @@
-import fs from 'fs';
+import * as fs from 'fs';
 import { Buffer } from 'buffer';
 import { toProxyUrl } from '../utils/proxy-ghub';
 import { BRANCH, getGhubApi, OWNER } from '../utils/ghub-helper';

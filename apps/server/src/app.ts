@@ -6,9 +6,9 @@ import chalk from 'chalk';
 import dayjs from 'dayjs';
 import { koaBody } from 'koa-body';
 import staticServer from 'koa-static';
-import router from './router/index.ts';
-import redisJwt from './middleware/redis-jwt.ts';
-import reqCtxMw from './middleware/req-ctx/mw.ts';
+import router from './router/index';
+import redisJwt from './middleware/redis-jwt';
+import reqCtxMw from './middleware/req-ctx/mw';
 import feRouterBack from './middleware/fe-router-back';
 import errorHandler from './middleware/error-handler';
 

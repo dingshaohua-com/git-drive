@@ -1,6 +1,6 @@
 import Router from '@koa/router';
 import { queryOne } from '../service/user';
-import JsonResult from '../utils/json-result.ts';
+import JsonResult from '../utils/json-result';
 import { login, sendCode } from '../service/root';
 import reqCtx from '../middleware/req-ctx/helper';
 
