@@ -3,7 +3,7 @@
   import CreateFolderModal from '$lib/components/create-folder-modal.svelte';
   import Navigation from '$lib/components/navbar.svelte';
   import ContextMenu from '$lib/components/context-menu.svelte';
-  import { formatFileSize, getFileIcon, parseCustomUrl, buildCustomUrl, getParentCustomUrl } from './helper';
+  import { formatFileSize, getFileIcon, parseCustomUrl, buildCustomUrl, getParentCustomUrl, getDisplayRepoName } from './helper';
   import toast from '$lib/toast';
   import { triggerFileUpload } from '$lib/utils/file-uploader';
   import copyToClipboard from '$lib/utils/copy-helper';
@@ -142,12 +142,16 @@
                   <button onclick={() => syncAnyLevel()} class="cursor-pointer hover:text-blue-600 transition-colors"> 仓库列表 </button>
                   <span class="mx-2">/</span>
                   <button onclick={() => syncAnyLevel(buildCustomUrl({ repoName: current.repo }))} class="cursor-pointer hover:text-blue-600 transition-colors {!current.path ? 'font-medium text-gray-900' : ''}">
-                    {current.repo}
+                    {getDisplayRepoName(current.repo)}
                   </button>
                   {#if current.path}
                     {#each current.path.split('/').filter((p) => p) as segment, index}
                       <span class="mx-2">/</span>
-                      {@const segmentPath = current.path.split('/').filter((p) => p).slice(0, index + 1).join('/')}
+                      {@const segmentPath = current.path
+                        .split('/')
+                        .filter((p) => p)
+                        .slice(0, index + 1)
+                        .join('/')}
                       <button onclick={() => syncAnyLevel(buildCustomUrl({ repoName: current.repo, path: segmentPath }))} class="cursor-pointer hover:text-blue-600 transition-colors {index === current.path.split('/').filter((p) => p).length - 1 ? 'font-medium text-gray-900' : ''}">
                         {segment}
                       </button>
@@ -184,7 +188,7 @@
                               <i class="{getFileIcon(item)} text-3xl"></i>
                               <div class="mt-1 w-full text-center">
                                 <p class="text-xs font-medium text-gray-900 truncate" title={item.name}>
-                                  {item.name}
+                                  {item.type === 'repo' ? getDisplayRepoName(item.name) : item.name}
                                 </p>
                                 {#if item.type === 'file'}
                                   <p class="text-xs text-gray-500">

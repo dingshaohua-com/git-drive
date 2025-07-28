@@ -147,3 +147,16 @@ export const getParentCustomUrl = (currentUrl: string) => {
 // console.log(getParentCustomUrl(url2));
 // // => https://file.dingshaohua.com/my-repo/folder
 
+/**
+ * 去掉仓库名中的用户名前缀，仅用于显示
+ * @param {string} repoName 完整仓库名（包含用户名前缀）
+ * @returns {string} 去掉用户名前缀的仓库名
+ */
+export const getDisplayRepoName = (repoName: string) => {
+   console.log(1111, repoName)
+  if (!repoName) return '';
+  const firstDashIndex = repoName.indexOf('-');
+  console.log(22222, repoName)
+  return firstDashIndex > 0 ? repoName.substring(firstDashIndex + 1) : repoName;
+}
+
