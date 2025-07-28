@@ -6,6 +6,11 @@ import reqCtx from '../middleware/req-ctx/helper';
 
 const router = new Router({ prefix: '/api' });
 
+
+
+
+
+
 console.log('root router');
 
 router.get('/hi', async (ctx, next) => {
