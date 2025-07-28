@@ -1,6 +1,6 @@
 
 import toast from '$lib/toast';
-import { parseGitHubUrl } from '../../routes/all/helper';
+import { parseCustomUrl } from '../../routes/all/helper';
 
 export interface UploadOptions {
   path?: string;
@@ -19,7 +19,7 @@ export const uploadFile = async (file: File, options: UploadOptions = {}) => {
   const { path = '', onProgress, onSuccess, onError } = options;
 
   try {
-    const { repo, path: filePath } = parseGitHubUrl(path);
+    const { repo, path: filePath } = parseCustomUrl(path);
     const formData = new FormData();
     formData.append('file', file);
     formData.append('repo', repo);

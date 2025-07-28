@@ -37,95 +37,76 @@ export const getBreadcrumbs = (currentPath: string) => {
 
 
   /**
- * 解析 GitHub URL，提取 repo / branch / path
- * @param {string} url GitHub 文件/目录 URL
- * @returns {{owner:string, repo:string, branch:string, path:string}}
+ * 解析自定义 URL，提取 repoName 和 path
+ * @param {string} url 自定义文件/目录 URL，格式：https://file.dingshaohua.com/${repoName}/${path}
+ * @returns {{repoName: string, path: string, isRoot: boolean}}
  */
-export const parseGitHubUrl = (url: string) => {
+export const parseCustomUrl = (url: string) => {
   // 去掉 hash、query
   const clean = url.split(/[?#]/)[0];
 
-  // 先检查是否为根目录（只有 owner，没有 repo）
-  const rootMatch = clean.match(/^https:\/\/github\.com\/([^/]+)\/?$/i);
+  // 检查是否为根目录（只有域名，没有 repoName）
+  const rootMatch = clean.match(/^https:\/\/file\.dingshaohua\.com\/?$/i);
   if (rootMatch) {
-    return { owner: rootMatch[1], repo: '', branch: '', path: '', isRoot: true };
+    return { repo: '', path: '', isRoot: true };
   }
 
-  // 基础匹配：https://github.com/OWNER/REPO
-  const baseMatch = clean.match(/^https:\/\/github\.com\/([^/]+)\/([^/]+)/i);
-  if (!baseMatch) {
-    return { owner: '', repo: '', branch: '', path: '', isRoot: false };
+  // 匹配格式：https://file.dingshaohua.com/REPO_NAME[/PATH]
+  const match = clean.match(/^https:\/\/file\.dingshaohua\.com\/([^/]+)(?:\/(.*))?$/i);
+  if (!match) {
+    return { repo: '', path: '', isRoot: false };
   }
 
-  const [, owner, repo] = baseMatch;
-  
-  // 完整匹配：https://github.com/OWNER/REPO/(blob|tree)/BRANCH[/PATH]
-  const fullMatch = clean.match(
-    /^https:\/\/github\.com\/([^/]+)\/([^/]+)\/(?:blob|tree)\/([^/]+)(?:\/(.*))?$/i
-  );
-  
-  if (fullMatch) {
-    const [, , , branch, path = ''] = fullMatch;
-    return { owner, repo, branch, path, isRoot: false };
-  }
-  
-  // 只有基础信息
-  return { owner, repo, branch: '', path: '', isRoot: false };
+  const [, repo, path = ''] = match;
+
+  return {
+    repo,
+    path,
+    isRoot: false
+  };
 }
 
 // /* ===== 使用示例 ===== */
-// const url1 = 'https://github.com/ghub-drive/one/blob/main/cc.gitkeep';
-// const url2 = 'https://github.com/microsoft/vscode/tree/main/src/vs/editor';
-// console.log(parseGitHubUrl(url1));
-// // => { owner: 'ghub-drive', repo: 'one', branch: 'main', path: 'cc.gitkeep' }
+// const url1 = 'https://file.dingshaohua.com/my-repo/folder/file.txt';
+// const url2 = 'https://file.dingshaohua.com/my-repo';
+// console.log(parseCustomUrl(url1));
+// // => { repoName: 'my-repo', path: 'folder/file.txt', isRoot: false }
 
-// console.log(parseGitHubUrl(url2));
-// // => { owner: 'microsoft', repo: 'vscode', branch: 'main', path: 'src/vs/editor' }
+// console.log(parseCustomUrl(url2));
+// // => { repoName: 'my-repo', path: '', isRoot: false }
 
 /**
- * 拼接 GitHub URL
+ * 拼接自定义 URL
  * @param {Object} params - URL参数
- * @param {string} params.repo - 仓库名（必填）
- * @param {string} [params.owner='ghub-drive'] - 用户名，默认 ghub-drive
- * @param {string} [params.branch='main'] - 分支名，默认 main
+ * @param {string} params.repoName - 仓库名（必填）
  * @param {string} [params.path=''] - 文件/目录路径
- * @param {'blob'|'tree'} [params.type='blob'] - 类型，默认 blob
- * @returns {string} GitHub URL
+ * @returns {string} 自定义 URL
  */
-export const buildGitHubUrl = ({
-  repo,
-  owner = 'ghub-drive',
-  branch = 'main',
-  path = '',
-  type = 'blob'
+export const buildCustomUrl = ({
+  repoName,
+  path = ''
 }: {
-  repo: string;
-  owner?: string;
-  branch?: string;
+  repoName: string;
   path?: string;
-  type?: 'blob' | 'tree';
 }) => {
-  if (!repo) return '';
-  
-  let url = `https://github.com/${owner}/${repo}`;
-  
-  if (branch) {
-    url += `/${type}/${branch}`;
-    if (path) {
-      url += `/${path}`;
-    }
+  if (!repoName) return '';
+
+  let url = `https://file.dingshaohua.com/${repoName}`;
+
+  if (path) {
+    url += `/${path}`;
   }
-  
+
   return url;
 }
 
 // /* ===== 使用示例 ===== */
-// const url1 = buildGitHubUrl({ repo: 'one', path: 'cc.gitkeep' });
-// const url2 = buildGitHubUrl({ repo: 'vscode', path: 'src/vs/editor', type: 'tree' });
+// const url1 = buildCustomUrl({ repoName: 'my-repo', path: 'folder/file.txt' });
+// const url2 = buildCustomUrl({ repoName: 'my-repo' });
 // console.log(url1);
-// // => https://github.com/ghub-drive/one/blob/main/cc.gitkeep
+// // => https://file.dingshaohua.com/my-repo/folder/file.txt
 // console.log(url2);
-// // => https://github.com/ghub-drive/vscode/tree/main/src/vs/editor
+// // => https://file.dingshaohua.com/my-repo
 
 /**
  * 获取上一级路径
@@ -140,27 +121,26 @@ export const getParentPath = (currentPath: string) => {
 }
 
 /**
- * 获取上一级 GitHub URL
- * @param {string} currentUrl - 当前 GitHub URL
- * @returns {string} 上一级 GitHub URL
+ * 获取上一级自定义 URL
+ * @param {string} currentUrl - 当前自定义 URL
+ * @returns {string} 上一级自定义 URL
  */
-export const getParentGitHubUrl = (currentUrl: string) => {
-  const { owner, repo, branch, path } = parseGitHubUrl(currentUrl);
-  
-  // 如果没有路径，说明在仓库根目录，返回用户主页
-  if (!path) return `https://github.com/${owner}`;
-  
+export const getParentCustomUrl = (currentUrl: string) => {
+  const { repoName, path } = parseCustomUrl(currentUrl);
+
+  // 如果没有路径，说明在仓库根目录，返回根目录
+  if (!path) return `https://file.dingshaohua.com`;
+
   const parentPath = getParentPath(path);
-  const type = parentPath ? 'tree' : 'blob';
-  
-  return buildGitHubUrl({ repo, owner, branch, path: parentPath, type });
+
+  return `https://file.dingshaohua.com/${repoName}${parentPath ? '/' + parentPath : ''}`;
 }
 
 // /* ===== 使用示例 ===== */
-// const url1 = 'https://github.com/ghub-drive/one/blob/main/cc.gitkeep';
-// const url2 = 'https://github.com/microsoft/vscode/tree/main/src/vs/editor';
-// console.log(getParentGitHubUrl(url1));
-// // => https://github.com/ghub-drive/one/blob/main/
-// console.log(getParentGitHubUrl(url2));
-// // => https://github.com/microsoft/vscode/tree/main/src/vs/
+// const url1 = 'https://file.dingshaohua.com/my-repo/folder/file.txt';
+// const url2 = 'https://file.dingshaohua.com/my-repo/folder/subfolder';
+// console.log(getParentCustomUrl(url1));
+// // => https://file.dingshaohua.com/my-repo/folder
+// console.log(getParentCustomUrl(url2));
+// // => https://file.dingshaohua.com/my-repo/folder
 

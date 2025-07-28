@@ -14,6 +14,9 @@ const router = new Router({ prefix: '/api/me' });
 router.get('/', async (ctx) => {
   const userId = reqCtx.get('userId');
   const user = await queryOne({ id: userId });
+  // console.log('user111', user);
+  
+  // reqCtx.set('user', user);
   ctx.body = JsonResult.success(user);
 });
 

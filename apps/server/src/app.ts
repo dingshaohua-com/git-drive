@@ -21,7 +21,6 @@ if (!fs.existsSync(uploadDir)) {
 const app = new Koa();
 // 错误处理中间件必须最先注册
 app.use(errorHandler());
-app.use(koaBody());
 app.use(
   koaBody({
     multipart: true, // 开启文件上传能力

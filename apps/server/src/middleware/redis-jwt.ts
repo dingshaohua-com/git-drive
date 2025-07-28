@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { redis } from './redis';
 import context from './req-ctx/helper';
+import { queryOne } from '../service/user';
 
 const redisJwt = async (ctx, next) => {
   // 跳过不需要验证的路径
@@ -21,9 +22,16 @@ const redisJwt = async (ctx, next) => {
         return;
       }
 
+      // 上下文存储当前登录用户信息
+      let user = context.get('user');
+      if (!user) {
+        user = await queryOne({ id: info.id });
+      }
+      context.set('user', user);
+
+      // 上下文存储当前登录用户 id
       ctx.state.userId = info.id;
       context.set('userId', ctx.state.userId);
-      
     } catch (err) {
       ctx.status = 401;
       ctx.body = { msg: 'Token无效' };

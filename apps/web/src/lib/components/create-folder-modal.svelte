@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { parseGitHubUrl } from '../../routes/all/helper';
+  import { parseCustomUrl } from '../../routes/all/helper';
   import toast from '$lib/toast';
   import { Button, Modal } from 'flowbite-svelte';
 
@@ -24,7 +24,7 @@
     }
 
     addLoading = true;
-    const { repo, path } = parseGitHubUrl(currentPath);
+    const { repo, path } = parseCustomUrl(currentPath);
     console.log('文件夹的时候', currentPath, path);
     try {
       // 这里需要调用创建文件夹的 API

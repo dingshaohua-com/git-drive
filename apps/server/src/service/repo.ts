@@ -1,6 +1,8 @@
 import * as fs from 'fs';
+import { log } from 'console';
 import { Buffer } from 'buffer';
 import { toProxyUrl } from '../utils/proxy-ghub';
+import reqCtx from '../middleware/req-ctx/helper';
 import { BRANCH, getGhubApi, OWNER } from '../utils/ghub-helper';
 
 /**
@@ -10,15 +12,16 @@ import { BRANCH, getGhubApi, OWNER } from '../utils/ghub-helper';
  * @param {boolean} [isPrivate] 是否私有
  * @returns {Promise<any>}
  */
-export async function createGithubRepo(repoName: string, description: string = '') {
+export const createGithubRepo = async (repoName: string, description: string = '') => {
+  const user = reqCtx.get('user');
   const api = await getGhubApi();
   const res = await api.post(`/user/repos`, {
-    name: repoName,
+    name: user.username + '-' + repoName,
     description,
     private: false,
   });
   return res.data;
-}
+};
 
 /**
  * 获取当前账号下的仓库列表，支持名称模糊搜索
@@ -26,22 +29,28 @@ export async function createGithubRepo(repoName: string, description: string = '
  * @returns {Promise<any[]>}
  */
 export const queryList = async (keyword: string = '') => {
+  const user = reqCtx.get('user');
+  const searchWord = user.username + '-' + keyword;
   const api = await getGhubApi();
   // 获取所有仓库（默认最多100个，如需更多可做分页）
   const res = await api.get('/user/repos?per_page=100');
   let repos = res.data;
-  if (keyword) {
-    const lower = keyword.toLowerCase();
+  if (searchWord) {
+    const lower = searchWord.toLowerCase();
+    console.log('仓库列表', lower);
     repos = repos.filter((repo: any) => repo.name.toLowerCase().includes(lower));
   }
-  repos.forEach((repo: any) => {
-    repo.type = 'repo';
-    repo.path = '/' + repo.name;
-  });
-  return repos;
+  const result = repos.map((repo: any) => ({
+    type: 'repo',
+    name: repo.name,
+    url: `https://file.dingshaohua.com/${repo.name}`,
+  }));
+
+  return result;
 };
 
 export const queryOne = async (repo: string, path: string) => {
+  const user = reqCtx.get('user');
   const api = await getGhubApi();
   const url = `/repos/${OWNER}/${repo}/contents/${path}`;
   try {
@@ -52,12 +61,19 @@ export const queryOne = async (repo: string, path: string) => {
       },
     });
 
-    res.data.forEach((item: any) => {
-      delete item._links;
-      item.down_url = toProxyUrl(item.download_url);
-    });
+    // res.data.forEach((item: any) => {
+    //   delete item._links;
+    //   item.down_url = toProxyUrl(item.download_url);
+    // });
 
-    return res.data;
+    const finalRepoName = `${user.username}-${repo}`;
+    const result = res.data.map((item: any) => ({
+      type: item.type,
+      name: item.name,
+      size: item.size,
+      url: `https://file.dingshaohua.com/${repo}/${item.path}`,
+    }));
+    return result;
   } catch (e: any) {
     if (e.response && e.response.status === 404 && e.response.data?.message === 'This repository is empty.') {
       // 返回空数组或自定义提示
