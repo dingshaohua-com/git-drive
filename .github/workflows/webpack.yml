@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - name: 迁出代码
-        uses: actions/checkout@main
+        uses: actions/checkout@v4
 
       - name: 安装pnpm
         uses: pnpm/action-setup@master
