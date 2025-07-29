@@ -38,7 +38,7 @@ jobs:
           TARGET: /home/apps-root/git-drive/
           SCRIPT_AFTER: |
             cd /home/apps-root/git-drive
-            echo "${{ secrets.ENV }}" >> ./src/server/.env
+            echo "${{ secrets.ENV }}" >> ./apps/server/.env
             pnpm i
             pm2 list | grep -q "git-drive" && pm2 delete git-drive
             pm2 start npm --name git-drive -- start:server
