@@ -2,7 +2,7 @@
   import { goto } from '$app/navigation';
   import type { QuickLoginType, LoginFieldType } from '$lib/types/auth';
   import { auth, me } from '$lib/stores';
-  import { error } from '$lib/toast';
+  import toast, { error } from '$lib/toast';
   import { Modal, Spinner } from 'flowbite-svelte';
   import { slide } from 'svelte/transition';
 
@@ -18,11 +18,18 @@
   const onLogin = async (event: Event) => {
     event.preventDefault();
     defaultModal = true;
-    await auth.login(formData);
-    // await me.sync();
-    console.log('登录成功');
-    defaultModal = false;
-    goto('/home', { replaceState: true });
+    try {
+      await auth.login(formData);
+      goto('/home', { replaceState: true });
+    } catch (error) {
+      console.log(9999, error);
+      
+      toast.error(error)
+    }finally{
+      defaultModal = false;
+    }
+   
+    
   };
 
   // 发送验证码

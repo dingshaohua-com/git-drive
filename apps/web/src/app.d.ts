@@ -3,7 +3,7 @@
 
 interface Api {
   root: {
-    login: (params: { account?: string; password?: string; email?: string; phone?: string; code?: string }) => Promise<{ token: string }>;
+    login: (params: any) => Promise<any>;
     sendCode: (params: { email?: string; phone?: string }) => Promise<void>;
     logout: () => Promise<void>;
   };

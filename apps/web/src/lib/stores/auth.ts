@@ -67,6 +67,8 @@ function createAuthStore() {
 				});
 				return token;
 			} catch (error) {
+				console.log(1111, error);
+				
 				update(state => ({ ...state, isLoading: false }));
 				throw error;
 			}
