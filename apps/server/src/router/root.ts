@@ -5,6 +5,7 @@ import { login, sendCode } from '../service/root';
 import reqCtx from '../middleware/req-ctx/helper';
 import { redis } from '../middleware/redis';
 
+
 const router = new Router({ prefix: '/api' });
 
 router.get('/hi', async (ctx, next) => {

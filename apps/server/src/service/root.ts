@@ -4,6 +4,7 @@ import { PrismaClient } from '@prisma/client';
 import { getLoginType } from '../utils/common';
 import { sendMail } from '../utils/email-helper';
 import JsonResult from '../utils/json-result';
+import NormalError from '../exception/nomal-error';
 
 const prisma = new PrismaClient();
 
@@ -35,7 +36,7 @@ export const login = async (params) => {
         return genToken({ id: newUser.id });
       }
     } else {
-      throw Error('验证码错误！');
+      throw new NormalError('验证码错误！');
     }
   }
 };

@@ -19,12 +19,16 @@ const errorHandler = (): Middleware => {
       });
 
       console.log(111222, error);
-      
+
 
       // 根据错误类型设置不同的响应
       if (error.status) {
         // Koa 内置错误（如 404, 401 等）
         ctx.status = error.status;
+        ctx.body = JsonResult.failed(error.message || '请求失败');
+      } else if (error.name === 'NormalError') {
+        // 自定义错误
+        ctx.status = 200;
         ctx.body = JsonResult.failed(error.message || '请求失败');
       } else if (error.name === 'ValidationError') {
         // 参数验证错误
@@ -41,7 +45,7 @@ const errorHandler = (): Middleware => {
       } else {
         // 其他未知错误
         ctx.status = 500;
-        ctx.body = JsonResult.failed( '服务器内部错误：' + error.message);
+        ctx.body = JsonResult.failed('服务器内部错误：' + error.message);
       }
     }
   };

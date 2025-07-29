@@ -76,7 +76,7 @@
   };
 
   const handleShare = (item: any) => {
-    copyToClipboard(item.down_url);
+    copyToClipboard(item.url);
     toast.success('分享链接已复制');
   };
 
