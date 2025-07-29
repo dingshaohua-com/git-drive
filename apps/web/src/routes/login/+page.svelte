@@ -11,7 +11,7 @@
   let isCodeSent = $state(false);
   let countdown = $state(0);
   let formData = $state<LoginFieldType>({
-    email: '3426612142@qq.com',
+    email: '',
   });
 
   // 登录
@@ -82,7 +82,7 @@
     quickLoginType = type;
     isCodeSent = false;
     countdown = 0;
-    formData = type === 'email' ? { email: '3426612142@qq.com' } : {};
+    formData = type === 'email' ? { email: '' } : {};
   };
 </script>
 
