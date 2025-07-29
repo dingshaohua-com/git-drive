@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "@repo/config-prettier": "workspace:*",
+    "@sveltejs/adapter-static": "^3.0.8",
     "@types/koa": "^2.15.0",
     "@types/koa__router": "^12.0.4",
     "@types/node": "^24.1.0",

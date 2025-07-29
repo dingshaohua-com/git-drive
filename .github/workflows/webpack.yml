@@ -41,5 +41,5 @@ jobs:
             echo "${{ secrets.ENV }}" >> ./src/server/.env
             pnpm i
             pm2 list | grep -q "git-drive" && pm2 delete git-drive
-            pm2 start npm --name git-drive -- start
+            pm2 start npm --name git-drive -- start:server
                 
