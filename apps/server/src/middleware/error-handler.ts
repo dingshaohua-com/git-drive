@@ -18,6 +18,9 @@ const errorHandler = (): Middleware => {
         stack: error.stack,
       });
 
+      console.log(111222, error);
+      
+
       // 根据错误类型设置不同的响应
       if (error.status) {
         // Koa 内置错误（如 404, 401 等）
@@ -38,7 +41,7 @@ const errorHandler = (): Middleware => {
       } else {
         // 其他未知错误
         ctx.status = 500;
-        ctx.body = JsonResult.failed(error.message || '服务器内部错误');
+        ctx.body = JsonResult.failed( '服务器内部错误：' + error.message);
       }
     }
   };

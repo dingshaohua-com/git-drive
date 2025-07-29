@@ -97,6 +97,9 @@ export const buildCustomUrl = ({
     url += `/${path}`;
   }
 
+  console.log(11111, path);
+  
+
   return url;
 }
 
@@ -126,14 +129,14 @@ export const getParentPath = (currentPath: string) => {
  * @returns {string} 上一级自定义 URL
  */
 export const getParentCustomUrl = (currentUrl: string) => {
-  const { repoName, path } = parseCustomUrl(currentUrl);
+  const { repo, path } = parseCustomUrl(currentUrl);
 
   // 如果没有路径，说明在仓库根目录，返回根目录
   if (!path) return `https://file.dingshaohua.com`;
 
   const parentPath = getParentPath(path);
 
-  return `https://file.dingshaohua.com/${repoName}${parentPath ? '/' + parentPath : ''}`;
+  return `https://file.dingshaohua.com/${repo}${parentPath ? '/' + parentPath : ''}`;
 }
 
 // /* ===== 使用示例 ===== */
@@ -143,4 +146,17 @@ export const getParentCustomUrl = (currentUrl: string) => {
 // // => https://file.dingshaohua.com/my-repo/folder
 // console.log(getParentCustomUrl(url2));
 // // => https://file.dingshaohua.com/my-repo/folder
+
+/**
+ * 去掉仓库名中的用户名前缀，仅用于显示
+ * @param {string} repoName 完整仓库名（包含用户名前缀）
+ * @returns {string} 去掉用户名前缀的仓库名
+ */
+export const getDisplayRepoName = (repoName: string) => {
+   console.log(1111, repoName)
+  if (!repoName) return '';
+  const firstDashIndex = repoName.indexOf('-');
+  console.log(22222, repoName)
+  return firstDashIndex > 0 ? repoName.substring(firstDashIndex + 1) : repoName;
+}
 

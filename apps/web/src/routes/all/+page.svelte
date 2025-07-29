@@ -3,7 +3,7 @@
   import CreateFolderModal from '$lib/components/create-folder-modal.svelte';
   import Navigation from '$lib/components/navbar.svelte';
   import ContextMenu from '$lib/components/context-menu.svelte';
-  import { formatFileSize, getFileIcon, parseCustomUrl, buildCustomUrl, getParentPath } from './helper';
+  import { formatFileSize, getFileIcon, parseCustomUrl, buildCustomUrl, getParentCustomUrl, getDisplayRepoName } from './helper';
   import toast from '$lib/toast';
   import { triggerFileUpload } from '$lib/utils/file-uploader';
   import copyToClipboard from '$lib/utils/copy-helper';
@@ -25,11 +25,11 @@
     isRoot: false,
   });
 
-  const syncAnyLevel = async (url: string) => {
+  const syncAnyLevel = async (url: string = 'https://file.dingshaohua.com') => {
     const { repo, path, isRoot } = parseCustomUrl(url);
 
     console.log({ repo, path, isRoot });
-    
+
     current.path = path;
     current.repo = repo;
     current.url = url;
@@ -44,11 +44,11 @@
     loading = false;
   };
 
-  syncAnyLevel('https://file.dingshaohua.com');
+  syncAnyLevel();
 
   function goBack() {
-    const parentPath = getParentPath(current.url);
-    syncAnyLevel(parentPath);
+    const parentUrl = getParentCustomUrl(current.url);
+    syncAnyLevel(parentUrl);
   }
 
   function triggerUpload() {
@@ -84,7 +84,7 @@
     showEditRepoModal = true;
   };
   const handleRepoCreated = () => {
-    syncAnyLevel('https://github.com/ghub-drive');
+    syncAnyLevel();
   };
 
   const clickItem = (item: Item) => {
@@ -110,14 +110,14 @@
               <!-- 工具栏 -->
               <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-2">
+                  <button onclick={() => syncAnyLevel(current.url)} class="cursor-pointer p-1 text-sm bg-gray-100 text-gray-600 rounded hover:bg-gray-200 transition-colors">
+                    <i class="ri-refresh-line text-lg"></i>
+                  </button>
                   {#if !current.isRoot}
                     <button onclick={goBack} class="cursor-pointer p-1 text-sm bg-gray-100 text-gray-600 rounded hover:bg-gray-200 disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors">
                       <i class="ri-arrow-left-line text-lg"></i>
                     </button>
                   {/if}
-                  <button onclick={() => syncAnyLevel(current.url)} class="cursor-pointer p-1 text-sm bg-gray-100 text-gray-600 rounded hover:bg-gray-200 transition-colors">
-                    <i class="ri-refresh-line text-lg"></i>
-                  </button>
                 </div>
                 <div class="flex items-center space-x-2">
                   {#if current.isRoot}
@@ -139,19 +139,20 @@
                 {#if current.isRoot}
                   <span class="font-medium text-gray-900">仓库列表</span>
                 {:else}
-                  <button onclick={() => syncAnyLevel('https://file.dingshaohua.com')} class="hover:text-blue-600 transition-colors"> 仓库列表 </button>
+                  <button onclick={() => syncAnyLevel()} class="cursor-pointer hover:text-blue-600 transition-colors"> 仓库列表 </button>
                   <span class="mx-2">/</span>
-                  <button onclick={() => syncAnyLevel(buildCustomUrl({ repo: current.repo }))} class="hover:text-blue-600 transition-colors {!current.path ? 'font-medium text-gray-900' : ''}">
-                    {current.repo}
+                  <button onclick={() => syncAnyLevel(buildCustomUrl({ repoName: current.repo }))} class="cursor-pointer hover:text-blue-600 transition-colors {!current.path ? 'font-medium text-gray-900' : ''}">
+                    {getDisplayRepoName(current.repo)}
                   </button>
                   {#if current.path}
                     {#each current.path.split('/').filter((p) => p) as segment, index}
                       <span class="mx-2">/</span>
                       {@const segmentPath = current.path
                         .split('/')
+                        .filter((p) => p)
                         .slice(0, index + 1)
                         .join('/')}
-                      <button onclick={() => syncAnyLevel(buildCustomUrl({ repo: current.repo, path: segmentPath, type: 'tree' }))} class="hover:text-blue-600 transition-colors {index === current.path.split('/').filter((p) => p).length - 1 ? 'font-medium text-gray-900' : ''}">
+                      <button onclick={() => syncAnyLevel(buildCustomUrl({ repoName: current.repo, path: segmentPath }))} class="cursor-pointer hover:text-blue-600 transition-colors {index === current.path.split('/').filter((p) => p).length - 1 ? 'font-medium text-gray-900' : ''}">
                         {segment}
                       </button>
                     {/each}
@@ -187,7 +188,7 @@
                               <i class="{getFileIcon(item)} text-3xl"></i>
                               <div class="mt-1 w-full text-center">
                                 <p class="text-xs font-medium text-gray-900 truncate" title={item.name}>
-                                  {item.name}
+                                  {item.type === 'repo' ? getDisplayRepoName(item.name) : item.name}
                                 </p>
                                 {#if item.type === 'file'}
                                   <p class="text-xs text-gray-500">

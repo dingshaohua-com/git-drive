@@ -22,9 +22,9 @@
   };
 
   // 处理用户操作
-  const handleUserAction = (href: string) => {
+  const handleUserAction = async(href: string) => {
     if (href === '/logout') {
-      auth.logout();
+      await auth.logout();
       // 替换当前页面，而不是添加新条目。
       goto('/', { replaceState: true });
     } else {

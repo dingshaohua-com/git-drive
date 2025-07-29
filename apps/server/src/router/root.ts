@@ -3,6 +3,7 @@ import { queryOne } from '../service/user';
 import JsonResult from '../utils/json-result';
 import { login, sendCode } from '../service/root';
 import reqCtx from '../middleware/req-ctx/helper';
+import { redis } from '../middleware/redis';
 
 const router = new Router({ prefix: '/api' });
 
@@ -22,8 +23,18 @@ router.post('/login', async (ctx) => {
 
 // 发送邮箱验证码
 router.post('/send-code', async (ctx) => {
-  await sendCode(ctx.request.body);
-  ctx.body = JsonResult.success('发送成功');
+  const res = await sendCode(ctx.request.body);
+  ctx.body = res.status?JsonResult.success('发送成功'):JsonResult.failed(res.error);
+});
+
+// 退出登录
+router.post('/logout', async (ctx) => {
+  const token = ctx.header?.authorization?.replace('Bearer ', '');
+  if (token) {
+    // 删除 Redis 中的 token
+    await redis.del(`token:${token}`);
+  }
+  ctx.body = JsonResult.success('退出成功');
 });
 
 export default router;

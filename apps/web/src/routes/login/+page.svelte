@@ -3,7 +3,10 @@
   import type { QuickLoginType, LoginFieldType } from '$lib/types/auth';
   import { auth, me } from '$lib/stores';
   import { error } from '$lib/toast';
+  import { Modal, Spinner } from 'flowbite-svelte';
+  import { slide } from 'svelte/transition';
 
+  let defaultModal = $state(false);
   let quickLoginType = $state<QuickLoginType | null>('email');
   let isCodeSent = $state(false);
   let countdown = $state(0);
@@ -14,10 +17,11 @@
   // 登录
   const onLogin = async (event: Event) => {
     event.preventDefault();
+    defaultModal = true;
     await auth.login(formData);
     // await me.sync();
     console.log('登录成功');
-    
+    defaultModal = false;
     goto('/home', { replaceState: true });
   };
 
@@ -54,8 +58,10 @@
 
     try {
       await api.root.sendCode(loginData);
-    } catch (e) {
-      error('验证码发送失败');
+    } catch (e: any) {
+      console.log(333, e);
+
+      error(e || '验证码发送失败');
       clearInterval(timer);
       isCodeSent = false;
       countdown = 0;
@@ -160,3 +166,12 @@
     </div>
   </div>
 </div>
+
+<Modal bind:open={defaultModal} size="xs" transition={slide} permanent>
+  <div class="flex items-center justify-center min-h-20">
+    <div class="text-center">
+      <Spinner />
+      <div class="mt-2">登录中...</div>
+    </div>
+  </div>
+</Modal>
