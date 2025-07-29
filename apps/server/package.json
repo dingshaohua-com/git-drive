@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "npx kill-port 3000 && tsx ./src/app.ts",
+    "dev": "npx kill-port 3003 && tsx ./src/app.ts",
     "prisma": "tsx ./bin/prisma.ts"
   },
   "keywords": [],

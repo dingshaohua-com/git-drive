@@ -5,7 +5,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
 	plugins: [sveltekit(), tailwindcss()],
 	server: {
-		port: 3001,
+		port: 3004,
 		proxy: {
 			'/api': {
 				// target: 'https://ddoc.dingshaohua.com',
