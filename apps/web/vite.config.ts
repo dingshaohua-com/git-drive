@@ -9,7 +9,7 @@ export default defineConfig({
 		proxy: {
 			'/api': {
 				// target: 'https://ddoc.dingshaohua.com',
-				target: 'http://localhost:3000',
+				target: 'http://localhost:3003',
 				changeOrigin: true,
 				// rewrite: (path) => path.replace(/^\/api/, ''),
 			},

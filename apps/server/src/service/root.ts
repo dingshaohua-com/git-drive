@@ -25,7 +25,7 @@ export const login = async (params) => {
     if (code === codeTemp) {
       // 验证成功后立即删除验证码
       await redis.del(redisKey);
-      
+
       if (user) {
         return genToken({ id: user.id });
       } else {
@@ -51,22 +51,26 @@ export const sendCode = async (params) => {
         error: '上次验证码还在有效期范围内！'
       };
     }
-    
+
     // 生成验证码
     const verifyCode = Math.floor(Math.random() * 1000000)
       .toString()
       .padStart(6, '0');
-    // 发送验证码 // 存储邮箱验证码（8 小时过期）
+    const sendRes = sendMail(email, verifyCode);
+    // 发送验证码 // 存储邮箱验证码（1分钟过期）
     const res = await redis.set(`email:${email}`, verifyCode, 'EX', 60 * 1);
     console.log(res);
-     return {
-        status: true
-      };
+    return {
+      status: true,
+      data: {
+        ...sendRes
+      }
+    };
   } else if (phone) {
     // 检查上次验证码是否还在有效期内
     const existingCode = await redis.get(`phone:${phone}`);
     if (existingCode) {
-        return {
+      return {
         status: false,
         error: '上次验证码还在有效期范围内！'
       };
