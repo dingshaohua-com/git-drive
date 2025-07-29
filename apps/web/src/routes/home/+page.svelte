@@ -8,7 +8,7 @@
   <main class="pt-20">
     <!-- 功能说明 -->
     <section class="py-32 bg-gradient-to-r from-indigo-50 to-purple-50">
-      <div class="max-w-6xl mx-auto px-6">阿斯顿撒</div>
+      <div class="max-w-6xl mx-auto px-6">功能稍微开发，留给老婆写</div>
     </section>
   </main>
 </div>

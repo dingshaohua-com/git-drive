@@ -6,7 +6,8 @@
   "scripts": {
     "start: web": "turbo dev --filter=web",
     "start: server": "turbo dev --filter=server",
-    "prisma: gen": "turbo run prisma --filter=server"
+    "prisma: gen": "turbo run prisma --filter=server",
+    "build": "turbo build"
   },
   "keywords": [],
   "author": "",
