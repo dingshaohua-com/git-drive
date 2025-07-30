@@ -24,8 +24,8 @@ router.post('/login', async (ctx) => {
 
 // 发送邮箱验证码
 router.post('/send-code', async (ctx) => {
-  const res = await sendCode(ctx.request.body);
-  ctx.body = res.status?JsonResult.success('发送成功'):JsonResult.failed(res.error);
+  await sendCode(ctx.request.body);
+  ctx.body = JsonResult.success('发送成功');
 });
 
 // 退出登录

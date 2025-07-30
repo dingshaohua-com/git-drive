@@ -1,8 +1,7 @@
 <script lang="ts">
   import { Button, Modal } from "flowbite-svelte";
 
-  let { visible, onSuccess } = $props();
-  let defaultModal = $state(false);
+  let { visible=$bindable(), onSuccess } = $props();
   let addError = $state('');
   let addLoading = $state(false);
   let repoName = $state('');
@@ -32,7 +31,7 @@
 </script>
 
 
-<Modal title="仓库信息" bind:open={visible} size="md" autoclose={false}>
+<Modal title="仓库信息" bind:open={visible}  autoclose={false} class="w-11/12 max-w-120">
   <form onsubmit={onSubmit} class="flex flex-col gap-4 p-2">
     <!-- <div class="flex flex-col gap-1">
       <label class="font-medium text-gray-700">Token 名称</label>
@@ -54,7 +53,7 @@
         type="button"
         class="px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors"
         onclick={() => {
-          defaultModal = false;
+          visible = false;
         }}
         disabled={addLoading}>取消</button
       >

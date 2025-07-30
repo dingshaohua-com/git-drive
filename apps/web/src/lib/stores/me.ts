@@ -43,24 +43,7 @@ function createMeStore() {
 
   return {
     subscribe,
-
-
-    // 登出
-    logout: () => {
-      // if (browser) {
-      //   localStorage.removeItem('token');
-      //   localStorage.removeItem('loginMe');
-      // }
-      // set({ token: null, loginMe: null, isLoading: false });
-    },
-
-    // 设置加载状态
-    // setLoading: (isLoading: boolean) => {
-    //   update(state => ({ ...state, isLoading }));
-    // },
-
     update: (me: Me) => update(state => ({ ...state, ...me })),
-
     // 同步用户信息
     sync: async () => {
       update(state => ({ ...state, isLoading: true }));
@@ -74,8 +57,8 @@ function createMeStore() {
         return res.data;
       } catch (error) {
         if (browser) {
-          localStorage.removeItem('token');
-          localStorage.removeItem('loginMe');
+          // localStorage.removeItem('token');
+          // localStorage.removeItem('loginMe');
         }
 
         throw error;

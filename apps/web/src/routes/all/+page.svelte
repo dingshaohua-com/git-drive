@@ -7,6 +7,7 @@
   import toast from '$lib/toast';
   import { triggerFileUpload } from '$lib/utils/file-uploader';
   import copyToClipboard from '$lib/utils/copy-helper';
+  import FilePreviewModal from '$lib/components/file-preview-modal.svelte'
 
   interface Item {
     name: string;
@@ -18,6 +19,7 @@
   let list = $state<Array<Item>>([]);
   let showEditRepoModal = $state(false);
   let showCreateFolderModal = $state(false);
+  let showFilePreviewModal = $state(false);
   let current = $state({
     path: '',
     repo: '',
@@ -87,16 +89,18 @@
     syncAnyLevel();
   };
 
+  let clickedItem = $state<Item|null>(null);
   const clickItem = (item: Item) => {
     if (item.type === 'file') {
-      handleShare(item);
-      setTimeout(() => {
-        window.open(item.url);
-      }, 1000);
+      console.log(111222, '点击啦');
+      clickedItem = item;
+      showFilePreviewModal = true;
     } else {
       syncAnyLevel(item.url);
     }
   };
+
+
 </script>
 
 <div class="min-h-screen bg-gray-50 flex flex-col items-center justify-center">
@@ -228,5 +232,6 @@
     </div>
   </div>
 </div>
-<EditRepoModal visible={showEditRepoModal} onSuccess={handleRepoCreated} />
+<FilePreviewModal bind:visible={showFilePreviewModal} data={clickedItem}/>
+<EditRepoModal bind:visible={showEditRepoModal} onSuccess={handleRepoCreated} />
 <CreateFolderModal bind:visible={showCreateFolderModal} currentPath={current.url} onSuccess={handleFolderCreated} />

@@ -3,7 +3,6 @@ import { redis } from '../middleware/redis';
 import { PrismaClient } from '@prisma/client';
 import { getLoginType } from '../utils/common';
 import { sendMail } from '../utils/email-helper';
-import JsonResult from '../utils/json-result';
 import NormalError from '../exception/nomal-error';
 
 const prisma = new PrismaClient();
@@ -47,10 +46,7 @@ export const sendCode = async (params) => {
     // 检查上次验证码是否还在有效期内
     const existingCode = await redis.get(`email:${email}`);
     if (existingCode) {
-      return {
-        status: false,
-        error: '上次验证码还在有效期范围内！'
-      };
+      throw new NormalError('上次验证码还在有效期范围内！')
     }
 
     // 生成验证码
@@ -59,22 +55,12 @@ export const sendCode = async (params) => {
       .padStart(6, '0');
     const sendRes = sendMail(email, verifyCode);
     // 发送验证码 // 存储邮箱验证码（1分钟过期）
-    const res = await redis.set(`email:${email}`, verifyCode, 'EX', 60 * 1);
-    console.log(res);
-    return {
-      status: true,
-      data: {
-        ...sendRes
-      }
-    };
+    await redis.set(`email:${email}`, verifyCode, 'EX', 60 * 1);
   } else if (phone) {
     // 检查上次验证码是否还在有效期内
     const existingCode = await redis.get(`phone:${phone}`);
     if (existingCode) {
-      return {
-        status: false,
-        error: '上次验证码还在有效期范围内！'
-      };
+      throw new NormalError('上次验证码还在有效期范围内！')
     }
     // todo
   }

@@ -17,7 +17,7 @@ export const sendMail = (to, content) => {
         to, // "bar@example.com, baz@example.com"
         subject: "登录验证码",
         text: "验证码", // plain‑text body
-        html: `您的验证码为：<b>${content}</b>`, // HTML body
+        html: `您的验证码为：<b>${content}</b>，有效期为1分钟，请妥善保管 👧`, // HTML body
     }
     return transporter.sendMail(params);
 }

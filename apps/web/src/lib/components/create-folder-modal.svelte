@@ -58,7 +58,7 @@
   });
 </script>
 
-<Modal title="新建文件夹" bind:open={visible} size="md" autoclose={false}>
+<Modal title="新建文件夹" bind:open={visible} autoclose={false} class="w-11/12 max-w-120">
   <form onsubmit={onSubmit} class="flex flex-col gap-4 p-2">
     <div class="flex gap-2 items-center">
       <label class="font-medium text-gray-700 min-w-[60px]">文件夹名称 <span class="text-red-500">*</span></label>
