@@ -47,6 +47,6 @@ app.use(router()); // 路由
 
 app.listen(3003, '0.0.0.0', () => {
   console.log(`
-    ${chalk.green('➜')}  ${chalk.bold('后端服务已启动:')}   ${chalk.blue('http://localhost:3000')}
+    ${chalk.green('➜')}  ${chalk.bold('后端服务已启动:')}   ${chalk.blue('http://localhost:3003')}
     `);
 });

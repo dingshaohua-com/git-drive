@@ -8,6 +8,7 @@
   import { triggerFileUpload } from '$lib/utils/file-uploader';
   import copyToClipboard from '$lib/utils/copy-helper';
   import FilePreviewModal from '$lib/components/file-preview-modal.svelte'
+  import FavoriteModal from '$lib/components/favorite-modal.svelte'
 
   interface Item {
     name: string;
@@ -15,8 +16,10 @@
     type: string;
     size: number;
   }
+
   let loading = $state(false);
   let list = $state<Array<Item>>([]);
+  let showFavoriteModal = $state(false);
   let showEditRepoModal = $state(false);
   let showCreateFolderModal = $state(false);
   let showFilePreviewModal = $state(false);
@@ -68,6 +71,10 @@
     syncAnyLevel(current.url);
   }
 
+  const handleFavoriteCreated = ()=>{
+    syncAnyLevel(current.url);
+  }
+
   const handleRename = (item: any) => {};
 
   const handleDelete = async (item: any) => {
@@ -80,6 +87,11 @@
   const handleShare = (item: any) => {
     copyToClipboard(item.url);
     toast.success('分享链接已复制');
+  };
+
+  const handleFavorite = (item: any) => {
+    clickedItem = item;
+    showFavoriteModal = true;
   };
 
   const createRepo = () => {
@@ -213,6 +225,10 @@
                             <i class="ri-delete-bin-line text-red-500"></i>
                             <span>删除</span>
                           </button>
+                          <button class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2 transition-colors" onclick={() => handleFavorite(item)}>
+                            <i class="ri-heart-line text-red-500"></i>
+                            <span>收藏</span>
+                          </button>
                           {#if item.type === 'file'}
                             <button class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2 transition-colors" onclick={() => handleShare(item)}>
                               <i class="ri-share-line text-red-500"></i>
@@ -232,6 +248,7 @@
     </div>
   </div>
 </div>
+<FavoriteModal bind:visible={showFavoriteModal} data={clickedItem} onSuccess={handleFavoriteCreated}/>
 <FilePreviewModal bind:visible={showFilePreviewModal} data={clickedItem}/>
 <EditRepoModal bind:visible={showEditRepoModal} onSuccess={handleRepoCreated} />
 <CreateFolderModal bind:visible={showCreateFolderModal} currentPath={current.url} onSuccess={handleFolderCreated} />

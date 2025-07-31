@@ -18,6 +18,10 @@ interface Api {
     uploadFile: (params: any) => Promise<any>;
     addFolder: (params: any) => Promise<any>;
   };
+  favorite:{
+    list: (params?: any) => Promise<any>;
+    create: (params: any) => Promise<any>;
+  }
 }
 declare global {
   namespace App {}

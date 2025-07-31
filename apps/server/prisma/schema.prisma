@@ -29,3 +29,10 @@ model user {
   nickname String? @db.VarChar(255)
   avatar   String? @db.VarChar(255)
 }
+
+model favorite {
+  id    Int     @id @default(autoincrement())
+  path  String? @db.VarChar(255)
+  label String? @db.VarChar(255)
+  uid   Int
+}
