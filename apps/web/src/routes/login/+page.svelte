@@ -21,7 +21,7 @@
     try {
       await auth.login(formData);
       goto('/home', { replaceState: true });
-    } catch (error) {
+    } catch (error: any) {
       console.log(9999, error);
       
       toast.error(error)

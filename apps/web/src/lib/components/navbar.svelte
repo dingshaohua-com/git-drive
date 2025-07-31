@@ -71,7 +71,9 @@
         <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
           <i class="ri-git-repository-line text-white text-lg"></i>
         </div>
-        <span class="text-xl font-semibold text-gray-900">GitDriver</span>
+        <span class="text-xl font-semibold text-gray-900">
+          <a href="/">GitDriver</a>
+        </span>
       </div>
 
       <!-- 桌面端导航菜单 -->

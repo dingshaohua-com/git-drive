@@ -1,11 +1,22 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query'
   import Navbar from '$lib/components/navbar.svelte';
+  import { parseCustomUrl } from '../all/helper';
+  import { goto } from '$app/navigation';
 
   const query = createQuery({
     queryKey: ['favorites'],
     queryFn: ()=> api.favorite.list(),
   })
+
+
+  const goFile = (item:any)=>{
+    const { repo, path } = parseCustomUrl(item.path);
+    const params = new URLSearchParams();
+    if (repo) params.set('repo', repo);
+    if (path) params.set('path', path);
+    goto(`/all?${params.toString()}`, { replaceState: true })
+  }
   
 </script>
 
@@ -23,7 +34,7 @@
             <p>Error: {$query.error.message}</p>
           {:else if $query.isSuccess}
             {#each $query.data as todo}
-            <div class="w-24 h-20 border border-gray-200 bg-white rounded-lg p-2 hover:bg-gray-50 transition-colors flex items-center justify-center">
+            <div class="w-24 h-20 border border-gray-200 bg-white rounded-lg p-2 hover:bg-gray-50 transition-colors flex items-center justify-center" onclick={()=>goFile(todo)}>
               {todo.label}
             </div>
               

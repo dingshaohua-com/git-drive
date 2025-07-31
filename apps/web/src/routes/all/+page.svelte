@@ -7,8 +7,11 @@
   import toast from '$lib/toast';
   import { triggerFileUpload } from '$lib/utils/file-uploader';
   import copyToClipboard from '$lib/utils/copy-helper';
-  import FilePreviewModal from '$lib/components/file-preview-modal.svelte'
-  import FavoriteModal from '$lib/components/favorite-modal.svelte'
+  import FilePreviewModal from '$lib/components/file-preview-modal.svelte';
+  import FavoriteModal from '$lib/components/favorite-modal.svelte';
+  import { goto } from '$app/navigation';
+  import { onMount } from 'svelte';
+  import { page } from '$app/state';
 
   interface Item {
     name: string;
@@ -30,11 +33,28 @@
     isRoot: false,
   });
 
+  const init = () => {
+    const urlPath = page.url.searchParams.get('path') || '';
+    const repo = page.url.searchParams.get('repo');
+    let customUrl;
+    if (repo) {
+      console.log(999);
+      customUrl = buildCustomUrl({ repoName: repo, path: urlPath });
+    }
+    syncAnyLevel(customUrl);
+  };
+
+  const syncUrl = (repo: string, path: string) => {
+    const params = new URLSearchParams();
+    if (repo) params.set('repo', repo);
+    if (path) params.set('path', path);
+    goto(`/all?${params.toString()}`, { replaceState: true });
+  };
+
   const syncAnyLevel = async (url: string = 'https://file.dingshaohua.com') => {
     const { repo, path, isRoot } = parseCustomUrl(url);
-
-    console.log({ repo, path, isRoot });
-
+    // 更新 URL 查询参数
+    syncUrl(repo, path);
     current.path = path;
     current.repo = repo;
     current.url = url;
@@ -48,8 +68,6 @@
     }
     loading = false;
   };
-
-  syncAnyLevel();
 
   function goBack() {
     const parentUrl = getParentCustomUrl(current.url);
@@ -71,9 +89,9 @@
     syncAnyLevel(current.url);
   }
 
-  const handleFavoriteCreated = ()=>{
+  const handleFavoriteCreated = () => {
     syncAnyLevel(current.url);
-  }
+  };
 
   const handleRename = (item: any) => {};
 
@@ -101,7 +119,7 @@
     syncAnyLevel();
   };
 
-  let clickedItem = $state<Item|null>(null);
+  let clickedItem = $state<Item | null>(null);
   const clickItem = (item: Item) => {
     if (item.type === 'file') {
       console.log(111222, '点击啦');
@@ -112,7 +130,9 @@
     }
   };
 
-
+  onMount(() => {
+    init();
+  });
 </script>
 
 <div class="min-h-screen bg-gray-50 flex flex-col items-center justify-center">
@@ -248,7 +268,7 @@
     </div>
   </div>
 </div>
-<FavoriteModal bind:visible={showFavoriteModal} data={clickedItem} onSuccess={handleFavoriteCreated}/>
-<FilePreviewModal bind:visible={showFilePreviewModal} data={clickedItem}/>
+<FavoriteModal bind:visible={showFavoriteModal} data={clickedItem} onSuccess={handleFavoriteCreated} />
+<FilePreviewModal bind:visible={showFilePreviewModal} data={clickedItem} />
 <EditRepoModal bind:visible={showEditRepoModal} onSuccess={handleRepoCreated} />
 <CreateFolderModal bind:visible={showCreateFolderModal} currentPath={current.url} onSuccess={handleFolderCreated} />
