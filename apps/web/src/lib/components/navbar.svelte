@@ -2,7 +2,10 @@
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import { auth, me } from '$lib/stores';
+  import ProfileModal from  '$lib/components/profile-modal.svelte';
 
+
+  let showProfileModal = $state(false);
   // 导航菜单项
   const menuItems = [
     { name: '首页', href: '/home', icon: 'ri-heart-line' },
@@ -27,7 +30,11 @@
       await auth.logout();
       // 替换当前页面，而不是添加新条目。
       goto('/', { replaceState: true });
-    } else {
+    } else if(href === '/profile'){
+      showProfileModal = true;
+    }
+    else
+     {
       navigateTo(href);
     }
   };
@@ -89,7 +96,7 @@
           </button>
         {/each}
       </nav>
-
+      <!-- https://q1.qlogo.cn/g?b=qq&nk=960423114&s=640 -->
       <!-- 桌面端用户操作 -->
       <div class="hidden md:flex items-center">
         <div class="relative me-dropdown">
@@ -194,3 +201,4 @@
 
 <!-- 占位符，防止内容被固定导航栏遮挡 -->
 <div class="h-20"></div>
+<ProfileModal bind:visible={showProfileModal} />
