@@ -11,6 +11,7 @@ export const queryOne = async (params) => {
   if(isQQEmail){
     result.avatar = `https://q1.qlogo.cn/g?b=qq&nk=${QQ}&s=640`
   }
+  result['hasPwd'] = Boolean(result.password);
   return result;
 };
 

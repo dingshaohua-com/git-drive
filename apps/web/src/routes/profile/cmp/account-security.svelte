@@ -1,0 +1,281 @@
+<script lang="ts">
+  import { Button, Label, Input } from 'flowbite-svelte';
+  import { me } from '$lib/stores/me';
+  import toast from '$lib/toast';
+
+  // 密码修改表单
+  let passwordForm = $state({
+    oldPassword: '',
+    newPassword: '',
+  });
+
+  // 邮箱修改表单
+  let emailForm = $state({
+    newEmail: '',
+    verificationCode: '',
+  });
+
+  // 手机号修改表单
+  let phoneForm = $state({
+    newPhone: '',
+    verificationCode: '',
+  });
+
+  // 状态管理
+  let isUpdatingPassword = $state(false);
+  let isUpdatingEmail = $state(false);
+  let isUpdatingPhone = $state(false);
+  let isSendingEmailCode = $state(false);
+  let isSendingPhoneCode = $state(false);
+
+  // 表单验证错误
+  let passwordErrors = $state({ oldPassword: '', newPassword: '' });
+  let emailErrors = $state({ newEmail: '', verificationCode: '' });
+  let phoneErrors = $state({ newPhone: '', verificationCode: '' });
+
+  // 验证密码表单
+  const validatePasswordForm = () => {
+    passwordErrors = { oldPassword: '', newPassword: '' };
+    if ($me.hasPwd && !passwordForm.oldPassword) passwordErrors.oldPassword = '请输入当前密码';
+    if (!passwordForm.newPassword) passwordErrors.newPassword = '请输入新密码';
+    else if (passwordForm.newPassword.length < 6) passwordErrors.newPassword = '密码长度不能少于6位';
+    return !passwordErrors.oldPassword && !passwordErrors.newPassword;
+  };
+
+  // 验证邮箱表单
+  const validateEmailForm = () => {
+    emailErrors = { newEmail: '', verificationCode: '' };
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailForm.newEmail) emailErrors.newEmail = '请输入新邮箱';
+    else if (!emailRegex.test(emailForm.newEmail)) emailErrors.newEmail = '请输入有效的邮箱地址';
+    if (!emailForm.verificationCode) emailErrors.verificationCode = '请输入验证码';
+    return !emailErrors.newEmail && !emailErrors.verificationCode;
+  };
+
+  // 验证手机号表单
+  const validatePhoneForm = () => {
+    phoneErrors = { newPhone: '', verificationCode: '' };
+    const phoneRegex = /^1[3-9]\d{9}$/;
+    if (!phoneForm.newPhone) phoneErrors.newPhone = '请输入新手机号';
+    else if (!phoneRegex.test(phoneForm.newPhone)) phoneErrors.newPhone = '请输入有效的手机号';
+    if (!phoneForm.verificationCode) phoneErrors.verificationCode = '请输入验证码';
+    return !phoneErrors.newPhone && !phoneErrors.verificationCode;
+  };
+
+  // 更新密码
+  const updatePassword = async () => {
+    if (!validatePasswordForm()) return;
+
+    isUpdatingPassword = true;
+    try {
+      const requestData = { newPassword: passwordForm.newPassword };
+      if ($me.hasPwd) requestData.oldPassword = passwordForm.oldPassword;
+
+      await api.me.put(requestData);
+      passwordForm = { oldPassword: '', newPassword: '' };
+      toast.success($me.hasPwd ? '密码修改成功' : '密码设置成功');
+      await me.sync();
+    } catch (error) {
+      toast.error($me.hasPwd ? '密码修改失败' : '密码设置失败');
+    } finally {
+      isUpdatingPassword = false;
+    }
+  };
+
+  // 发送邮箱验证码
+  const sendEmailCode = async () => {
+    if (!emailForm.newEmail) {
+      toast.error('请先输入邮箱地址');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(emailForm.newEmail)) {
+      toast.error('请输入有效的邮箱地址');
+      return;
+    }
+
+    isSendingEmailCode = true;
+    try {
+      await api.me.sendEmailCode({ email: emailForm.newEmail });
+      toast.success('验证码已发送到邮箱');
+    } catch (error) {
+      toast.error('验证码发送失败');
+    } finally {
+      isSendingEmailCode = false;
+    }
+  };
+
+  // 更新邮箱
+  const updateEmail = async () => {
+    if (!validateEmailForm()) return;
+
+    isUpdatingEmail = true;
+    try {
+      await api.me.put({
+        email: emailForm.newEmail,
+        emailCode: emailForm.verificationCode,
+      });
+      await me.sync();
+      emailForm = { newEmail: '', verificationCode: '' };
+      toast.success('邮箱更新成功');
+    } catch (error) {
+      toast.error('邮箱更新失败');
+    } finally {
+      isUpdatingEmail = false;
+    }
+  };
+
+  // 发送手机验证码
+  const sendPhoneCode = async () => {
+    if (!phoneForm.newPhone) {
+      toast.error('请先输入手机号');
+      return;
+    }
+
+    const phoneRegex = /^1[3-9]\d{9}$/;
+    if (!phoneRegex.test(phoneForm.newPhone)) {
+      toast.error('请输入有效的手机号');
+      return;
+    }
+
+    isSendingPhoneCode = true;
+    try {
+      await api.me.sendPhoneCode({ phone: phoneForm.newPhone });
+      toast.success('验证码已发送到手机');
+    } catch (error) {
+      toast.error('验证码发送失败');
+    } finally {
+      isSendingPhoneCode = false;
+    }
+  };
+
+  // 更新手机号
+  const updatePhone = async () => {
+    if (!validatePhoneForm()) return;
+
+    isUpdatingPhone = true;
+    try {
+      await api.me.put({
+        phone: phoneForm.newPhone,
+        phoneCode: phoneForm.verificationCode,
+      });
+      await me.sync();
+      phoneForm = { newPhone: '', verificationCode: '' };
+      toast.success('手机号更新成功');
+    } catch (error) {
+      toast.error('手机号更新失败');
+    } finally {
+      isUpdatingPhone = false;
+    }
+  };
+</script>
+
+<div class="space-y-8">
+  <!-- 修改密码 -->
+  <div class="border-b border-gray-200 pb-6">
+    <h3 class="text-lg font-medium text-gray-900 mb-4">{$me.hasPwd ? '修改密码' : '设置密码'}</h3>
+    <div class="space-y-4">
+      {#if $me.hasPwd}
+        <div class="flex items-center space-x-4">
+          <Label for="oldPassword" class="w-12 flex-shrink-0">旧密码</Label>
+          <div class="flex-1">
+            <Input id="oldPassword" type="password" bind:value={passwordForm.oldPassword} placeholder="请输入旧密码" />
+            {#if passwordErrors.oldPassword}
+              <p class="text-red-500 text-sm mt-1">{passwordErrors.oldPassword}</p>
+            {/if}
+          </div>
+        </div>
+      {/if}
+
+      <div class="flex items-center space-x-4">
+        <Label for="newPassword" class="w-12 flex-shrink-0">新密码</Label>
+        <div class="flex-1">
+          <Input id="newPassword" type="password" bind:value={passwordForm.newPassword} placeholder="请输入新密码" />{#if passwordErrors.newPassword}
+            <p class="text-red-500 text-sm mt-1">{passwordErrors.newPassword}</p>
+          {/if}
+        </div>
+      </div>
+
+      <div class="flex justify-end">
+        <Button onclick={updatePassword} disabled={isUpdatingPassword}>
+          {isUpdatingPassword ? ($me.hasPwd ? '修改中...' : '设置中...') : '保存'}
+        </Button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 邮箱设置 -->
+  <div class="border-b border-gray-200 pb-6">
+    <h3 class="text-lg font-medium text-gray-900 mb-4">邮箱设置</h3>
+    <div class="space-y-4">
+      <div class="flex items-center space-x-4">
+        <Label for="newEmail" class="w-12 flex-shrink-0">新邮箱</Label>
+        <div class="flex-1">
+          <Input id="newEmail" type="email" bind:value={emailForm.newEmail} placeholder="请输入新的邮箱地址" />
+          {#if emailErrors.newEmail}
+            <p class="text-red-500 text-sm mt-1">{emailErrors.newEmail}</p>
+          {/if}
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-4">
+        <Label for="emailCode" class="w-12 flex-shrink-0">验证码</Label>
+        <div class="flex-1">
+          <div class="flex space-x-2">
+            <Input id="emailCode" bind:value={emailForm.verificationCode} placeholder="请输入验证码" class="flex-1" />
+            <Button color="light" onclick={sendEmailCode} disabled={isSendingEmailCode}>
+              {isSendingEmailCode ? '发送中...' : '发验证码'}
+            </Button>
+          </div>
+          {#if emailErrors.verificationCode}
+            <p class="text-red-500 text-sm mt-1">{emailErrors.verificationCode}</p>
+          {/if}
+        </div>
+      </div>
+
+      <div class="flex justify-end">
+        <Button onclick={updateEmail} disabled={isUpdatingEmail}>
+          {isUpdatingEmail ? '更新中...' : '保存'}
+        </Button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 手机号设置 -->
+  <div>
+    <h3 class="text-lg font-medium text-gray-900 mb-4">手机号设置</h3>
+    <div class="space-y-4">
+      <div class="flex items-center space-x-4">
+        <Label for="newPhone" class="w-12 flex-shrink-0">新手机</Label>
+        <div class="flex-1">
+          <Input id="newPhone" bind:value={phoneForm.newPhone} placeholder="请输入新的手机号" />
+          {#if phoneErrors.newPhone}
+            <p class="text-red-500 text-sm mt-1">{phoneErrors.newPhone}</p>
+          {/if}
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-4">
+        <Label for="phoneCode" class="w-12 flex-shrink-0">验证码</Label>
+        <div class="flex-1">
+          <div class="flex space-x-2">
+            <Input id="phoneCode" bind:value={phoneForm.verificationCode} placeholder="请输入验证码" class="flex-1" />
+            <Button color="light" onclick={sendPhoneCode} disabled={isSendingPhoneCode}>
+              {isSendingPhoneCode ? '发送中...' : '发验证码'}
+            </Button>
+          </div>
+          {#if phoneErrors.verificationCode}
+            <p class="text-red-500 text-sm mt-1">{phoneErrors.verificationCode}</p>
+          {/if}
+        </div>
+      </div>
+
+      <div class="flex justify-end">
+        <Button onclick={updatePhone} disabled={isUpdatingPhone}>
+          {isUpdatingPhone ? '更新中...' : '保存'}
+        </Button>
+      </div>
+    </div>
+  </div>
+</div>

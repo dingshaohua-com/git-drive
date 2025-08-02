@@ -15,7 +15,7 @@
 
   // 用户操作菜单项
   const meMenuItems = [
-    { name: '个人中心', href: '/profile', icon: 'ri-me-line' },
+    { name: '个人中心', href: '/profile', icon: 'ri-user-line' },
     { name: '退出登录', href: '/logout', icon: 'ri-logout-box-line' },
   ];
 
@@ -31,7 +31,8 @@
       // 替换当前页面，而不是添加新条目。
       goto('/', { replaceState: true });
     } else if(href === '/profile'){
-      showProfileModal = true;
+      // showProfileModal = true;
+      goto('/profile', { replaceState: true });
     }
     else
      {

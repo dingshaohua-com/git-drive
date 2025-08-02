@@ -10,6 +10,7 @@ export interface Me {
   avatar?: string;
   isLoading: boolean;
   username?: string;
+  hasPwd: boolean;
 }
 
 // Store状态类型
@@ -26,7 +27,8 @@ function createMeStore() {
         username:'',
         email: '',
         avatar: '',
-        isLoading: false
+        isLoading: false,
+        hasPwd:false
       };
     }
 
@@ -36,7 +38,8 @@ function createMeStore() {
       username:'',
       email: '',
       avatar: '',
-      isLoading: false
+      isLoading: false,
+      hasPwd: false
     };
   };
 
