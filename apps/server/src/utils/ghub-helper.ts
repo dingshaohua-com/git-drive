@@ -19,7 +19,7 @@ export const BRANCH = "main";
 // token 获取（不做本地缓存，直接查库或环境变量）
 const getGithubToken = async (): Promise<string | undefined> => {
   if (GITHUB_TOKEN) return GITHUB_TOKEN;
-  const res = await getPrisma().app.findFirst();
+  const res = await getPrisma().info.findFirst();
   return res?.gtoken || undefined;
 }
 

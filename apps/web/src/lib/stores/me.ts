@@ -6,6 +6,7 @@ export interface Me {
   id: string;
   nickname: string;
   email: string;
+  phone?: string;
   avatar?: string;
   isLoading: boolean;
   username?: string;

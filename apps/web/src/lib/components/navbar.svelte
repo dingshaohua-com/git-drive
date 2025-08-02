@@ -96,7 +96,6 @@
           </button>
         {/each}
       </nav>
-      <!-- https://q1.qlogo.cn/g?b=qq&nk=960423114&s=640 -->
       <!-- 桌面端用户操作 -->
       <div class="hidden md:flex items-center">
         <div class="relative me-dropdown">

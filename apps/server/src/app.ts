@@ -7,6 +7,7 @@ import dayjs from 'dayjs';
 import { koaBody } from 'koa-body';
 import staticServer from 'koa-static';
 import router from './router/index';
+import info from './middleware/info';
 import redisJwt from './middleware/redis-jwt';
 import reqCtxMw from './middleware/req-ctx/mw';
 import feRouterBack from './middleware/fe-router-back';
@@ -42,6 +43,7 @@ app.use(
 app.use(staticServer(path.join(__dirname, 'www'))); // app.use(staticServer('./www'));
 app.use(feRouterBack());
 app.use(reqCtxMw()); // 创建上下文容器中间件
+app.use(info)
 app.use(redisJwt);
 app.use(router()); // 路由
 

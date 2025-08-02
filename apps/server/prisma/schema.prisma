@@ -7,11 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model app {
-  gtoken String @db.VarChar(255)
-  id     Int    @id @default(autoincrement())
-}
-
 model repo {
   id    Int     @id
   uid   Int
@@ -35,4 +30,10 @@ model favorite {
   path  String? @db.VarChar(255)
   label String? @db.VarChar(255)
   uid   Int
+}
+
+model info {
+  gtoken String @db.VarChar(255)
+  id     Int    @id @default(autoincrement())
+  vcode  Int?
 }

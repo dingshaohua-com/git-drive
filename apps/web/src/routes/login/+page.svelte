@@ -11,7 +11,7 @@
   let isCodeSent = $state(false);
   let countdown = $state(0);
   let formData = $state<LoginFieldType>({
-    email: '',
+    email: '960423114@qq.com',
   });
 
   // 登录
@@ -22,8 +22,6 @@
       await auth.login(formData);
       goto('/home', { replaceState: true });
     } catch (error: any) {
-      console.log(9999, error);
-      
       toast.error(error)
     }finally{
       defaultModal = false;

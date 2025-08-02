@@ -1,12 +1,17 @@
 import { PrismaClient } from '@prisma/client';
 import context from '../middleware/req-ctx/helper';
+import { isQQEmailCheck } from '../utils/common';
 
 const prisma = new PrismaClient();
 export const queryOne = async (params) => {
-  const results: any = await prisma.user.findFirst({
+  const result = await prisma.user.findFirst({
     where: params,
   });
-  return results;
+  const {isQQEmail, QQ} = isQQEmailCheck(result.email)
+  if(isQQEmail){
+    result.avatar = `https://q1.qlogo.cn/g?b=qq&nk=${QQ}&s=640`
+  }
+  return result;
 };
 
 export const update = async (params) => {
