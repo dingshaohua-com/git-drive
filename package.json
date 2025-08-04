@@ -13,9 +13,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.13.1",
+  "packageManager": "pnpm@10.14.0",
   "devDependencies": {
-    "chalk": "^5.4.1",
+    "chalk": "^5.5.0",
     "kill-port": "^2.0.1",
     "prettier": "^3.6.2",
     "turbo": "^2.5.5"

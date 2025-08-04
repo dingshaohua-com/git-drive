@@ -2,6 +2,11 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator openapi {
+  provider = "prisma-openapi"
+  output   = "./openapi"
+}
+
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
@@ -37,3 +42,4 @@ model sys_conf {
   id     Int    @id @default(autoincrement())
   vcode  Int?
 }
+
