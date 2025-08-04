@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { redis } from '../middleware/redis';
+import redis from '../utils/redis-helper';
 
 // 生成唯一令牌
 const genToken = async (payload) => {

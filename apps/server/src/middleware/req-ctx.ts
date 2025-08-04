@@ -1,9 +1,7 @@
-// requestContext.ts
 import { AsyncLocalStorage } from 'async_hooks';
 
 const asyncLocalStorage = new AsyncLocalStorage<Map<string, any>>();
-
-export default {
+ const reqCtx = {
   run: (callback: (...args: any[]) => void) => {
     asyncLocalStorage.run(new Map(), callback);
   },
@@ -16,3 +14,16 @@ export default {
     return store ? store.get(key) : undefined;
   },
 };
+
+
+export function reqCtxMiddleware() {
+  return async (ctx, next) => {
+    await new Promise((resolve, reject) => {
+      reqCtx.run(() => {
+        next().then(resolve).catch(reject);
+      });
+    });
+  };
+}
+
+export default reqCtx;

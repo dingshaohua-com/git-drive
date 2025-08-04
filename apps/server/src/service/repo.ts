@@ -1,9 +1,7 @@
 import * as fs from 'fs';
-import { log } from 'console';
 import { Buffer } from 'buffer';
-import { toProxyUrl } from '../utils/proxy-ghub';
-import reqCtx from '../middleware/req-ctx/helper';
-import { BRANCH, getGhubApi, OWNER } from '../utils/ghub-helper';
+import reqCtx from '@/middleware/req-ctx';
+import { BRANCH, getGhubApi, OWNER } from '@/utils/ghub-helper';
 
 /**
  * 创建 GitHub 仓库

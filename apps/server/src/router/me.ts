@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import Router from '@koa/router';
-import JsonResult from '../utils/json-result';
-import reqCtx from '../middleware/req-ctx/helper';
-import { queryOne, update } from '../service/user';
+import JsonResult from '@/utils/json-result';
+import reqCtx from '@/middleware/req-ctx';
+import { queryOne, update } from '@/service/user';
 
 const router = new Router({ prefix: '/api/me' });
 
@@ -15,7 +15,7 @@ router.get('/', async (ctx) => {
   const userId = reqCtx.get('userId');
   const user = await queryOne({ id: userId });
   // console.log('user111', user);
-  
+
   // reqCtx.set('user', user);
   ctx.body = JsonResult.success(user);
 });

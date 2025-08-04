@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import rootRouter from './root';
 import Router from '@koa/router';
-import JsonResult from '../utils/json-result';
-import { queryList, create } from '../service/favorite';
-import reqCtx from '../middleware/req-ctx/helper';
+import JsonResult from '@/utils/json-result';
+import { queryList, create } from '@/service/favorite';
+import reqCtx from '@/middleware/req-ctx';
 
 const router = new Router({ prefix: '/api/favorite' });
 

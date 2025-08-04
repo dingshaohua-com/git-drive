@@ -1,5 +1,5 @@
 import type { Middleware } from 'koa';
-import JsonResult from '../utils/json-result';
+import JsonResult from '@/utils/json-result';
 
 /**
  * 统一异常处理中间件
@@ -11,16 +11,12 @@ const errorHandler = (): Middleware => {
       await next();
     } catch (error: any) {
       // 记录错误日志
-      console.error('API Error:', {
-        url: ctx.url,
-        method: ctx.method,
-        error: error.message,
-        stack: error.stack,
-      });
-
-      console.log(111222, error);
-
-
+      // console.error('API Error:', {
+      //   url: ctx.url,
+      //   method: ctx.method,
+      //   error: error.message,
+      //   stack: error.stack,
+      // });
       // 根据错误类型设置不同的响应
       if (error.status) {
         // Koa 内置错误（如 404, 401 等）

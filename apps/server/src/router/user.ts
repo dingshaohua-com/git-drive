@@ -1,8 +1,7 @@
-import Router from '@koa/router';
-import { queryOne, update } from '../service/user';
-import JsonResult from '../utils/json-result';
 import _ from 'lodash';
-
+import Router from '@koa/router';
+import JsonResult from '@/utils/json-result';
+import { queryOne, update } from '@/service/user';
 
 const router = new Router({ prefix: '/api/user' });
 
@@ -13,10 +12,9 @@ const router = new Router({ prefix: '/api/user' });
 router.get('/', async (ctx) => {
   const query = ctx.query as any;
   query.id && (query.id = Number(query.id));
-  const res = await queryOne(query)
+  const res = await queryOne(query);
   ctx.body = res ? JsonResult.success(res) : JsonResult.failed('未找到数据');
 });
-
 
 router.put('/', async (ctx) => {
   const bodyParams = _.cloneDeep(ctx.request.body);

@@ -32,7 +32,7 @@ model favorite {
   uid   Int
 }
 
-model info {
+model sys_conf {
   gtoken String @db.VarChar(255)
   id     Int    @id @default(autoincrement())
   vcode  Int?

@@ -1,7 +1,7 @@
 import rootRouter from './root';
 import Router from '@koa/router';
-import JsonResult from '../utils/json-result';
-import { queryList, queryOne, uploadFile, addFolder, remove, createGithubRepo } from '../service/repo';
+import JsonResult from '@/utils/json-result';
+import { queryList, queryOne, uploadFile, addFolder, remove, createGithubRepo } from '@/service/repo';
 
 const router = new Router({ prefix: '/api/repo' });
 

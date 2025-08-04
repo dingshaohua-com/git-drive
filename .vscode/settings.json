@@ -1,4 +1,5 @@
 {
   "npm.exclude": ["**/apps/**", "**/packages/**"],
-  "prettier.documentSelectors": ["**/*.svelte"] //如果使用 sevlet-vscode 插件格式化则不需要此
+  "prettier.documentSelectors": ["**/*.svelte"], //如果使用 sevlet-vscode 插件格式化则不需要此
+  "cSpell.words": ["kbody"]
 }

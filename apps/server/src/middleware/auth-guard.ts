@@ -1,9 +1,9 @@
 import jwt from 'jsonwebtoken';
-import { redis } from './redis';
-import context from './req-ctx/helper';
-import { queryOne } from '../service/user';
+import redis from '@/utils/redis-helper';
+import context from './req-ctx';
+import { queryOne } from '@/service/user';
 
-const redisJwt = async (ctx, next) => {
+const authGuard = async (ctx, next) => {
   // 跳过不需要验证的路径
   const skipPaths = [/^\/api\/login$/, /^(?!\/api).*/, /^\/api\/send-code$/, /^\/api\/user$/, /^\/api\/shelf$/];
   const shouldSkip = skipPaths.some((pattern) => pattern.test(ctx.path)) || (ctx.method === 'GET' && ctx.query.share === 'true');
@@ -45,4 +45,4 @@ const redisJwt = async (ctx, next) => {
 
   await next();
 };
-export default redisJwt;
+export default authGuard;

@@ -1,10 +1,9 @@
 import Router from '@koa/router';
-import { queryOne } from '../service/user';
-import JsonResult from '../utils/json-result';
-import { login, sendCode } from '../service/root';
-import reqCtx from '../middleware/req-ctx/helper';
-import { redis } from '../middleware/redis';
-
+import redis from '@/utils/redis-helper';
+import { queryOne } from '@/service/user';
+import JsonResult from '@/utils/json-result';
+import { login, sendCode } from '@/service/root';
+import reqCtx from '@/middleware/req-ctx';
 
 const router = new Router({ prefix: '/api' });
 

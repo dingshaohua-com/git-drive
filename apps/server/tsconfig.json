@@ -3,6 +3,9 @@
     "strict": false,
     "esModuleInterop": true, // 不然 koa 模块报错
     "noEmit": true, // allowImportingTsExtensions 需要此配置项
-    "allowImportingTsExtensions": true // 允许导入 ts 模块
+    "allowImportingTsExtensions": true, // 允许导入 ts 模块
+    /* Sort path */
+    "baseUrl": ".",
+    "paths": {"@/*": ["src/*"]}
   }
 }

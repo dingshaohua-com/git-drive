@@ -1,10 +1,10 @@
-import genToken from '../utils/gen-token';
-import { redis } from '../middleware/redis';
+import genToken from '@/utils/gen-token';
+import redis from '@/utils/redis-helper';
+import { getLoginType } from '@/utils/common';
 import { PrismaClient } from '@prisma/client';
-import { getLoginType } from '../utils/common';
-import { sendMail } from '../utils/email-helper';
-import reqCtx from '../middleware/req-ctx/helper';
-import NormalError from '../exception/nomal-error';
+import { sendMail } from '@/utils/email-helper';
+import NormalError from '@/exception/normal-err';
+import reqCtx from '@/middleware/req-ctx';
 
 const prisma = new PrismaClient();
 
