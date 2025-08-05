@@ -5,7 +5,7 @@ import { queryOne } from '@/service/user';
 
 const authGuard = async (ctx, next) => {
   // 跳过不需要验证的路径
-  const skipPaths = [/^\/api$/,/^\/api\/login$/, /^(?!\/api).*/, /^\/api\/send-code$/, /^\/api\/user$/, /^\/api\/shelf$/];
+  const skipPaths = [/^\/api\/swagger$/, /^\/api\/doc$/, /^\/api$/,/^\/api\/login$/, /^(?!\/api).*/, /^\/api\/send-code$/, /^\/api\/user$/, /^\/api\/shelf$/];
   const shouldSkip = skipPaths.some((pattern) => pattern.test(ctx.path)) || (ctx.method === 'GET' && ctx.query.share === 'true');
 
   if (!shouldSkip && ctx.header?.authorization) {
