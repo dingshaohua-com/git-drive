@@ -176,6 +176,9 @@
 						}
 					}
 				},
+				"tags": [
+					"根接口"
+				],
 				"security": [],
 				"parameters": []
 			}
@@ -193,6 +196,9 @@
 						}
 					}
 				},
+				"tags": [
+					"根接口"
+				],
 				"security": [],
 				"parameters": []
 			}
@@ -212,6 +218,11 @@
 						}
 					}
 				},
+				"description": "登录",
+				"summary": "获取所有用户信息",
+				"tags": [
+					"根接口"
+				],
 				"security": [],
 				"parameters": [],
 				"requestBody": {
@@ -241,6 +252,9 @@
 						}
 					}
 				},
+				"tags": [
+					"根接口"
+				],
 				"security": [],
 				"parameters": [
 					{
@@ -269,6 +283,9 @@
 						}
 					}
 				},
+				"tags": [
+					"根接口"
+				],
 				"security": [],
 				"parameters": [],
 				"requestBody": {

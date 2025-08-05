@@ -4,12 +4,13 @@ import reqCtx from '@/middleware/req-ctx';
 import { user as User } from '@prisma/client';
 import { login, sendCode } from '@/service/root';
 import JsonResult, { ApiResponse } from '../utils/json-result';
-import { Controller, Get, Post, Body, Route, Header } from 'tsoa';
+import { Controller, Get, Post, Body, Route, Header, Tags } from 'tsoa';
 import swaggerJson from '../../swagger.json';
 
 type LoginParams = {} & User;
 
 @Route('api')
+@Tags('根接口')
 export class RootController extends Controller {
   @Get()
   public async hi(): ApiResponse<string> {
@@ -21,6 +22,10 @@ export class RootController extends Controller {
     return swaggerJson;
   }
 
+   /**
+   * 登录
+   * @summary 获取所有用户信息
+   */
   @Post('login')
   public async login(@Body() requestBody: LoginParams): ApiResponse<{ token: string; me: User }> {
     const token = await login(requestBody);
