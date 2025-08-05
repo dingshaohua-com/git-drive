@@ -4,9 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "npx kill-port 3003 && tsx watch --include ./src/*.ts ./src/app.ts",
+    "dev_gen": "npm run clean && concurrently  \"npm run tsoa:gen\" \"npm run tsoa:watch\" \"npm run dev\"",
+    "dev": "npx kill-port 3003 || true && tsx watch --clear-screen=false --include ./src/*.ts ./src/app.ts",
     "start": "npx kill-port 3003 && tsx ./src/app.ts",
-    "prisma": "tsx ./bin/prisma.ts"
+    "prisma": "tsx ./bin/prisma.ts",
+    "tsoa:gen": "tsoa spec-and-routes",
+    "tsoa:watch": "npx chokidar \"src/controllers/**\" -c \"npm run tsoa:gen\"",
+    "clean": "pkill -f chokidar || true && pkill -f tsx || true"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +20,7 @@
     "@koa/cors": "^5.0.0",
     "@koa/router": "^14.0.0",
     "@prisma/client": "^6.13.0",
+    "@tsoa/runtime": "^6.6.0",
     "axios": "^1.11.0",
     "dayjs": "^1.11.13",
     "ioredis": "^5.7.0",
@@ -27,14 +32,17 @@
     "koa-static": "^5.0.0",
     "lodash": "^4.17.21",
     "nodemailer": "^7.0.5",
-    "prisma": "^6.13.0"
+    "prisma": "^6.13.0",
+    "tsoa": "^6.6.0"
   },
   "devDependencies": {
     "@repo/config-prettier": "workspace:*",
     "@types/koa": "^3.0.0",
     "@types/koa__router": "^12.0.4",
-    "@types/node": "^24.1.0",
+    "@types/node": "^24.2.0",
     "chalk": "^5.5.0",
+    "chokidar-cli": "^3.0.0",
+    "concurrently": "^9.2.0",
     "tsx": "^4.20.3"
   }
 }

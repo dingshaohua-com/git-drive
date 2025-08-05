@@ -6,6 +6,11 @@
     "allowImportingTsExtensions": true, // 允许导入 ts 模块
     /* Sort path */
     "baseUrl": ".",
-    "paths": {"@/*": ["src/*"]}
+    "paths": { "@/*": ["src/*"], "tsoa": ["node_modules/tsoa/dist"], "tsoa/": ["node_modules/tsoa/dist/"] },
+
+    /* 1. 允许在类及其成员上使用装饰器语法 */
+    "experimentalDecorators": true,
+    /* 2. 为装饰器发射类型元数据（如设计类型、参数类型、返回类型） */
+    "emitDecoratorMetadata": true
   }
 }

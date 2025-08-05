@@ -8,7 +8,7 @@ import reqCtx from '@/middleware/req-ctx';
 
 const prisma = new PrismaClient();
 
-export const login = async (params) => {
+export const login = async (params): Promise<string> => {
   const appInfo = reqCtx.get('info');
   const loginType = getLoginType(params);
   const codeTemp = Number(params.code);
