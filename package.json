@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "turbo dev",
     "start": "turbo dev --filter=server",
-    "gen:prisma": "turbo run gen:prisma",
+    "gen:prisma": "turbo run gen:prisma -- \"$@\"",
     "build": "turbo build"
   },
   "keywords": [],

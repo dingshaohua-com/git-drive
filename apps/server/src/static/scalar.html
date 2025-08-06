@@ -20,7 +20,7 @@
           reqBodyTitle.innerHTML = '请求体'
         });
         const serverRef = document.querySelector('.scalar-reference-intro-server');
-        serverRef.querySelector('label').innerText = '服务';
+        serverRef?.querySelector('label')?.innerText = '服务';
       }
 
       function loadScriptOnce(txt) {
