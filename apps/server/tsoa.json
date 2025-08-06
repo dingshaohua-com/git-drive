@@ -3,7 +3,7 @@
   "noImplicitAdditionalProperties": "throw-on-extras",
   "controllerPathGlobs": ["src/controllers/**"],
   "spec": {
-    "outputDirectory": ".", 
+    "outputDirectory": "src/static",
     "specVersion": 3
   },
   "routes": {

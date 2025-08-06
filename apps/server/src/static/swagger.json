@@ -7,30 +7,6 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
-			"JsonResultType_string_": {
-				"properties": {
-					"code": {
-						"type": "number",
-						"format": "double"
-					},
-					"msg": {
-						"type": "string"
-					},
-					"data": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"code",
-					"msg"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ApiResponse_string_": {
-				"$ref": "#/components/schemas/JsonResultType_string_",
-				"description": "控制器方法返回类型的通用别名\n用于简化 Promise<JsonResultType<T>> 的写法"
-			},
 			"DefaultSelection_Prisma._36_userPayload_": {
 				"properties": {
 					"avatar": {
@@ -161,48 +137,6 @@
 		"contact": {}
 	},
 	"paths": {
-		"/api": {
-			"get": {
-				"operationId": "Hi",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ApiResponse_string_"
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"根接口"
-				],
-				"security": [],
-				"parameters": []
-			}
-		},
-		"/api/doc": {
-			"get": {
-				"operationId": "Doc",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {}
-							}
-						}
-					}
-				},
-				"tags": [
-					"根接口"
-				],
-				"security": [],
-				"parameters": []
-			}
-		},
 		"/api/login": {
 			"post": {
 				"operationId": "Login",
@@ -218,8 +152,8 @@
 						}
 					}
 				},
-				"description": "登录",
-				"summary": "获取所有用户信息",
+				"description": "就是登录接口",
+				"summary": "登录",
 				"tags": [
 					"根接口"
 				],
@@ -252,6 +186,8 @@
 						}
 					}
 				},
+				"description": "退出登录",
+				"summary": "退出",
 				"tags": [
 					"根接口"
 				],
@@ -283,6 +219,8 @@
 						}
 					}
 				},
+				"description": "发送证码 接口",
+				"summary": "发送证码",
 				"tags": [
 					"根接口"
 				],

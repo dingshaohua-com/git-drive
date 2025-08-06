@@ -12,21 +12,6 @@ import type * as KoaRouter from '@koa/router';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
-    "JsonResultType_string_": {
-        "dataType": "refObject",
-        "properties": {
-            "code": {"dataType":"double","required":true},
-            "msg": {"dataType":"string","required":true},
-            "data": {"dataType":"string"},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ApiResponse_string_": {
-        "dataType": "refAlias",
-        "type": {"ref":"JsonResultType_string_","validators":{}},
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "DefaultSelection_Prisma._36_userPayload_": {
         "dataType": "refAlias",
         "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"avatar":{"dataType":"string","required":true},"nickname":{"dataType":"string","required":true},"des":{"dataType":"string","required":true},"username":{"dataType":"string","required":true},"role":{"dataType":"string","required":true},"qq":{"dataType":"double","required":true},"password":{"dataType":"string","required":true},"email":{"dataType":"string","required":true},"id":{"dataType":"double","required":true}},"validators":{}},
@@ -86,17 +71,17 @@ export function RegisterRoutes(router: KoaRouter) {
     // ###########################################################################################################
 
 
-        const argsRootController_hi: Record<string, TsoaRoute.ParameterSchema> = {
+        const argsRootController_ui: Record<string, TsoaRoute.ParameterSchema> = {
         };
         router.get('/api',
             ...(fetchMiddlewares<Middleware>(RootController)),
-            ...(fetchMiddlewares<Middleware>(RootController.prototype.hi)),
+            ...(fetchMiddlewares<Middleware>(RootController.prototype.ui)),
 
-            async function RootController_hi(context: Context, next: Next) {
+            async function RootController_ui(context: Context, next: Next) {
 
             let validatedArgs: any[] = [];
             try {
-              validatedArgs = templateService.getValidatedArgs({ args: argsRootController_hi, context, next });
+              validatedArgs = templateService.getValidatedArgs({ args: argsRootController_ui, context, next });
             } catch (err) {
               const error = err as any;
               error.message ||= JSON.stringify({ fields: error.fields });
@@ -107,7 +92,7 @@ export function RegisterRoutes(router: KoaRouter) {
             const controller = new RootController();
 
             return templateService.apiHandler({
-              methodName: 'hi',
+              methodName: 'ui',
               controller,
               context,
               validatedArgs,

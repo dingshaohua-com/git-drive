@@ -1,30 +1,43 @@
+import fs from 'fs';
+import path from 'path';
 import redis from '@/utils/redis-helper';
 import { queryOne } from '@/service/user';
 import reqCtx from '@/middleware/req-ctx';
 import { user as User } from '@prisma/client';
 import { login, sendCode } from '@/service/root';
+import swaggerJson from '../static/swagger.json';
 import JsonResult, { ApiResponse } from '../utils/json-result';
-import { Controller, Get, Post, Body, Route, Header, Tags } from 'tsoa';
-import swaggerJson from '../../swagger.json';
+import { Controller, Get, Post, Body, Route, Header, Tags, Hidden } from 'tsoa';
 
 type LoginParams = {} & User;
 
 @Route('api')
 @Tags('根接口')
 export class RootController extends Controller {
+  // @Get()
+  // public async hi(): ApiResponse<string> {
+  //   return JsonResult.success('hello, this is server');
+  // }
+
+  @Hidden()
   @Get()
-  public async hi(): ApiResponse<string> {
-    return JsonResult.success('hello, this is server');
+  public async ui() {
+    const filePath = path.resolve('src', 'static', 'scalar.html');
+    // 设置响应头
+    this.setHeader('Content-Type', 'text/html; charset=utf-8');
+    // 同步读取文件
+    return fs.readFileSync(filePath);
   }
 
+  @Hidden()
   @Get('doc')
   public async doc() {
     return swaggerJson;
   }
 
-   /**
-   * 登录
-   * @summary 获取所有用户信息
+  /**
+   * 就是登录接口
+   * @summary 登录
    */
   @Post('login')
   public async login(@Body() requestBody: LoginParams): ApiResponse<{ token: string; me: User }> {
@@ -34,7 +47,10 @@ export class RootController extends Controller {
     return JsonResult.success({ token, me });
   }
 
-  // 退出登录
+  /**
+   * 退出登录
+   * @summary 退出
+   */
   @Post('logout')
   public async logout(@Header('Authorization') authorization: string): ApiResponse {
     const token = authorization.replace('Bearer ', '');
@@ -45,7 +61,10 @@ export class RootController extends Controller {
     return JsonResult.success();
   }
 
-  // 发送邮箱验证码
+  /**
+   * 发送证码 接口
+   * @summary 发送证码
+   */
   @Post('send-code')
   public async sendCode(@Body() requestBody): ApiResponse {
     await sendCode(requestBody);

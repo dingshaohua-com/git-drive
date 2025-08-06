@@ -30,7 +30,6 @@ const router = new Router();
 RegisterRoutes(router);
 app.use(router.routes());
 
-
 app.use(
   koaSwagger({
     title: 'server',
