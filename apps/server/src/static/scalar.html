@@ -7,7 +7,7 @@
   </head>
   <body>
     <!-- Need a Custom Header? Check out this example https://codepen.io/scalarorg/pen/VwOXqam -->
-    <script id="api-reference" data-url="/api/doc"></script>
+    <!-- <script id="api-reference" data-url="/api/doc"></script> -->
     <script>
       function rewriteDom() {
         const sectionContent = document.querySelectorAll('.section-content');
@@ -50,6 +50,9 @@
         loadScriptOnce(res);
       };
       localStorage.setItem('scalar-reference-selected-client-v2', 'js/axios');
+      const scriptNode = document.createElement('script');
+      scriptNode['data-url'] = location.origin + '/api/doc';
+      document.body.appendChild(scriptNode);
       main();
     </script>
   </body>
