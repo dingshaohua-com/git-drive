@@ -9,11 +9,66 @@
     <!-- Need a Custom Header? Check out this example https://codepen.io/scalarorg/pen/VwOXqam -->
     <!-- <script id="api-reference" data-url="/api/doc"></script> -->
     <script>
+      // 保存原始的 fetch 函数
+      const originalFetch = window.fetch;
+
+      // 重写 fetch
+      window.fetch = async function (...args) {
+        let [resource, config] = args;
+
+        // console.log('🔍 拦截到的请求:', {
+        //   url: resource,
+        //   method: config?.method || 'GET',
+        //   headers: config?.headers,
+        //   body: config?.body,
+        // });
+
+        // // 你可以在这里修改请求参数
+        // // 例如：添加 token 到 headers
+        // if (!config) config = {};
+        // if (!config.headers) config.headers = {};
+        // config.headers['Authorization'] = 'Bearer your-token';
+
+        try {
+          const response = await originalFetch(resource, config);
+
+          // 你也可以在这里处理响应
+
+          // console.log('✅ 响应:', response);
+
+          // 如果你想读取响应体，可以克隆一份再读取
+          const clonedResponse = response.clone();
+          const bodyText = await clonedResponse.text();
+          // console.log('📦 响应体:', bodyText);
+          if (resource.indexOf('/api/doc') > -1) {
+            setTimeout(() => {
+              rewriteDom();
+            }, 100);
+          }
+          return response;
+        } catch (error) {
+          // console.error('❌ fetch 出错:', error);
+          throw error;
+        }
+      };
+
       function rewriteDom() {
         const sectionContent = document.querySelectorAll('.section-content');
         sectionContent.forEach((item) => {
           const reqBodyTitle = item.querySelector('.request-body-title');
-          if (reqBodyTitle) reqBodyTitle.innerHTML = '请求体';
+          if (reqBodyTitle) {
+            const text = document.createElement('span'); // 推荐用 span，Text 不是合法标签
+            text.textContent = '请求体';
+
+            const targetNode = reqBodyTitle.childNodes[1];
+            if (targetNode) {
+              reqBodyTitle.replaceChild(text, targetNode);
+            } else {
+              console.warn('目标节点不存在');
+            }
+          }
+
+          // if (reqBodyTitle) reqBodyTitle.innerHTML = '请求体';
         });
         const serverRef = document.querySelector('.scalar-reference-intro-server');
         if (serverRef) {
@@ -25,7 +80,6 @@
         const s = document.createElement('script');
         s.innerText = txt;
         document.body.appendChild(s);
-        setTimeout(() => rewriteDom(), 300);
       }
 
       const locale = {
@@ -52,8 +106,9 @@
       localStorage.setItem('scalar-reference-selected-client-v2', 'js/axios');
 
       // 动态创建script 标签 1
+
       const scriptNode = document.createElement('script');
-      scriptNode.setAttribute('data-url',location.origin + '/api/doc')
+      scriptNode.setAttribute('data-url', location.origin + '/api/doc');
       scriptNode.id = 'api-reference';
       document.body.appendChild(scriptNode);
 
