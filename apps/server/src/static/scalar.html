@@ -50,9 +50,14 @@
         loadScriptOnce(res);
       };
       localStorage.setItem('scalar-reference-selected-client-v2', 'js/axios');
+
+      // 动态创建script 标签 1
       const scriptNode = document.createElement('script');
-      scriptNode['data-url'] = location.origin + '/api/doc';
+      scriptNode.setAttribute('data-url',location.origin + '/api/doc')
+      scriptNode.id = 'api-reference';
       document.body.appendChild(scriptNode);
+
+      // 动态创建script 标签 2
       main();
     </script>
   </body>
