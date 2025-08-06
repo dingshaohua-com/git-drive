@@ -4,9 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev_gen": "npm run clean && concurrently  \"npm run tsoa:gen\" \"npm run tsoa:watch\" \"npm run dev\"",
-    "dev": "npx kill-port 3003 || true && tsx watch --clear-screen=false --include ./src/*.ts ./src/app.ts",
-    "start": "npx kill-port 3003 && tsx ./src/app.ts",
+    "dev": "npm run clean && concurrently  \"npm run tsoa:gen\" \"npm run tsoa:watch\" \"npm run dev:watch\"",
+    "dev:watch": "npx kill-port 3003 || true && tsx watch --clear-screen=false --include ./src/*.ts ./src/app.ts",
     "prisma": "tsx ./bin/prisma.ts",
     "tsoa:gen": "tsoa spec-and-routes",
     "tsoa:watch": "npx chokidar \"src/controllers/**\" -c \"npm run tsoa:gen\"",
