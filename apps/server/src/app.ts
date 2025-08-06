@@ -41,6 +41,6 @@ app.use(
 );
 app.listen(3003, '0.0.0.0', () => {
   const { green, blue, bold } = chalk;
-  const str = `${green('➜')}  ${bold('后端服务已启动2:')}   ${blue('http://localhost:3003')}`;
+  const str = `${green('➜')}  ${bold('后端服务已启动:')}   ${blue('http://localhost:3003')}`;
   console.log(str);
 });
