@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <title>Scalar API Reference</title>
@@ -7,53 +7,49 @@
   </head>
   <body>
     <!-- Need a Custom Header? Check out this example https://codepen.io/scalarorg/pen/VwOXqam -->
-    <script
-      id="api-reference"
-      data-url="/api/doc"
-    ></script>
+    <script id="api-reference" data-url="/api/doc"></script>
     <script>
       function rewriteDom() {
-        const sectionContent = document.querySelectorAll(".section-content");
+        const sectionContent = document.querySelectorAll('.section-content');
         sectionContent.forEach((item) => {
-          const reqBodyTitle = item.querySelector('.request-body-title')
-          if(reqBodyTitle)
-          reqBodyTitle.innerHTML = '请求体'
+          const reqBodyTitle = item.querySelector('.request-body-title');
+          if (reqBodyTitle) reqBodyTitle.innerHTML = '请求体';
         });
         const serverRef = document.querySelector('.scalar-reference-intro-server');
-        serverRef?.querySelector('label')?.innerText = '服务';
+        if (serverRef) {
+          serverRef.querySelector('label').innerText = '服务';
+        }
       }
 
       function loadScriptOnce(txt) {
-        const s = document.createElement("script");
+        const s = document.createElement('script');
         s.innerText = txt;
         document.body.appendChild(s);
-        setTimeout(()=>rewriteDom(),300)
+        setTimeout(() => rewriteDom(), 300);
       }
 
       const locale = {
-        "Client Libraries": "客户端 类型",
+        'Client Libraries': '客户端 类型',
         // 'Search':'搜索',
-        "↑↓ Navigate": "↑↓ 导航",
-        "⏎ Select": "⏎ 选择",
-        "Download OpenAPI Document": "下载 OpenAPI 文档",
-        Models: "模型",
-        "Open API Client": "打开客户端",
-        Responses: "响应",
-        Headers: "请求头",
-        'Operations':'接口列表'
+        '↑↓ Navigate': '↑↓ 导航',
+        '⏎ Select': '⏎ 选择',
+        'Download OpenAPI Document': '下载 OpenAPI 文档',
+        Models: '模型',
+        'Open API Client': '打开客户端',
+        Responses: '响应',
+        Headers: '请求头',
+        Operations: '接口列表',
         // required: '必须'
       };
 
       const main = async () => {
-        let res = await fetch(
-          "https://cdn.jsdelivr.net/npm/@scalar/api-reference"
-        ).then((res) => res.text());
+        let res = await fetch('https://cdn.jsdelivr.net/npm/@scalar/api-reference').then((res) => res.text());
         Object.keys(locale).forEach((item) => {
           res = res.replaceAll(item, locale[item]);
         });
         loadScriptOnce(res);
       };
-      localStorage.setItem('scalar-reference-selected-client-v2', 'js/axios')
+      localStorage.setItem('scalar-reference-selected-client-v2', 'js/axios');
       main();
     </script>
   </body>
