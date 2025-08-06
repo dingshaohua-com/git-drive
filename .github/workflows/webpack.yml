@@ -42,5 +42,5 @@ jobs:
             pnpm i
             pm2 list | grep -q "git-drive" && pm2 delete git-drive
             npm run 'gen:prisma'
-            pm2 start "npm run 'start'" --name git-drive
+            pm2 start "npm run start" --name git-drive
                 
