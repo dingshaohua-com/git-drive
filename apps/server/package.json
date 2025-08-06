@@ -4,12 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "npm run clean && concurrently  \"npm run tsoa:gen\" \"npm run tsoa:watch\" \"npm run dev:watch\"",
-    "dev:watch": "npx kill-port 3003 || true && tsx watch --clear-screen=false --include ./src/*.ts ./src/app.ts",
-    "prisma": "tsx ./bin/prisma.ts",
-    "tsoa:gen": "tsoa spec-and-routes",
-    "tsoa:watch": "npx chokidar \"src/controllers/**\" -c \"npm run tsoa:gen\"",
-    "clean": "pkill -f chokidar || true && pkill -f tsx || true"
+    "start":"tsx ./src/app.ts",
+    "dev": "npm run clean && concurrently  \"npm run gen:tsoa\" \"npm run gen-watch:tsoa\" \"npm run dev-watch\"",
+    "dev-watch": "npx kill-port 3003 && tsx watch --clear-screen=false --include ./src/*.ts ./src/app.ts",
+    "gen:prisma": "tsx ./bin/prisma.ts",
+    "gen:tsoa": "tsoa spec-and-routes",
+    "gen-watch:tsoa": "npx chokidar \"src/controllers/**\" -c \"npm run gen:tsoa\"",
+    "clean": "tsx ./bin/clean.ts"
   },
   "keywords": [],
   "author": "",

@@ -41,6 +41,6 @@ jobs:
             echo "${{ secrets.ENV }}" >> ./apps/server/.env
             pnpm i
             pm2 list | grep -q "git-drive" && pm2 delete git-drive
-            npm run 'prisma: gen'
-            pm2 start "npm run 'start: server'" --name git-drive
+            npm run 'gen:prisma'
+            pm2 start "npm run 'start'" --name git-drive
                 
