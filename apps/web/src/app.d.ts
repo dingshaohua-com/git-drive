@@ -1,28 +1,17 @@
 // See https://svelte.dev/docs/kit/types#app.d.ts
 // for information about these interfaces
 
+// 导入 Orval 生成的 API 类型
+import type * as RootApi from '$lib/api/endpoints/root';
+
 interface Api {
-  root: {
-    login: (params: any) => Promise<any>;
-    sendCode: (params: { email?: string; phone?: string }) => Promise<void>;
-    logout: () => Promise<void>;
-  };
-  user: {
-    me: () => Promise<User>;
-  };
-  repo: {
-    list: (params?: any) => Promise<any>;
-    get: (params: any) => Promise<any>;
-    add: (params: any) => Promise<any>;
-    remove: (params: any) => Promise<void>;
-    uploadFile: (params: any) => Promise<any>;
-    addFolder: (params: any) => Promise<any>;
-  };
-  favorite:{
-    list: (params?: any) => Promise<any>;
-    create: (params: any) => Promise<any>;
-  }
+  root: typeof RootApi;
+  // 当有其他 API 模块时，可以继续添加
+  // user: typeof UserApi;
+  // repo: typeof RepoApi;
+  // favorite: typeof FavoriteApi;
 }
+
 declare global {
   namespace App {}
   var api: Api;

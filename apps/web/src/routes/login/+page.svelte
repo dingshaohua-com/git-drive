@@ -5,7 +5,7 @@
   import toast, { error } from '$lib/toast';
   import { Modal, Spinner } from 'flowbite-svelte';
   import { slide } from 'svelte/transition';
-  import { login, sendCode } from '$lib/api/endpoints/root';
+  // import { login, sendCode } from '$lib/api/endpoints/root'; // 不再需要导入，使用全局 api
   import type { LoginParams } from '$lib/api/model/loginParams';
 
   let defaultModal = $state(false);
@@ -21,7 +21,9 @@
     event.preventDefault();
     defaultModal = true;
     try {
-      const res = await login(formData);
+      const res = await api.root.login(formData);
+      // 现在 res 直接就是业务数据，不需要 res.data.data
+      console.log('登录成功:', res);
       goto('/home', { replaceState: true });
     } catch (error: any) {
       toast.error(error)
@@ -64,8 +66,7 @@
     }, 1000);
 
     try {
-      // await api.root.sendCode(loginData);
-      await sendCode(loginData)
+      await api.root.sendCode(loginData);
     } catch (e: any) {
       console.log(333, e);
 

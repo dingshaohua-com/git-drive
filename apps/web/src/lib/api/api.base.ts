@@ -71,22 +71,8 @@ axios.interceptors.response.use(
   },
 );
 
-// // ---===将api注入全局，只需将api定义放在modules中即可===---
-// // 参数1：其目录路径相对于此配置文件的位置；参数2：是否搜索其子目录；参数3：匹配基础组件文件名的正则表达式
-// const requireModules: any = import.meta.glob('./modules/**.ts', {
-//   eager: true,
-// });
-
-// const api: any = {};
-// Object.keys(requireModules).forEach(async (filePath) => {
-//   const fileName = getFileNameFromUrl(filePath);
-//   if (fileName) {
-//     api[fileName] = requireModules[filePath];
-//   }
-// });
-
-
-// globalThis.api = api;
+// 全局 API 初始化在单独的文件中处理
+import './global-api';
 
 // 为 Orval 提供的自定义 axios 实例
 // 这个函数告诉 Orval 我们的拦截器已经解构了 response.data
