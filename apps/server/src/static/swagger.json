@@ -93,15 +93,24 @@
 				"description": "控制器方法返回类型的通用别名\n用于简化 Promise<JsonResultType<T>> 的写法"
 			},
 			"LoginParams": {
-				"allOf": [
-					{
-						"properties": {},
-						"type": "object"
+				"properties": {
+					"code": {
+						"type": "string"
 					},
-					{
-						"$ref": "#/components/schemas/User"
+					"phone": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					},
+					"account": {
+						"type": "string"
 					}
-				]
+				},
+				"type": "object"
 			},
 			"JsonResultType_any_": {
 				"properties": {
@@ -155,7 +164,7 @@
 				"description": "就是登录接口",
 				"summary": "登录",
 				"tags": [
-					"根接口"
+					"root"
 				],
 				"security": [],
 				"parameters": [],
@@ -189,7 +198,7 @@
 				"description": "退出登录",
 				"summary": "退出",
 				"tags": [
-					"根接口"
+					"root"
 				],
 				"security": [],
 				"parameters": [
@@ -222,7 +231,7 @@
 				"description": "发送证码 接口",
 				"summary": "发送证码",
 				"tags": [
-					"根接口"
+					"root"
 				],
 				"security": [],
 				"parameters": [],

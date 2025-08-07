@@ -4,15 +4,15 @@ import redis from '@/utils/redis-helper';
 import { queryOne } from '@/service/user';
 import reqCtx from '@/middleware/req-ctx';
 import { user as User } from '@prisma/client';
+import LoginParams from '../types/login.dto'
 import { login, sendCode } from '@/service/root';
 import swaggerJson from '../static/swagger.json';
 import JsonResult, { ApiResponse } from '../utils/json-result';
 import { Controller, Get, Post, Body, Route, Header, Tags, Hidden } from 'tsoa';
 
-type LoginParams = {} & User;
 
 @Route('api')
-@Tags('根接口')
+@Tags('root')
 export class RootController extends Controller {
   // @Get()
   // public async hi(): ApiResponse<string> {

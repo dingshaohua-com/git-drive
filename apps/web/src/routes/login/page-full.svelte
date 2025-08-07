@@ -5,14 +5,12 @@
   import toast, { error } from '$lib/toast';
   import { Modal, Spinner } from 'flowbite-svelte';
   import { slide } from 'svelte/transition';
-  import { login } from '$lib/api/endpoints/root';
-  import type { LoginParams } from '$lib/api/model/loginParams';
 
   let defaultModal = $state(false);
   let quickLoginType = $state<QuickLoginType | null>('email');
   let isCodeSent = $state(false);
   let countdown = $state(0);
-  let formData = $state<LoginParams>({
+  let formData = $state<LoginFieldType>({
     email: '960423114@qq.com',
   });
 
@@ -21,7 +19,7 @@
     event.preventDefault();
     defaultModal = true;
     try {
-      await login(formData);
+      await auth.login(formData);
       goto('/home', { replaceState: true });
     } catch (error: any) {
       toast.error(error)
@@ -75,6 +73,15 @@
     }
   };
 
+  // 第三方登录
+  const handleThirdPartyLogin = (type: 'wechat' | 'qq') => {
+    if (type === 'wechat') {
+      alert('微信登录功能开发中...');
+    } else {
+      alert('QQ登录功能开发中...');
+    }
+  };
+
   // 切换快捷登录类型
   const switchQuickLoginType = (type: QuickLoginType | null) => {
     quickLoginType = type;
@@ -118,6 +125,20 @@
             </button>
           </div>
         {/if}
+
+        {#if quickLoginType === 'sms'}
+          <div>
+            <input type="tel" bind:value={formData.phone} placeholder="请输入手机号" required pattern="^1[3-9]\d{9}$" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:outline-none" />
+          </div>
+
+          <div class="flex">
+            <input bind:value={formData.code} placeholder="请输入验证码" required class="flex-1 px-4 py-3 rounded-l-lg border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:outline-none" />
+            <button type="button" onclick={sendCode} disabled={isCodeSent} class="cursor-pointer w-24 bg-blue-500 text-white rounded-r-lg hover:bg-blue-600 disabled:bg-gray-400 px-2 text-sm">
+              {isCodeSent ? `${countdown}s` : '发送验证码'}
+            </button>
+          </div>
+        {/if}
+
         <button type="submit" class="w-full h-12 bg-blue-500 hover:bg-blue-600 text-white border-blue-500 hover:border-blue-600 rounded-lg cursor-pointer"> 登录 </button>
       </form>
     </div>
@@ -137,7 +158,15 @@
         <button onclick={() => switchQuickLoginType('email')} class="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer transition-all {quickLoginType === 'email' ? 'bg-blue-500 text-white shadow-lg' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}">
           <i class="ri-mail-line"></i>
         </button>
-      
+        <button onclick={() => switchQuickLoginType('sms')} class="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer transition-all {quickLoginType === 'sms' ? 'bg-blue-500 text-white shadow-lg' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}">
+          <i class="ri-smartphone-line"></i>
+        </button>
+        <button onclick={() => handleThirdPartyLogin('wechat')} class="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer transition-all bg-gray-100 hover:bg-green-50 text-green-500">
+          <i class="ri-wechat-line"></i>
+        </button>
+        <button onclick={() => handleThirdPartyLogin('qq')} class="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer transition-all bg-gray-100 hover:bg-green-50 text-blue-500">
+          <i class="ri-qq-line"></i>
+        </button>
       </div>
     </div>
   </div>

@@ -5,11 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start":"tsx ./src/app.ts",
-    "dev": "npm run clean && concurrently  \"npm run gen:tsoa\" \"npm run gen-watch:tsoa\" \"npm run dev-watch\"",
+    "dev": "npm run clean && npm run gen:tsoa && concurrently \"npm run gen-watch:tsoa\" \"npm run dev-watch\"",
     "dev-watch": "npx kill-port 3003 && tsx watch --clear-screen=false --include ./src/*.ts ./src/app.ts",
     "gen:prisma": "tsx ./bin/prisma.ts",
     "gen:tsoa": "tsoa spec-and-routes",
-    "gen-watch:tsoa": "npx chokidar \"src/controllers/**\" -c \"npm run gen:tsoa\"",
+    "gen-watch:tsoa": "npm run clean && npx chokidar \"src/controllers/**\" \"src/types/**\" -c \"npm run gen:tsoa\"",
     "clean": "tsx ./bin/clean.ts"
   },
   "keywords": [],
