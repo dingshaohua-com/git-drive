@@ -4,18 +4,13 @@
  * server
  * OpenAPI spec version: 1.0.0
  */
-import axios from 'axios';
-import type {
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
-
 import type {
   JsonResultTypeAny,
   JsonResultTypeTokenStringMeUser,
   LoginParams
 } from '../model';
 
+import { customAxiosInstance } from '../api.base';
 
 
 
@@ -24,37 +19,42 @@ import type {
  * 就是登录接口
  * @summary 登录
  */
-export const login = <TData = AxiosResponse<JsonResultTypeTokenStringMeUser>>(
-    loginParams: LoginParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/api/login`,
-      loginParams,options
-    );
-  }
-/**
+export const login = (
+    loginParams: LoginParams,
+ ) => {
+      return customAxiosInstance<JsonResultTypeTokenStringMeUser>(
+      {url: `/api/login`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: loginParams
+    },
+      );
+    }
+  /**
  * 退出登录
  * @summary 退出
  */
-export const logout = <TData = AxiosResponse<JsonResultTypeAny>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/api/logout`,undefined,options
-    );
-  }
-/**
+export const logout = (
+    
+ ) => {
+      return customAxiosInstance<JsonResultTypeAny>(
+      {url: `/api/logout`, method: 'POST'
+    },
+      );
+    }
+  /**
  * 发送证码 接口
  * @summary 发送证码
  */
-export const sendCode = <TData = AxiosResponse<JsonResultTypeAny>>(
-    sendCodeBody: unknown, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/api/send-code`,
-      sendCodeBody,options
-    );
-  }
-export type LoginResult = AxiosResponse<JsonResultTypeTokenStringMeUser>
-export type LogoutResult = AxiosResponse<JsonResultTypeAny>
-export type SendCodeResult = AxiosResponse<JsonResultTypeAny>
+export const sendCode = (
+    sendCodeBody: unknown,
+ ) => {
+      return customAxiosInstance<JsonResultTypeAny>(
+      {url: `/api/send-code`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: sendCodeBody
+    },
+      );
+    }
+  export type LoginResult = NonNullable<Awaited<ReturnType<typeof login>>>
+export type LogoutResult = NonNullable<Awaited<ReturnType<typeof logout>>>
+export type SendCodeResult = NonNullable<Awaited<ReturnType<typeof sendCode>>>

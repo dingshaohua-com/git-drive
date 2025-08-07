@@ -21,7 +21,7 @@
     event.preventDefault();
     defaultModal = true;
     try {
-      await login(formData);
+      const res = await login(formData);
       goto('/home', { replaceState: true });
     } catch (error: any) {
       toast.error(error)

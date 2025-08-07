@@ -11,8 +11,12 @@ export default defineConfig({
       mock: false, // ⑥ 同时生成 MSW mock
       clean: true, // 👈 每次生成前清目录
       override: {
-      
-      },  
+        // 自定义 axios 实例，让 Orval 知道我们的拦截器已经解构了 response.data
+        mutator: {
+          path: './src/lib/api/api.base.ts',
+          name: 'customAxiosInstance',
+        }
+      },
     },
   },
 });

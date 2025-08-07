@@ -1,23 +1,24 @@
 // init.ts
 import axios from 'axios';
+import type { AxiosRequestConfig } from 'axios';
 import { auth } from '../stores';
 import toast from '$lib/toast';
 
 // const isDev = import.meta.env.MODE==='development';
 
-const getFileNameFromUrl = (url: string): string | null => {
-  const match = url.match(/([^/]+)\.([^/]+)?$/); // 使用正则表达式匹配文件名（不包括扩展名）
-  if (match && match[1]) {
-    let fileName = match[1];
-    // 转换为小写，并用正则表达式替换每个分隔符后的字符为大写（除非它是字符串的第一个字符）
-    fileName = fileName
-      .toLowerCase() // 先转换为小写
-      .replace(/[-_\s]+(.)?/g, (match: string, p1: string) => (p1 ? p1.toUpperCase() : ''))
-      .replace(/^./, (str: string) => str.toLowerCase()); // 转换为小驼峰
-    return fileName;
-  }
-  return null; // 如果没有匹配到文件名，则返回null
-};
+// const getFileNameFromUrl = (url: string): string | null => {
+//   const match = url.match(/([^/]+)\.([^/]+)?$/); // 使用正则表达式匹配文件名（不包括扩展名）
+//   if (match && match[1]) {
+//     let fileName = match[1];
+//     // 转换为小写，并用正则表达式替换每个分隔符后的字符为大写（除非它是字符串的第一个字符）
+//     fileName = fileName
+//       .toLowerCase() // 先转换为小写
+//       .replace(/[-_\s]+(.)?/g, (match: string, p1: string) => (p1 ? p1.toUpperCase() : ''))
+//       .replace(/^./, (str: string) => str.toLowerCase()); // 转换为小驼峰
+//     return fileName;
+//   }
+//   return null; // 如果没有匹配到文件名，则返回null
+// };
 
 // ---===全局默认axios配置===---
 // const whitePath = ["/login", "/sms-send"]; // 白名单
@@ -70,19 +71,28 @@ axios.interceptors.response.use(
   },
 );
 
-// ---===将api注入全局，只需将api定义放在modules中即可===---
-// 参数1：其目录路径相对于此配置文件的位置；参数2：是否搜索其子目录；参数3：匹配基础组件文件名的正则表达式
-const requireModules: any = import.meta.glob('./modules/**.ts', {
-  eager: true,
-});
+// // ---===将api注入全局，只需将api定义放在modules中即可===---
+// // 参数1：其目录路径相对于此配置文件的位置；参数2：是否搜索其子目录；参数3：匹配基础组件文件名的正则表达式
+// const requireModules: any = import.meta.glob('./modules/**.ts', {
+//   eager: true,
+// });
 
-const api: any = {};
-Object.keys(requireModules).forEach(async (filePath) => {
-  const fileName = getFileNameFromUrl(filePath);
-  if (fileName) {
-    api[fileName] = requireModules[filePath];
-  }
-});
+// const api: any = {};
+// Object.keys(requireModules).forEach(async (filePath) => {
+//   const fileName = getFileNameFromUrl(filePath);
+//   if (fileName) {
+//     api[fileName] = requireModules[filePath];
+//   }
+// });
 
 
-globalThis.api = api;
+// globalThis.api = api;
+
+// 为 Orval 提供的自定义 axios 实例
+// 这个函数告诉 Orval 我们的拦截器已经解构了 response.data
+// 所以生成的类型应该直接是业务数据类型，而不是 AxiosResponse<T>
+export const customAxiosInstance = <T>(config: AxiosRequestConfig): Promise<T> => {
+  // 直接使用配置好拦截器的 axios 实例
+  // 拦截器会自动处理 response.data 的解构
+  return axios(config);
+};
