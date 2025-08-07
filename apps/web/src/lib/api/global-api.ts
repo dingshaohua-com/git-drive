@@ -34,10 +34,6 @@ export const initGlobalApi = () => {
   // 挂载到全局对象
   globalThis.api = api;
   
-  // 在开发环境下，也挂载到 window 对象方便调试
-  if (typeof window !== 'undefined') {
-    globalThis.api = api;
-  }
   
   console.log('🚀 Global API initialized:', Object.keys(api));
   
