@@ -5,7 +5,7 @@
   import toast, { error } from '$lib/toast';
   import { Modal, Spinner } from 'flowbite-svelte';
   import { slide } from 'svelte/transition';
-  import { login } from '$lib/api/endpoints/root';
+  import { login, sendCode } from '$lib/api/endpoints/root';
   import type { LoginParams } from '$lib/api/model/loginParams';
 
   let defaultModal = $state(false);
@@ -33,7 +33,7 @@
   };
 
   // 发送验证码
-  const sendCode = async () => {
+  const toSendCode = async () => {
     let loginData: { email?: string; phone?: string } = {};
 
     if (quickLoginType === 'email') {
@@ -64,7 +64,8 @@
     }, 1000);
 
     try {
-      await api.root.sendCode(loginData);
+      // await api.root.sendCode(loginData);
+      await sendCode(loginData)
     } catch (e: any) {
       console.log(333, e);
 
@@ -113,7 +114,7 @@
 
           <div class="flex">
             <input bind:value={formData.code} placeholder="请输入验证码" required class="flex-1 px-4 py-3 rounded-l-lg border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:outline-none" />
-            <button type="button" onclick={sendCode} disabled={isCodeSent} class="cursor-pointer w-24 bg-blue-500 text-white rounded-r-lg hover:bg-blue-600 disabled:bg-gray-400 px-2 text-sm">
+            <button type="button" onclick={toSendCode} disabled={isCodeSent} class="cursor-pointer w-24 bg-blue-500 text-white rounded-r-lg hover:bg-blue-600 disabled:bg-gray-400 px-2 text-sm">
               {isCodeSent ? `${countdown}s` : '发送验证码'}
             </button>
           </div>

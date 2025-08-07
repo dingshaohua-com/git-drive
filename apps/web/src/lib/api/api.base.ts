@@ -23,7 +23,7 @@ import toast from '$lib/toast';
 // ---===全局默认axios配置===---
 // const whitePath = ["/login", "/sms-send"]; // 白名单
 // axios.defaults.baseURL = isDev?'/api':'';
-axios.defaults.baseURL = '/api';
+// axios.defaults.baseURL = '/api';
 axios.defaults.timeout = 10000;
 axios.interceptors.request.use(
   (config) => {
