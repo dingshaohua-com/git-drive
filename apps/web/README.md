@@ -83,3 +83,10 @@ You have specified a baseUrl and/or paths in your tsconfig.json which interferes
    官方文档链接已提供：https://kit.svelte.dev/docs/configuration#alias
 
 总结：删除 `tsconfig.json` 中的 `baseUrl` 和 `paths` 设置，改用 SvelteKit 的 `alias` 配置来定义路径别名即可解决这个问题。
+
+
+## 封装api
+api 是使用 orval 根据后端 openApi 动态生成的，其配置文件在 `orval.config.ts`,每次接口更新需要运行 `npm run generate-api` 生成api文件。
+
+同时我也手动把 api 挂全局对象上了，在 `global-api.ts` 和  `app.d.ts` 有所体现！    
+ 如果有新的模块，需要在 `global-api.ts` 中导入并添加到 `api` 对象中，在 `app.d.ts` 中添加类型定义即可。
