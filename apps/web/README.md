@@ -88,5 +88,7 @@ You have specified a baseUrl and/or paths in your tsconfig.json which interferes
 ## 封装api
 api 是使用 orval 根据后端 openApi 动态生成的，其配置文件在 `orval.config.ts`,每次接口更新需要运行 `npm run generate-api` 生成api文件。
 
+通过 `orval.config.ts>mutator` 字段来解决 截器已经提前解构了 response.data 和 orval生成类型文件冲突问题！
+
 同时我也手动把 api 挂全局对象上了，在 `global-api.ts` 和  `app.d.ts` 有所体现！    
  如果有新的模块，需要在 `global-api.ts` 中导入并添加到 `api` 对象中，在 `app.d.ts` 中添加类型定义即可。
