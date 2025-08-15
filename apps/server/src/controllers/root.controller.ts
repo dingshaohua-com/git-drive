@@ -11,6 +11,7 @@ import JsonResult, { ApiResponse } from '../utils/json-result';
 import { Controller, Get, Post, Body, Route, Header, Tags, Hidden } from 'tsoa';
 
 
+
 @Route('api')
 @Tags('root')
 export class RootController extends Controller {

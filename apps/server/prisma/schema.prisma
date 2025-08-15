@@ -37,4 +37,3 @@ model sys_conf {
   id     Int    @id @default(autoincrement())
   vcode  Int?
 }
-

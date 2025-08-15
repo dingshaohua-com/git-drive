@@ -21,6 +21,7 @@ console.log('热更新测试成功! - 修改时间:', new Date().toLocaleTimeStr
 app.use(errorHandler());
 app.use(kBody);
 app.use(staticServer(path.join(__dirname, 'www')));
+app.use(staticServer(path.join(__dirname, 'static')));
 app.use(feRouterBack());
 app.use(reqCtxMiddleware()); // 创建上下文容器中间件
 app.use(info);

@@ -1,13 +1,33 @@
 {
-  "entryFile": "src/app.ts", 
+  "entryFile": "src/app.ts",
   "noImplicitAdditionalProperties": "throw-on-extras",
-  "controllerPathGlobs": ["src/controllers/**"],
+  "controllerPathGlobs": [
+    "src/controllers/**"
+  ],
   "spec": {
     "outputDirectory": "src/static",
-    "specVersion": 3
+    "specVersion": 3,
+    "name": "Server API",
+    "description": "## xx服务\n\n  这是一个基于 Koa + TSOA 的后端 API 服务",
+    "license": "MIT",
+    "tags": [
+      {
+        "name": "root",
+        "description": "🤡 基础接口服务\n\n  包含登录、登出等核心功能",
+        "x-displayName": "基础服务"
+      },
+      {
+        "name": "user",
+        "description": "用户管理 - 用户相关的所有操作"
+      },
+      {
+        "name": "auth",
+        "description": "认证授权 - 登录、权限验证等"
+      }
+    ]
   },
   "routes": {
-    "routesDir": "src/routers", 
+    "routesDir": "src/routers",
     "middleware": "koa"
   }
 }
