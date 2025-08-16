@@ -1,6 +1,6 @@
 // init.ts
 import axios from 'axios';
-import type { AxiosRequestConfig } from 'axios';
+import type { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { auth } from '../stores';
 import toast from '$lib/toast';
 
@@ -64,13 +64,39 @@ axios.interceptors.response.use(
 // };
 
 
-export const customAxiosInstance = <T>(
+// export const customAxiosInstance = <T>(
+//   config: AxiosRequestConfig,
+//   options?: AxiosRequestConfig,
+// ): Promise<T> => {
+//   const promise = axios({
+//     ...config,
+//     ...options,
+//   }).then(({ data }) => data);
+//   return promise;
+// };
+
+interface ApiResponse<T> {
+  code: number;
+  data: T;
+  msg: string;
+}
+
+export const customAxiosInstance = <T, R>(
   config: AxiosRequestConfig,
   options?: AxiosRequestConfig,
-): Promise<T> => {
+): Promise<R> => {
   const promise = axios({
     ...config,
     ...options,
-  }).then(({ data }) => data);
+  })
+    .then((response: AxiosResponse<ApiResponse<T>>) => {
+      const { data } = response;
+      if (data.code === 0) {
+        // 强制转换为 R 类型
+        return (data.data as unknown) as R;  // 注意：这里的类型转换
+      }
+      throw new Error(data.msg || 'Unknown error');
+    });
+
   return promise;
 };

@@ -45,7 +45,7 @@ function createAuthStore() {
 		login: async (params: LoginParams) => {
 			update(state => ({ ...state, isLoading: true }));
 			try {
-				const { data:{token, me} } = await api.root.login(params);
+				const { token, me } = await api.root.login(params);
 				
 				meStore.update(me);
 
