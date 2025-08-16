@@ -6,6 +6,7 @@
   import { Modal, Spinner } from 'flowbite-svelte';
   import { slide } from 'svelte/transition';
   import type { LoginParams } from '$lib/api/model/loginParams';
+
   
 
   let defaultModal = $state(false);
@@ -21,6 +22,9 @@
   const onLogin = async (event: Event) => {
     event.preventDefault();
     defaultModal = true;
+
+    const res = await api.root.login(formData);
+
     try {
       await auth.login(formData);
       goto('/home', { replaceState: true });

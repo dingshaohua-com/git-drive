@@ -22,28 +22,14 @@ const models: TsoaRoute.Models = {
         "type": {"ref":"DefaultSelection_Prisma._36_userPayload_","validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "JsonResultSuccess__token-string--me-User__": {
+    "JsonResultType__token-string--me-User__": {
         "dataType": "refObject",
         "properties": {
-            "code": {"dataType":"enum","enums":[0],"required":true},
+            "code": {"dataType":"double","required":true},
             "msg": {"dataType":"string","required":true},
             "data": {"dataType":"nestedObjectLiteral","nestedProperties":{"me":{"ref":"User","required":true},"token":{"dataType":"string","required":true}},"required":true},
         },
         "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "JsonResultFailed": {
-        "dataType": "refObject",
-        "properties": {
-            "code": {"dataType":"enum","enums":[1],"required":true},
-            "msg": {"dataType":"string","required":true},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "JsonResultType__token-string--me-User__": {
-        "dataType": "refAlias",
-        "type": {"dataType":"union","subSchemas":[{"ref":"JsonResultSuccess__token-string--me-User__"},{"ref":"JsonResultFailed"}],"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ApiResponse__token-string--me-User__": {
@@ -56,19 +42,14 @@ const models: TsoaRoute.Models = {
         "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"code":{"dataType":"string"},"phone":{"dataType":"string"},"email":{"dataType":"string"},"password":{"dataType":"string"},"account":{"dataType":"string"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "JsonResultSuccess_any_": {
+    "JsonResultType_any_": {
         "dataType": "refObject",
         "properties": {
-            "code": {"dataType":"enum","enums":[0],"required":true},
+            "code": {"dataType":"double","required":true},
             "msg": {"dataType":"string","required":true},
             "data": {"dataType":"any","required":true},
         },
         "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "JsonResultType_any_": {
-        "dataType": "refAlias",
-        "type": {"dataType":"union","subSchemas":[{"ref":"JsonResultSuccess_any_"},{"ref":"JsonResultFailed"}],"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ApiResponse": {

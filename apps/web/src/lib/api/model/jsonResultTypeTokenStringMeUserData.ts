@@ -9,7 +9,7 @@
  */
 import type { DefaultSelectionPrisma36UserPayload } from './defaultSelectionPrisma36UserPayload';
 
-export type JsonResultSuccessTokenStringMeUserData = {
+export type JsonResultTypeTokenStringMeUserData = {
   me: DefaultSelectionPrisma36UserPayload;
   token: string;
 };

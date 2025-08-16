@@ -56,14 +56,11 @@
 				"$ref": "#/components/schemas/DefaultSelection_Prisma._36_userPayload_",
 				"description": "Model user"
 			},
-			"JsonResultSuccess__token-string--me-User__": {
+			"JsonResultType__token-string--me-User__": {
 				"properties": {
 					"code": {
 						"type": "number",
-						"enum": [
-							0
-						],
-						"nullable": false
+						"format": "double"
 					},
 					"msg": {
 						"type": "string"
@@ -92,36 +89,6 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"JsonResultFailed": {
-				"properties": {
-					"code": {
-						"type": "number",
-						"enum": [
-							1
-						],
-						"nullable": false
-					},
-					"msg": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"code",
-					"msg"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"JsonResultType__token-string--me-User__": {
-				"anyOf": [
-					{
-						"$ref": "#/components/schemas/JsonResultSuccess__token-string--me-User__"
-					},
-					{
-						"$ref": "#/components/schemas/JsonResultFailed"
-					}
-				]
-			},
 			"ApiResponse__token-string--me-User__": {
 				"$ref": "#/components/schemas/JsonResultType__token-string--me-User__",
 				"description": "控制器方法返回类型的通用别名\n用于简化 Promise<JsonResultType<T>> 的写法"
@@ -146,14 +113,11 @@
 				},
 				"type": "object"
 			},
-			"JsonResultSuccess_any_": {
+			"JsonResultType_any_": {
 				"properties": {
 					"code": {
 						"type": "number",
-						"enum": [
-							0
-						],
-						"nullable": false
+						"format": "double"
 					},
 					"msg": {
 						"type": "string"
@@ -167,16 +131,6 @@
 				],
 				"type": "object",
 				"additionalProperties": false
-			},
-			"JsonResultType_any_": {
-				"anyOf": [
-					{
-						"$ref": "#/components/schemas/JsonResultSuccess_any_"
-					},
-					{
-						"$ref": "#/components/schemas/JsonResultFailed"
-					}
-				]
 			},
 			"ApiResponse": {
 				"$ref": "#/components/schemas/JsonResultType_any_",
