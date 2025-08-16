@@ -1,7 +1,7 @@
 export interface JsonResultSuccess<T> {
   readonly code: 0;
   readonly msg: string;
-  readonly data?: T;
+  readonly data: T;
 }
 
 export interface JsonResultFailed {
@@ -23,7 +23,7 @@ export default class JsonResult {
    * @param data 成功时返回的数据
    * @param msg 成功消息，默认为 'SUCCESS'
    */
-  static success<T>(data: T, msg: string = 'SUCCESS'): JsonResultSuccess<T> {
+  static success<T>(data?: T, msg: string = 'SUCCESS'): JsonResultSuccess<T> {
     return {
       code: 0,
       msg,

@@ -86,7 +86,8 @@
 				},
 				"required": [
 					"code",
-					"msg"
+					"msg",
+					"data"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -161,7 +162,8 @@
 				},
 				"required": [
 					"code",
-					"msg"
+					"msg",
+					"data"
 				],
 				"type": "object",
 				"additionalProperties": false

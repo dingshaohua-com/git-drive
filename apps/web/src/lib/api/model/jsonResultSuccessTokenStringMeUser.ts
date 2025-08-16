@@ -14,5 +14,5 @@ export interface JsonResultSuccessTokenStringMeUser {
   /** */
   code: JsonResultSuccessTokenStringMeUserCode;
   msg: string;
-  data?: JsonResultSuccessTokenStringMeUserData;
+  data: JsonResultSuccessTokenStringMeUserData;
 }

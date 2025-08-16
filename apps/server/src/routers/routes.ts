@@ -27,7 +27,7 @@ const models: TsoaRoute.Models = {
         "properties": {
             "code": {"dataType":"enum","enums":[0],"required":true},
             "msg": {"dataType":"string","required":true},
-            "data": {"dataType":"nestedObjectLiteral","nestedProperties":{"me":{"ref":"User","required":true},"token":{"dataType":"string","required":true}}},
+            "data": {"dataType":"nestedObjectLiteral","nestedProperties":{"me":{"ref":"User","required":true},"token":{"dataType":"string","required":true}},"required":true},
         },
         "additionalProperties": false,
     },
@@ -61,7 +61,7 @@ const models: TsoaRoute.Models = {
         "properties": {
             "code": {"dataType":"enum","enums":[0],"required":true},
             "msg": {"dataType":"string","required":true},
-            "data": {"dataType":"any"},
+            "data": {"dataType":"any","required":true},
         },
         "additionalProperties": false,
     },

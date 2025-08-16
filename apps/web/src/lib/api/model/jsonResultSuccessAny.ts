@@ -13,5 +13,5 @@ export interface JsonResultSuccessAny {
   /** */
   code: JsonResultSuccessAnyCode;
   msg: string;
-  data?: unknown;
+  data: unknown;
 }
