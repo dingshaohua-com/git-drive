@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start":"tsx ./src/app.ts",
+    "start": "tsx ./src/app.ts",
     "dev": "npm run clean && npm run gen:tsoa && concurrently \"npm run gen-watch:tsoa\" \"npm run dev-watch\"",
     "dev-watch": "npx kill-port 3003 && tsx watch --clear-screen=false --include ./src/*.ts ./src/app.ts",
     "gen:prisma": "tsx ./bin/prisma.ts",
@@ -19,7 +19,7 @@
   "dependencies": {
     "@koa/cors": "^5.0.0",
     "@koa/router": "^14.0.0",
-    "@prisma/client": "^6.13.0",
+    "@prisma/client": "^6.14.0",
     "@tsoa/runtime": "^6.6.0",
     "axios": "^1.11.0",
     "dayjs": "^1.11.13",
@@ -30,20 +30,19 @@
     "koa-combine-routers": "^4.0.2",
     "koa-mount": "^4.2.0",
     "koa-static": "^5.0.0",
-    "koa2-swagger-ui": "^5.11.0",
     "lodash": "^4.17.21",
     "nodemailer": "^7.0.5",
-    "prisma": "^6.13.0",
+    "prisma": "^6.14.0",
     "tsoa": "^6.6.0"
   },
   "devDependencies": {
     "@repo/config-prettier": "workspace:*",
     "@types/koa": "^3.0.0",
     "@types/koa__router": "^12.0.4",
-    "@types/node": "^24.2.0",
+    "@types/node": "^24.3.0",
     "chalk": "^5.5.0",
     "chokidar-cli": "^3.0.0",
     "concurrently": "^9.2.0",
-    "tsx": "^4.20.3"
+    "tsx": "^4.20.4"
   }
 }

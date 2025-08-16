@@ -17,7 +17,7 @@
     "chalk": "^5.5.0",
     "kill-port": "^2.0.1",
     "prettier": "^3.6.2",
-    "turbo": "^2.5.5"
+    "turbo": "^2.5.6"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
@@ -26,9 +26,6 @@
       "@tailwindcss/oxide",
       "esbuild",
       "prisma"
-    ],
-    "patchedDependencies": {
-      "koa2-swagger-ui": "patches/koa2-swagger-ui.patch"
-    }
+    ]
   }
 }

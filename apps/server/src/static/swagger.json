@@ -90,7 +90,7 @@
 			},
 			"ApiResponse__token-string--me-User__": {
 				"$ref": "#/components/schemas/JsonResultType__token-string--me-User__",
-				"description": "控制器方法返回类型的通用别名\r\n用于简化 Promise<JsonResultType<T>> 的写法"
+				"description": "控制器方法返回类型的通用别名\n用于简化 Promise<JsonResultType<T>> 的写法"
 			},
 			"LoginParams": {
 				"properties": {
@@ -132,7 +132,7 @@
 			},
 			"ApiResponse": {
 				"$ref": "#/components/schemas/JsonResultType_any_",
-				"description": "控制器方法返回类型的通用别名\r\n用于简化 Promise<JsonResultType<T>> 的写法"
+				"description": "控制器方法返回类型的通用别名\n用于简化 Promise<JsonResultType<T>> 的写法"
 			}
 		},
 		"securitySchemes": {}
