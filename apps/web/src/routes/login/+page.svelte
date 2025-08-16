@@ -24,6 +24,8 @@
     defaultModal = true;
 
     const res = await api.root.login(formData);
+    console.log(res);
+    
 
     try {
       await auth.login(formData);

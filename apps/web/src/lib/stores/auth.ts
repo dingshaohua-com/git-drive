@@ -45,20 +45,7 @@ function createAuthStore() {
 		login: async (params: LoginParams) => {
 			update(state => ({ ...state, isLoading: true }));
 			try {
-				const res = await api.root.login(params);
-				
-				if(res.code === 0){
-					console.log(res.data.me);
-				}
-
-				// if(res.code===1){
-				// 	console.log(res.code);
-					
-				// }
-
-				
-				console.log('登录成功:', me, token);
-				
+				const {me, token} = await api.root.login(params);
 				
 				meStore.update(me);
 
