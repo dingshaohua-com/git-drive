@@ -19,7 +19,13 @@ import { customAxiosInstance } from '../api.base';
 
 
   /**
- * 就是登录接口
+ * 支持多种登录方式。   
+首次登录请用邮箱验证码登录方式，进去之后再设置密码，以后便可以用账密方式登录了！
+
+| 登录方式 | 字段 | 说明 |
+|----------|----------|------|
+| 账号密码 | username, password | 账密登录 |
+| 邮箱验证码 | email, code | 邮箱 + 验证码登录 |
  * @summary 登录
  */
 export const login = (
@@ -34,7 +40,7 @@ export const login = (
     }
   /**
  * 退出登录
- * @summary 退出
+ * @summary 登出
  */
 export const logout = (
     

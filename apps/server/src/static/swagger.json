@@ -56,11 +56,14 @@
 				"$ref": "#/components/schemas/DefaultSelection_Prisma._36_userPayload_",
 				"description": "Model user"
 			},
-			"JsonResultType__token-string--me-User__": {
+			"JsonResultSuccess__token-string--me-User__": {
 				"properties": {
 					"code": {
 						"type": "number",
-						"format": "double"
+						"enum": [
+							0
+						],
+						"nullable": false
 					},
 					"msg": {
 						"type": "string"
@@ -88,6 +91,36 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"JsonResultFailed": {
+				"properties": {
+					"code": {
+						"type": "number",
+						"enum": [
+							1
+						],
+						"nullable": false
+					},
+					"msg": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"code",
+					"msg"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"JsonResultType__token-string--me-User__": {
+				"anyOf": [
+					{
+						"$ref": "#/components/schemas/JsonResultSuccess__token-string--me-User__"
+					},
+					{
+						"$ref": "#/components/schemas/JsonResultFailed"
+					}
+				]
+			},
 			"ApiResponse__token-string--me-User__": {
 				"$ref": "#/components/schemas/JsonResultType__token-string--me-User__",
 				"description": "控制器方法返回类型的通用别名\n用于简化 Promise<JsonResultType<T>> 的写法"
@@ -112,11 +145,14 @@
 				},
 				"type": "object"
 			},
-			"JsonResultType_any_": {
+			"JsonResultSuccess_any_": {
 				"properties": {
 					"code": {
 						"type": "number",
-						"format": "double"
+						"enum": [
+							0
+						],
+						"nullable": false
 					},
 					"msg": {
 						"type": "string"
@@ -129,6 +165,16 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"JsonResultType_any_": {
+				"anyOf": [
+					{
+						"$ref": "#/components/schemas/JsonResultSuccess_any_"
+					},
+					{
+						"$ref": "#/components/schemas/JsonResultFailed"
+					}
+				]
 			},
 			"ApiResponse": {
 				"$ref": "#/components/schemas/JsonResultType_any_",
@@ -162,7 +208,7 @@
 						}
 					}
 				},
-				"description": "就是登录接口",
+				"description": "支持多种登录方式。   \n首次登录请用邮箱验证码登录方式，进去之后再设置密码，以后便可以用账密方式登录了！\n\n| 登录方式 | 字段 | 说明 |\n|----------|----------|------|\n| 账号密码 | username, password | 账密登录 |\n| 邮箱验证码 | email, code | 邮箱 + 验证码登录 |",
 				"summary": "登录",
 				"tags": [
 					"root"
@@ -197,7 +243,7 @@
 					}
 				},
 				"description": "退出登录",
-				"summary": "退出",
+				"summary": "登出",
 				"tags": [
 					"root"
 				],

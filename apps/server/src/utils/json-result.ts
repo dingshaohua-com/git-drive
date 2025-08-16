@@ -1,8 +1,15 @@
-export interface JsonResultType<T = any> {
-  readonly code: number;
+export interface JsonResultSuccess<T> {
+  readonly code: 0;
   readonly msg: string;
   readonly data?: T;
 }
+
+export interface JsonResultFailed {
+  readonly code: 1;
+  readonly msg: string;
+}
+
+export type JsonResultType<T = any> = JsonResultSuccess<T> | JsonResultFailed;
 
 /**
  * 控制器方法返回类型的通用别名
@@ -11,19 +18,27 @@ export interface JsonResultType<T = any> {
 export type ApiResponse<T = any> = Promise<JsonResultType<T>>;
 
 export default class JsonResult {
-  static success<T>(data?: T): JsonResultType<T> {
+  /**
+   * 成功响应
+   * @param data 成功时返回的数据
+   * @param msg 成功消息，默认为 'SUCCESS'
+   */
+  static success<T>(data: T, msg: string = 'SUCCESS'): JsonResultSuccess<T> {
     return {
       code: 0,
-      msg: 'SUCCESS',
-      ...(data !== undefined ? { data } : {}),
+      msg,
+      data,
     };
   }
 
-  static failed(msg: string = 'FAILED'): JsonResultType<null> {
+  /**
+   * 失败响应
+   * @param msg 失败消息，默认为 'FAILED'
+   */
+  static failed(msg: string = 'FAILED', code: number = 1): JsonResultFailed {
     return {
-      code: 1,
+      code:1,
       msg,
-      data: null,
     };
   }
 }

@@ -1,6 +1,7 @@
 import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
 import { me as meStore } from '.';
+import type { LoginParams } from '$lib/api/model';
 
 
 // 认证状态类型
@@ -41,11 +42,23 @@ function createAuthStore() {
 		subscribe,
 
 		// 登录
-		login: async (params: any) => {
+		login: async (params: LoginParams) => {
 			update(state => ({ ...state, isLoading: true }));
-
 			try {
-				const {token, me} = await api.root.login(params);
+				const res = await api.root.login(params);
+				
+				if(res.code === 0){
+					console.log(res.data.me);
+				}
+
+				// if(res.code===1){
+				// 	console.log(res.code);
+					
+				// }
+
+				
+				console.log('登录成功:', me, token);
+				
 				
 				meStore.update(me);
 

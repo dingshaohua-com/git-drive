@@ -5,8 +5,8 @@
   import toast, { error } from '$lib/toast';
   import { Modal, Spinner } from 'flowbite-svelte';
   import { slide } from 'svelte/transition';
-  // import { login, sendCode } from '$lib/api/endpoints/root'; // 不再需要导入，使用全局 api
   import type { LoginParams } from '$lib/api/model/loginParams';
+  
 
   let defaultModal = $state(false);
   let quickLoginType = $state<QuickLoginType | null>('email');
@@ -14,6 +14,7 @@
   let countdown = $state(0);
   let formData = $state<LoginParams>({
     email: '960423114@qq.com',
+    code: '960912'
   });
 
   // 登录
@@ -21,17 +22,13 @@
     event.preventDefault();
     defaultModal = true;
     try {
-      const res = await api.root.login(formData);
-      // 现在 res 直接就是业务数据，不需要 res.data.data
-      console.log('登录成功:', res);
+      await auth.login(formData);
       goto('/home', { replaceState: true });
     } catch (error: any) {
       toast.error(error)
     }finally{
       defaultModal = false;
     }
-   
-    
   };
 
   // 发送验证码

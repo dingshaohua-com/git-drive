@@ -9,8 +9,6 @@
 
   // 检查是否需要重定向
   const checkAuth = () => {
-    console.log('执行了');
-
     // 只在客户端执行重定向逻辑
     if (!browser) return;
 

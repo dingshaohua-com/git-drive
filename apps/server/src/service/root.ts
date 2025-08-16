@@ -9,7 +9,7 @@ import reqCtx from '@/middleware/req-ctx';
 const prisma = new PrismaClient();
 
 export const login = async (params): Promise<string> => {
-  const appInfo = reqCtx.get('info');
+  const sysConf = reqCtx.get('sysConf');
   const loginType = getLoginType(params);
   const codeTemp = Number(params.code);
   delete params.code;
@@ -23,7 +23,7 @@ export const login = async (params): Promise<string> => {
     }
   } else if (loginType === 'email' || loginType === 'phone') {
     // 如果不能与万能验证码，就正常流程（校验验证码）
-    if (appInfo.vcode !== codeTemp) {
+    if (sysConf.vcode !== codeTemp) {
       const redisKey = `${loginType}:${params.email || params.phone}`;
       const code = await redis.get(redisKey);
       if (Number(code) === codeTemp) {

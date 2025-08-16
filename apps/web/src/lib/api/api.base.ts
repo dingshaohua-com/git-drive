@@ -30,7 +30,6 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   (response) => {
     const res = response.data;
-
     if (res.code === 1) {
       toast.error(res.msg);
       return Promise.reject(res.msg);
