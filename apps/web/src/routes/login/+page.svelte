@@ -22,11 +22,6 @@
   const onLogin = async (event: Event) => {
     event.preventDefault();
     defaultModal = true;
-
-    const res = await api.root.login(formData);
-    console.log(res);
-    
-
     try {
       await auth.login(formData);
       goto('/home', { replaceState: true });

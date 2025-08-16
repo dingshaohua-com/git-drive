@@ -54,11 +54,23 @@ axios.interceptors.response.use(
   },
 );
 
-// 为 Orval 提供的自定义 axios 实例
-// 这个函数告诉 Orval 我们的拦截器已经解构了 response.data
-// 所以生成的类型应该直接是业务数据类型，而不是 AxiosResponse<T>
-export const customAxiosInstance = <T>(config: AxiosRequestConfig): Promise<T> => {
-  // 直接使用配置好拦截器的 axios 实例
-  // 拦截器会自动处理 response.data 的解构
-  return axios(config);
+// // 为 Orval 提供的自定义 axios 实例
+// // 这个函数告诉 Orval 我们的拦截器已经解构了 response.data
+// // 所以生成的类型应该直接是业务数据类型，而不是 AxiosResponse<T>
+// export const customAxiosInstance = <T>(config: AxiosRequestConfig): Promise<T> => {
+//   // 直接使用配置好拦截器的 axios 实例
+//   // 拦截器会自动处理 response.data 的解构
+//   return axios(config);
+// };
+
+
+export const customAxiosInstance = <T>(
+  config: AxiosRequestConfig,
+  options?: AxiosRequestConfig,
+): Promise<T> => {
+  const promise = axios({
+    ...config,
+    ...options,
+  }).then(({ data }) => data);
+  return promise;
 };

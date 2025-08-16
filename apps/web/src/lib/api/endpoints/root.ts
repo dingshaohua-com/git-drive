@@ -17,6 +17,8 @@ import { customAxiosInstance } from '../api.base';
 
 
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
 
   /**
  * 支持多种登录方式。   
@@ -30,13 +32,13 @@ import { customAxiosInstance } from '../api.base';
  */
 export const login = (
     loginParams: LoginParams,
- ) => {
+ options?: SecondParameter<typeof customAxiosInstance>,) => {
       return customAxiosInstance<JsonResultTypeTokenStringMeUser>(
       {url: `/api/login`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: loginParams
     },
-      );
+      options);
     }
   /**
  * 退出登录
@@ -44,11 +46,11 @@ export const login = (
  */
 export const logout = (
     
- ) => {
+ options?: SecondParameter<typeof customAxiosInstance>,) => {
       return customAxiosInstance<JsonResultTypeAny>(
       {url: `/api/logout`, method: 'POST'
     },
-      );
+      options);
     }
   /**
  * 发送证码 接口
@@ -56,13 +58,13 @@ export const logout = (
  */
 export const sendCode = (
     sendCodeBody: unknown,
- ) => {
+ options?: SecondParameter<typeof customAxiosInstance>,) => {
       return customAxiosInstance<JsonResultTypeAny>(
       {url: `/api/send-code`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: sendCodeBody
     },
-      );
+      options);
     }
   export type LoginResult = NonNullable<Awaited<ReturnType<typeof login>>>
 export type LogoutResult = NonNullable<Awaited<ReturnType<typeof logout>>>
