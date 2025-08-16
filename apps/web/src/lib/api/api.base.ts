@@ -55,9 +55,6 @@ axios.interceptors.response.use(
   },
 );
 
-// 全局 API 初始化在单独的文件中处理
-import './global-api';
-
 // 为 Orval 提供的自定义 axios 实例
 // 这个函数告诉 Orval 我们的拦截器已经解构了 response.data
 // 所以生成的类型应该直接是业务数据类型，而不是 AxiosResponse<T>

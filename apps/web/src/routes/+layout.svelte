@@ -2,6 +2,7 @@
   import '../app.css';
   import AuthGuard from '$lib/components/auth-guard.svelte';
   import '$lib/api/api.base';
+  import '$lib/api/global-api';
   import { onMount } from 'svelte';
   import GlobalToast from '$lib/components/global-toast.svelte';
   import { page } from '$app/state';
