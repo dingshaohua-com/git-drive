@@ -25,10 +25,6 @@
     defaultModal = true;
 
     try {
-      // 现在应该可以直接访问 res.user 和 res.token，而不是 res.data.user
-      console.log('用户信息:', res.me);
-      console.log('Token:', res.token);
-
       await auth.login(formData);
       goto('/home', { replaceState: true });
     } catch (error: any) {
