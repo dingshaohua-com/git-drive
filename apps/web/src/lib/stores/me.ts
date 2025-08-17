@@ -1,17 +1,12 @@
 import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
+import type { User } from '$lib/api/model/user'
 
 // 用户信息类型
-export interface Me {
-  id: string;
-  nickname: string;
-  email: string;
-  phone?: string;
-  avatar?: string;
+export type Me = {
   isLoading: boolean;
-  username?: string;
   hasPwd: boolean;
-}
+} & User
 
 // Store状态类型
 // 创建 Me store
@@ -21,21 +16,23 @@ function createMeStore() {
     if (browser) {
       const meStorage = localStorage.getItem('me');
 
-      return meStorage ? {...JSON.parse(meStorage), isLoading: false} : {
-        id: '',
+      return meStorage ? { ...JSON.parse(meStorage), isLoading: false } : {
+        id: 0,
         nickname: '',
-        username:'',
+        username: '',
         email: '',
         avatar: '',
         isLoading: false,
-        hasPwd:false
+        hasPwd: false,
+        role: '',
+        des: ''
       };
     }
 
     return {
-      id: '',
+      id: 0,
       nickname: '',
-      username:'',
+      username: '',
       email: '',
       avatar: '',
       isLoading: false,
@@ -47,7 +44,7 @@ function createMeStore() {
 
   return {
     subscribe,
-    update: (me: Me) => update(state => ({ ...state, ...me })),
+    update: (me: Partial<Me>) => update(state => ({ ...state, ...me })),
     // 同步用户信息
     sync: async () => {
       update(state => ({ ...state, isLoading: true }));

@@ -14,7 +14,6 @@ export interface DefaultSelectionPrisma36UserPayload {
   des: string;
   username: string;
   role: string;
-  qq: number;
   password: string;
   email: string;
   id: number;

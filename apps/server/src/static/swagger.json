@@ -24,10 +24,6 @@
 					"role": {
 						"type": "string"
 					},
-					"qq": {
-						"type": "number",
-						"format": "double"
-					},
 					"password": {
 						"type": "string"
 					},
@@ -45,7 +41,6 @@
 					"des",
 					"username",
 					"role",
-					"qq",
 					"password",
 					"email",
 					"id"

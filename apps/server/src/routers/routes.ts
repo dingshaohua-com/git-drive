@@ -14,7 +14,7 @@ import type * as KoaRouter from '@koa/router';
 const models: TsoaRoute.Models = {
     "DefaultSelection_Prisma._36_userPayload_": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"avatar":{"dataType":"string","required":true},"nickname":{"dataType":"string","required":true},"des":{"dataType":"string","required":true},"username":{"dataType":"string","required":true},"role":{"dataType":"string","required":true},"qq":{"dataType":"double","required":true},"password":{"dataType":"string","required":true},"email":{"dataType":"string","required":true},"id":{"dataType":"double","required":true}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"avatar":{"dataType":"string","required":true},"nickname":{"dataType":"string","required":true},"des":{"dataType":"string","required":true},"username":{"dataType":"string","required":true},"role":{"dataType":"string","required":true},"password":{"dataType":"string","required":true},"email":{"dataType":"string","required":true},"id":{"dataType":"double","required":true}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "User": {
