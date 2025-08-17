@@ -54,49 +54,18 @@ axios.interceptors.response.use(
   },
 );
 
-// // 为 Orval 提供的自定义 axios 实例
-// // 这个函数告诉 Orval 我们的拦截器已经解构了 response.data
-// // 所以生成的类型应该直接是业务数据类型，而不是 AxiosResponse<T>
-// export const customAxiosInstance = <T>(config: AxiosRequestConfig): Promise<T> => {
-//   // 直接使用配置好拦截器的 axios 实例
-//   // 拦截器会自动处理 response.data 的解构
-//   return axios(config);
-// };
 
+// 类型工具：提取 API 响应中 data 字段的类型
+type ExtractDataType<T> = T extends { data: infer D } ? D : T;
 
-// export const customAxiosInstance = <T>(
-//   config: AxiosRequestConfig,
-//   options?: AxiosRequestConfig,
-// ): Promise<T> => {
-//   const promise = axios({
-//     ...config,
-//     ...options,
-//   }).then(({ data }) => data);
-//   return promise;
-// };
-
-interface ApiResponse<T> {
-  code: number;
-  data: T;
-  msg: string;
-}
-
-export const customAxiosInstance = <T, R>(
+export const customAxiosInstance = <T>(
   config: AxiosRequestConfig,
   options?: AxiosRequestConfig,
-): Promise<R> => {
-  const promise = axios({
+): Promise<ExtractDataType<T>> => {
+  // 直接返回 axios 调用的结果
+  // 响应拦截器已经处理了数据解构，返回的就是最终的业务数据
+  return axios({
     ...config,
     ...options,
-  })
-    .then((response: AxiosResponse<ApiResponse<T>>) => {
-      const { data } = response;
-      if (data.code === 0) {
-        // 强制转换为 R 类型
-        return (data.data as unknown) as R;  // 注意：这里的类型转换
-      }
-      throw new Error(data.msg || 'Unknown error');
-    });
-
-  return promise;
+  }) as Promise<ExtractDataType<T>>;
 };
