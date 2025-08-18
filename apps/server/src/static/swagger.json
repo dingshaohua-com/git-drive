@@ -51,6 +51,31 @@
 				"$ref": "#/components/schemas/DefaultSelection_Prisma._36_userPayload_",
 				"description": "Model user"
 			},
+			"JsonResultType_User_": {
+				"properties": {
+					"code": {
+						"type": "number",
+						"format": "double"
+					},
+					"msg": {
+						"type": "string"
+					},
+					"data": {
+						"$ref": "#/components/schemas/User"
+					}
+				},
+				"required": [
+					"code",
+					"msg",
+					"data"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ApiResponse_User_": {
+				"$ref": "#/components/schemas/JsonResultType_User_",
+				"description": "控制器方法返回类型的通用别名\n用于简化 Promise<JsonResultType<T>> 的写法"
+			},
 			"JsonResultType__token-string--me-User__": {
 				"properties": {
 					"code": {
@@ -131,7 +156,32 @@
 				"$ref": "#/components/schemas/JsonResultType_any_",
 				"description": "控制器方法返回类型的通用别名\n用于简化 Promise<JsonResultType<T>> 的写法"
 			},
-			"JsonResultType_User_": {
+			"DefaultSelection_Prisma._36_repoPayload_": {
+				"properties": {
+					"rname": {
+						"type": "string"
+					},
+					"uid": {
+						"type": "number",
+						"format": "double"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"rname",
+					"uid",
+					"id"
+				],
+				"type": "object"
+			},
+			"Repo": {
+				"$ref": "#/components/schemas/DefaultSelection_Prisma._36_repoPayload_",
+				"description": "Model repo"
+			},
+			"JsonResultType_Repo_": {
 				"properties": {
 					"code": {
 						"type": "number",
@@ -141,7 +191,7 @@
 						"type": "string"
 					},
 					"data": {
-						"$ref": "#/components/schemas/User"
+						"$ref": "#/components/schemas/Repo"
 					}
 				},
 				"required": [
@@ -152,8 +202,33 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"ApiResponse_User_": {
-				"$ref": "#/components/schemas/JsonResultType_User_",
+			"ApiResponse_Repo_": {
+				"$ref": "#/components/schemas/JsonResultType_Repo_",
+				"description": "控制器方法返回类型的通用别名\n用于简化 Promise<JsonResultType<T>> 的写法"
+			},
+			"Prisma.repoCreateInput": {
+				"properties": {
+					"rname": {
+						"type": "string",
+						"nullable": true
+					},
+					"uid": {
+						"type": "number",
+						"format": "double"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"uid",
+					"id"
+				],
+				"type": "object"
+			},
+			"ApiResponse_any_": {
+				"$ref": "#/components/schemas/JsonResultType_any_",
 				"description": "控制器方法返回类型的通用别名\n用于简化 Promise<JsonResultType<T>> 的写法"
 			},
 			"Prisma.StringFieldUpdateOperationsInput": {
@@ -267,6 +342,38 @@
 		"contact": {}
 	},
 	"paths": {
+		"/api/user": {
+			"get": {
+				"operationId": "Get",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse_User_"
+								}
+							}
+						}
+					}
+				},
+				"summary": "获取",
+				"tags": [
+					"user"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
 		"/api/login": {
 			"post": {
 				"operationId": "Login",
@@ -366,6 +473,234 @@
 				}
 			}
 		},
+		"/api/repo/list": {
+			"get": {
+				"operationId": "GetList",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse_Repo_"
+								}
+							}
+						}
+					}
+				},
+				"description": "获取所有仓库信息",
+				"summary": "列表",
+				"tags": [
+					"repo"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/api/repo": {
+			"post": {
+				"operationId": "Create",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse_Repo_"
+								}
+							}
+						}
+					}
+				},
+				"description": "新增仓库",
+				"summary": "创建",
+				"tags": [
+					"repo"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Prisma.repoCreateInput"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "Remove",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse_Repo_"
+								}
+							}
+						}
+					}
+				},
+				"description": "不单可以删除仓库，还支持删除文件夹、文件",
+				"summary": "删除",
+				"tags": [
+					"repo"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "repo",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"get": {
+				"operationId": "Get",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse_Repo_"
+								}
+							}
+						}
+					}
+				},
+				"description": "获取仓库信息",
+				"summary": "查询",
+				"tags": [
+					"repo"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "repo",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/api/repo/add-folder": {
+			"post": {
+				"operationId": "AddFolder",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse_any_"
+								}
+							}
+						}
+					}
+				},
+				"description": "创建文件夹到 repo 中",
+				"summary": "创建文件夹",
+				"tags": [
+					"repo"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"repo": {
+										"type": "string"
+									},
+									"path": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"repo",
+									"path"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/repo/upload-file": {
+			"post": {
+				"operationId": "UploadFile",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse_any_"
+								}
+							}
+						}
+					}
+				},
+				"description": "上传文件到 repo 中",
+				"summary": "创建文件夹",
+				"tags": [
+					"repo"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"repo": {
+										"type": "string"
+									},
+									"path": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"repo",
+									"path"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
 		"/api/me": {
 			"get": {
 				"operationId": "Get",
@@ -439,11 +774,13 @@
 		},
 		{
 			"name": "user",
-			"description": "用户管理 - 用户相关的所有操作"
+			"description": "用户管理 - 用户相关的所有操作",
+			"x-displayName": "用户"
 		},
 		{
-			"name": "auth",
-			"description": "认证授权 - 登录、权限验证等"
+			"name": "repo",
+			"description": "对仓库的增删改查以及上传文件等等操作",
+			"x-displayName": "仓库"
 		}
 	]
 }

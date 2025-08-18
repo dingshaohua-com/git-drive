@@ -7,6 +7,9 @@
   这是一个基于 Koa + TSOA 的后端 API 服务
  * OpenAPI spec version: 1.0.0
  */
-import type { PrismaStringFieldUpdateOperationsInput } from './prismaStringFieldUpdateOperationsInput';
+import type { DefaultSelectionPrisma36RepoPayload } from './defaultSelectionPrisma36RepoPayload';
 
-export type PrismaUserUpdateInputEmail = PrismaStringFieldUpdateOperationsInput | string;
+/**
+ * Model repo
+ */
+export type Repo = DefaultSelectionPrisma36RepoPayload;

@@ -7,10 +7,10 @@
   这是一个基于 Koa + TSOA 的后端 API 服务
  * OpenAPI spec version: 1.0.0
  */
-import type { JsonResultTypeTokenStringMeUser } from './jsonResultTypeTokenStringMeUser';
+import type { JsonResultTypeAny } from './jsonResultTypeAny';
 
 /**
  * 控制器方法返回类型的通用别名
 用于简化 Promise<JsonResultType<T>> 的写法
  */
-export type ApiResponseTokenStringMeUser = JsonResultTypeTokenStringMeUser;
+export type ApiResponseAny = JsonResultTypeAny;

@@ -7,10 +7,10 @@
   这是一个基于 Koa + TSOA 的后端 API 服务
  * OpenAPI spec version: 1.0.0
  */
-import type { DefaultSelectionPrisma36UserPayload } from './defaultSelectionPrisma36UserPayload';
+import type { DefaultSelectionPrisma36RepoPayload } from './defaultSelectionPrisma36RepoPayload';
 
-export interface JsonResultTypeUser {
+export interface JsonResultTypeRepo {
   code: number;
   msg: string;
-  data: DefaultSelectionPrisma36UserPayload;
+  data: DefaultSelectionPrisma36RepoPayload;
 }

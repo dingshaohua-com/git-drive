@@ -2,7 +2,6 @@ import Koa from 'koa';
 import path from 'path';
 import chalk from 'chalk';
 import Router from '@koa/router';
-// import router from '@/router/index';
 import staticServer from 'koa-static';
 import kBody from '@/utils/kbody-helper';
 import info from '@/middleware/sys-conf';
@@ -25,7 +24,6 @@ app.use(feRouterBack());
 app.use(reqCtxMiddleware()); // 创建上下文容器中间件
 app.use(info);
 app.use(authGuard);
-// app.use(router()); // 路由
 const router = new Router();
 RegisterRoutes(router);
 app.use(router.routes());

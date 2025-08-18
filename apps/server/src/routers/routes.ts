@@ -4,7 +4,11 @@
 import type { TsoaRoute } from '@tsoa/runtime';
 import { fetchMiddlewares, KoaTemplateService } from '@tsoa/runtime';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { UserController } from './../controllers/user.controller';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { RootController } from './../controllers/root.controller';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { RepoController } from './../controllers/repo.controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { MeController } from './../controllers/me.controller';
 import type { Context, Next, Middleware, Request as KRequest, Response as KResponse } from 'koa';
@@ -22,6 +26,21 @@ const models: TsoaRoute.Models = {
     "User": {
         "dataType": "refAlias",
         "type": {"ref":"DefaultSelection_Prisma._36_userPayload_","validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "JsonResultType_User_": {
+        "dataType": "refObject",
+        "properties": {
+            "code": {"dataType":"double","required":true},
+            "msg": {"dataType":"string","required":true},
+            "data": {"ref":"User","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ApiResponse_User_": {
+        "dataType": "refAlias",
+        "type": {"ref":"JsonResultType_User_","validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "JsonResultType__token-string--me-User__": {
@@ -59,19 +78,39 @@ const models: TsoaRoute.Models = {
         "type": {"ref":"JsonResultType_any_","validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "JsonResultType_User_": {
+    "DefaultSelection_Prisma._36_repoPayload_": {
+        "dataType": "refAlias",
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"rname":{"dataType":"string","required":true},"uid":{"dataType":"double","required":true},"id":{"dataType":"double","required":true}},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Repo": {
+        "dataType": "refAlias",
+        "type": {"ref":"DefaultSelection_Prisma._36_repoPayload_","validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "JsonResultType_Repo_": {
         "dataType": "refObject",
         "properties": {
             "code": {"dataType":"double","required":true},
             "msg": {"dataType":"string","required":true},
-            "data": {"ref":"User","required":true},
+            "data": {"ref":"Repo","required":true},
         },
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ApiResponse_User_": {
+    "ApiResponse_Repo_": {
         "dataType": "refAlias",
-        "type": {"ref":"JsonResultType_User_","validators":{}},
+        "type": {"ref":"JsonResultType_Repo_","validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Prisma.repoCreateInput": {
+        "dataType": "refAlias",
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"rname":{"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"enum","enums":[null]}]},"uid":{"dataType":"double","required":true},"id":{"dataType":"double","required":true}},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ApiResponse_any_": {
+        "dataType": "refAlias",
+        "type": {"ref":"JsonResultType_any_","validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Prisma.StringFieldUpdateOperationsInput": {
@@ -103,6 +142,36 @@ export function RegisterRoutes(router: KoaRouter) {
     // ###########################################################################################################
 
 
+        const argsUserController_get: Record<string, TsoaRoute.ParameterSchema> = {
+                userId: {"in":"query","name":"userId","required":true,"dataType":"string"},
+        };
+        router.get('/api/user',
+            ...(fetchMiddlewares<Middleware>(UserController)),
+            ...(fetchMiddlewares<Middleware>(UserController.prototype.get)),
+
+            async function UserController_get(context: Context, next: Next) {
+
+            let validatedArgs: any[] = [];
+            try {
+              validatedArgs = templateService.getValidatedArgs({ args: argsUserController_get, context, next });
+            } catch (err) {
+              const error = err as any;
+              error.message ||= JSON.stringify({ fields: error.fields });
+              context.status = error.status;
+              context.throw(context.status, error.message, error);
+            }
+
+            const controller = new UserController();
+
+            return templateService.apiHandler({
+              methodName: 'get',
+              controller,
+              context,
+              validatedArgs,
+              successStatus: undefined,
+            });
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsRootController_ui: Record<string, TsoaRoute.ParameterSchema> = {
         };
         router.get('/api',
@@ -244,6 +313,190 @@ export function RegisterRoutes(router: KoaRouter) {
 
             return templateService.apiHandler({
               methodName: 'sendCode',
+              controller,
+              context,
+              validatedArgs,
+              successStatus: undefined,
+            });
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsRepoController_getList: Record<string, TsoaRoute.ParameterSchema> = {
+        };
+        router.get('/api/repo/list',
+            ...(fetchMiddlewares<Middleware>(RepoController)),
+            ...(fetchMiddlewares<Middleware>(RepoController.prototype.getList)),
+
+            async function RepoController_getList(context: Context, next: Next) {
+
+            let validatedArgs: any[] = [];
+            try {
+              validatedArgs = templateService.getValidatedArgs({ args: argsRepoController_getList, context, next });
+            } catch (err) {
+              const error = err as any;
+              error.message ||= JSON.stringify({ fields: error.fields });
+              context.status = error.status;
+              context.throw(context.status, error.message, error);
+            }
+
+            const controller = new RepoController();
+
+            return templateService.apiHandler({
+              methodName: 'getList',
+              controller,
+              context,
+              validatedArgs,
+              successStatus: undefined,
+            });
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsRepoController_create: Record<string, TsoaRoute.ParameterSchema> = {
+                repo: {"in":"body","name":"repo","required":true,"ref":"Prisma.repoCreateInput"},
+        };
+        router.post('/api/repo',
+            ...(fetchMiddlewares<Middleware>(RepoController)),
+            ...(fetchMiddlewares<Middleware>(RepoController.prototype.create)),
+
+            async function RepoController_create(context: Context, next: Next) {
+
+            let validatedArgs: any[] = [];
+            try {
+              validatedArgs = templateService.getValidatedArgs({ args: argsRepoController_create, context, next });
+            } catch (err) {
+              const error = err as any;
+              error.message ||= JSON.stringify({ fields: error.fields });
+              context.status = error.status;
+              context.throw(context.status, error.message, error);
+            }
+
+            const controller = new RepoController();
+
+            return templateService.apiHandler({
+              methodName: 'create',
+              controller,
+              context,
+              validatedArgs,
+              successStatus: undefined,
+            });
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsRepoController_remove: Record<string, TsoaRoute.ParameterSchema> = {
+                repo: {"in":"query","name":"repo","required":true,"dataType":"string"},
+                path: {"in":"query","name":"path","required":true,"dataType":"string"},
+        };
+        router.delete('/api/repo',
+            ...(fetchMiddlewares<Middleware>(RepoController)),
+            ...(fetchMiddlewares<Middleware>(RepoController.prototype.remove)),
+
+            async function RepoController_remove(context: Context, next: Next) {
+
+            let validatedArgs: any[] = [];
+            try {
+              validatedArgs = templateService.getValidatedArgs({ args: argsRepoController_remove, context, next });
+            } catch (err) {
+              const error = err as any;
+              error.message ||= JSON.stringify({ fields: error.fields });
+              context.status = error.status;
+              context.throw(context.status, error.message, error);
+            }
+
+            const controller = new RepoController();
+
+            return templateService.apiHandler({
+              methodName: 'remove',
+              controller,
+              context,
+              validatedArgs,
+              successStatus: undefined,
+            });
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsRepoController_get: Record<string, TsoaRoute.ParameterSchema> = {
+                repo: {"in":"query","name":"repo","required":true,"dataType":"string"},
+                path: {"in":"query","name":"path","required":true,"dataType":"string"},
+        };
+        router.get('/api/repo',
+            ...(fetchMiddlewares<Middleware>(RepoController)),
+            ...(fetchMiddlewares<Middleware>(RepoController.prototype.get)),
+
+            async function RepoController_get(context: Context, next: Next) {
+
+            let validatedArgs: any[] = [];
+            try {
+              validatedArgs = templateService.getValidatedArgs({ args: argsRepoController_get, context, next });
+            } catch (err) {
+              const error = err as any;
+              error.message ||= JSON.stringify({ fields: error.fields });
+              context.status = error.status;
+              context.throw(context.status, error.message, error);
+            }
+
+            const controller = new RepoController();
+
+            return templateService.apiHandler({
+              methodName: 'get',
+              controller,
+              context,
+              validatedArgs,
+              successStatus: undefined,
+            });
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsRepoController_addFolder: Record<string, TsoaRoute.ParameterSchema> = {
+                repo: {"in":"body-prop","name":"repo","required":true,"dataType":"string"},
+                path: {"in":"body-prop","name":"path","required":true,"dataType":"string"},
+        };
+        router.post('/api/repo/add-folder',
+            ...(fetchMiddlewares<Middleware>(RepoController)),
+            ...(fetchMiddlewares<Middleware>(RepoController.prototype.addFolder)),
+
+            async function RepoController_addFolder(context: Context, next: Next) {
+
+            let validatedArgs: any[] = [];
+            try {
+              validatedArgs = templateService.getValidatedArgs({ args: argsRepoController_addFolder, context, next });
+            } catch (err) {
+              const error = err as any;
+              error.message ||= JSON.stringify({ fields: error.fields });
+              context.status = error.status;
+              context.throw(context.status, error.message, error);
+            }
+
+            const controller = new RepoController();
+
+            return templateService.apiHandler({
+              methodName: 'addFolder',
+              controller,
+              context,
+              validatedArgs,
+              successStatus: undefined,
+            });
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsRepoController_uploadFile: Record<string, TsoaRoute.ParameterSchema> = {
+                repo: {"in":"body-prop","name":"repo","required":true,"dataType":"string"},
+                path: {"in":"body-prop","name":"path","required":true,"dataType":"string"},
+                ctx: {"in":"request","name":"ctx","required":true,"dataType":"object"},
+        };
+        router.post('/api/repo/upload-file',
+            ...(fetchMiddlewares<Middleware>(RepoController)),
+            ...(fetchMiddlewares<Middleware>(RepoController.prototype.uploadFile)),
+
+            async function RepoController_uploadFile(context: Context, next: Next) {
+
+            let validatedArgs: any[] = [];
+            try {
+              validatedArgs = templateService.getValidatedArgs({ args: argsRepoController_uploadFile, context, next });
+            } catch (err) {
+              const error = err as any;
+              error.message ||= JSON.stringify({ fields: error.fields });
+              context.status = error.status;
+              context.throw(context.status, error.message, error);
+            }
+
+            const controller = new RepoController();
+
+            return templateService.apiHandler({
+              methodName: 'uploadFile',
               controller,
               context,
               validatedArgs,

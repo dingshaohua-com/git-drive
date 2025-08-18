@@ -21,11 +21,13 @@
       },
       {
         "name": "user",
-        "description": "用户管理 - 用户相关的所有操作"
+        "description": "用户管理 - 用户相关的所有操作",
+         "x-displayName": "用户"
       },
       {
-        "name": "auth",
-        "description": "认证授权 - 登录、权限验证等"
+        "name": "repo",
+        "description": "对仓库的增删改查以及上传文件等等操作",
+        "x-displayName": "仓库"
       }
     ]
   },
