@@ -114,6 +114,9 @@ importers:
       axios:
         specifier: ^1.11.0
         version: 1.11.0
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
       orval:
         specifier: ^7.11.2
         version: 7.11.2(openapi-types@12.1.3)

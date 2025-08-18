@@ -1,9 +1,7 @@
 {
   "entryFile": "src/app.ts",
   "noImplicitAdditionalProperties": "throw-on-extras",
-  "controllerPathGlobs": [
-    "src/controllers/**"
-  ],
+  "controllerPathGlobs": ["src/controllers/**"],
   "spec": {
     "outputDirectory": "src/static",
     "specVersion": 3,
@@ -15,6 +13,11 @@
         "name": "root",
         "description": "🤡 基础接口服务\n\n  包含登录、登出等核心功能",
         "x-displayName": "基础服务"
+      },
+      {
+        "name": "me",
+        "description": "操作当前登录用户\n\n  如果获取当前用户信息，更新当前用户等",
+        "x-displayName": "当前用户"
       },
       {
         "name": "user",

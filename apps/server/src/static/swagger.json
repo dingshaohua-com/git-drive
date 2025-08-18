@@ -86,7 +86,7 @@
 			},
 			"ApiResponse__token-string--me-User__": {
 				"$ref": "#/components/schemas/JsonResultType__token-string--me-User__",
-				"description": "控制器方法返回类型的通用别名\r\n用于简化 Promise<JsonResultType<T>> 的写法"
+				"description": "控制器方法返回类型的通用别名\n用于简化 Promise<JsonResultType<T>> 的写法"
 			},
 			"LoginParams": {
 				"properties": {
@@ -129,7 +129,130 @@
 			},
 			"ApiResponse": {
 				"$ref": "#/components/schemas/JsonResultType_any_",
-				"description": "控制器方法返回类型的通用别名\r\n用于简化 Promise<JsonResultType<T>> 的写法"
+				"description": "控制器方法返回类型的通用别名\n用于简化 Promise<JsonResultType<T>> 的写法"
+			},
+			"JsonResultType_User_": {
+				"properties": {
+					"code": {
+						"type": "number",
+						"format": "double"
+					},
+					"msg": {
+						"type": "string"
+					},
+					"data": {
+						"$ref": "#/components/schemas/User"
+					}
+				},
+				"required": [
+					"code",
+					"msg",
+					"data"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ApiResponse_User_": {
+				"$ref": "#/components/schemas/JsonResultType_User_",
+				"description": "控制器方法返回类型的通用别名\n用于简化 Promise<JsonResultType<T>> 的写法"
+			},
+			"Prisma.StringFieldUpdateOperationsInput": {
+				"properties": {
+					"set": {
+						"type": "string"
+					}
+				},
+				"type": "object"
+			},
+			"Prisma.NullableStringFieldUpdateOperationsInput": {
+				"properties": {
+					"set": {
+						"type": "string",
+						"nullable": true
+					}
+				},
+				"type": "object"
+			},
+			"Prisma.userUpdateInput": {
+				"properties": {
+					"avatar": {
+						"anyOf": [
+							{
+								"$ref": "#/components/schemas/Prisma.NullableStringFieldUpdateOperationsInput"
+							},
+							{
+								"type": "string"
+							}
+						],
+						"nullable": true
+					},
+					"nickname": {
+						"anyOf": [
+							{
+								"$ref": "#/components/schemas/Prisma.NullableStringFieldUpdateOperationsInput"
+							},
+							{
+								"type": "string"
+							}
+						],
+						"nullable": true
+					},
+					"des": {
+						"anyOf": [
+							{
+								"$ref": "#/components/schemas/Prisma.NullableStringFieldUpdateOperationsInput"
+							},
+							{
+								"type": "string"
+							}
+						],
+						"nullable": true
+					},
+					"username": {
+						"anyOf": [
+							{
+								"$ref": "#/components/schemas/Prisma.NullableStringFieldUpdateOperationsInput"
+							},
+							{
+								"type": "string"
+							}
+						],
+						"nullable": true
+					},
+					"role": {
+						"anyOf": [
+							{
+								"$ref": "#/components/schemas/Prisma.NullableStringFieldUpdateOperationsInput"
+							},
+							{
+								"type": "string"
+							}
+						],
+						"nullable": true
+					},
+					"password": {
+						"anyOf": [
+							{
+								"$ref": "#/components/schemas/Prisma.NullableStringFieldUpdateOperationsInput"
+							},
+							{
+								"type": "string"
+							}
+						],
+						"nullable": true
+					},
+					"email": {
+						"anyOf": [
+							{
+								"$ref": "#/components/schemas/Prisma.StringFieldUpdateOperationsInput"
+							},
+							{
+								"type": "string"
+							}
+						]
+					}
+				},
+				"type": "object"
 			}
 		},
 		"securitySchemes": {}
@@ -159,7 +282,7 @@
 						}
 					}
 				},
-				"description": "支持多种登录方式。   \r\n首次登录请用邮箱验证码登录方式，进去之后再设置密码，以后便可以用账密方式登录了！\r\n\r\n| 登录方式 | 字段 | 说明 |\r\n|----------|----------|------|\r\n| 账号密码 | username, password | 账密登录 |\r\n| 邮箱验证码 | email, code | 邮箱 + 验证码登录 |",
+				"description": "支持多种登录方式。   \n首次登录请用邮箱验证码登录方式，进去之后再设置密码，以后便可以用账密方式登录了！\n\n| 登录方式 | 字段 | 说明 |\n|----------|----------|------|\n| 账号密码 | username, password | 账密登录 |\n| 邮箱验证码 | email, code | 邮箱 + 验证码登录 |",
 				"summary": "登录",
 				"tags": [
 					"root"
@@ -242,6 +365,60 @@
 					}
 				}
 			}
+		},
+		"/api/me": {
+			"get": {
+				"operationId": "Get",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse_User_"
+								}
+							}
+						}
+					}
+				},
+				"summary": "获取",
+				"tags": [
+					"me"
+				],
+				"security": [],
+				"parameters": []
+			},
+			"put": {
+				"operationId": "Update",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse_User_"
+								}
+							}
+						}
+					}
+				},
+				"summary": "更新",
+				"tags": [
+					"me"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Prisma.userUpdateInput"
+							}
+						}
+					}
+				}
+			}
 		}
 	},
 	"servers": [
@@ -254,6 +431,11 @@
 			"name": "root",
 			"description": "🤡 基础接口服务\n\n  包含登录、登出等核心功能",
 			"x-displayName": "基础服务"
+		},
+		{
+			"name": "me",
+			"description": "操作当前登录用户\n\n  如果获取当前用户信息，更新当前用户等",
+			"x-displayName": "当前用户"
 		},
 		{
 			"name": "user",

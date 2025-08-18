@@ -1,11 +1,11 @@
 import { PrismaClient } from '@prisma/client';
 import { isQQEmailCheck } from '@/utils/common';
-import context from '@/middleware/req-ctx';
+import { Prisma } from '@prisma/client';
 
 const prisma = new PrismaClient();
-export const queryOne = async (params) => {
+export const queryOne = async (user: Prisma.userWhereInput) => {
   const result = await prisma.user.findFirst({
-    where: params,
+    where: user,
   });
   const { isQQEmail, QQ } = isQQEmailCheck(result.email);
   if (isQQEmail) {
@@ -15,13 +15,12 @@ export const queryOne = async (params) => {
   return result;
 };
 
-export const update = async (params) => {
-  const user = context.get('user');
+export const update = async (user: Prisma.userUpdateInput, userId: number) => {
   const results = await prisma.user.update({
     where: {
-      id: params.id,
+      id: userId,
     },
-    data: params,
+    data: user,
   });
   return results;
 };
