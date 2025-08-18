@@ -260,7 +260,7 @@
 	"info": {
 		"title": "Server API",
 		"version": "1.0.0",
-		"description": "## xx服务\n\n  这是一个基于 Koa + TSOA 的后端 API 服务",
+		"description": "## Git Drive 接口文档\n\n  这是一个基于 Koa + TSOA 的后端 API 服务",
 		"license": {
 			"name": "MIT"
 		},
