@@ -49,7 +49,7 @@ function createMeStore() {
           if (browser) localStorage.setItem('me', JSON.stringify(res));
           return { ...state, ...res, isLoading: false };
         });
-        return res.data;
+        return res;
       } catch (error) {
         if (browser) {
           // localStorage.removeItem('token');
