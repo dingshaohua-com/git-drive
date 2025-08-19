@@ -8,7 +8,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetParams = {
+export type RepoRemoveParams = {
 repo: string;
 path: string;
 };

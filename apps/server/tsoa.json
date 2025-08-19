@@ -3,6 +3,7 @@
   "noImplicitAdditionalProperties": "throw-on-extras",
   "controllerPathGlobs": ["src/controllers/**"],
   "spec": {
+    "operationIdTemplate": "{{controllerName}}-{{titleCase method.name}}",
     "outputDirectory": "src/static",
     "specVersion": 3,
     "name": "Server API",

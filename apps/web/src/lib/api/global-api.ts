@@ -7,6 +7,7 @@
 // 导入所有 Orval 生成的 API 模块
 import * as rootApi from './endpoints/root';
 import * as meApi from './endpoints/me';
+import * as repoApi from './endpoints/repo';
 // 当有其他 API 模块时，在这里导入
 // import * as userApi from './endpoints/user';
 
@@ -16,7 +17,8 @@ import * as meApi from './endpoints/me';
 const createGlobalApi = () => {
   const api = {
     root: rootApi,
-    me: meApi
+    me: meApi,
+    repo: repoApi
     // 当有其他 API 模块时，在这里添加
     // user: userApi,
   };

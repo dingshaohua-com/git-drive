@@ -8,7 +8,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type AddFolderBody = {
+export type RepoAddFolderBody = {
   repo: string;
   path: string;
 };

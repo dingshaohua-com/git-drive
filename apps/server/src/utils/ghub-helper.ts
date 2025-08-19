@@ -23,7 +23,7 @@ let ghubApiToken: string | null = null;
 
 export const getGhubApi = async () => {
   const sysConf = reqCtx.get('sysConf');
-  const token = sysConf.token;
+  const token = sysConf.gtoken;
   if (!token) throw new Error('GitHub Token 不存在');
   if (!ghubApiInstance || token !== ghubApiToken) {
     ghubApiInstance = axios.create({

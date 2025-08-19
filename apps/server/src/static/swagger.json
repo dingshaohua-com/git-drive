@@ -344,7 +344,7 @@
 	"paths": {
 		"/api/user": {
 			"get": {
-				"operationId": "Get",
+				"operationId": "UserController-Get",
 				"responses": {
 					"200": {
 						"description": "Ok",
@@ -376,7 +376,7 @@
 		},
 		"/api/login": {
 			"post": {
-				"operationId": "Login",
+				"operationId": "RootController-Login",
 				"responses": {
 					"200": {
 						"description": "Ok",
@@ -410,7 +410,7 @@
 		},
 		"/api/logout": {
 			"post": {
-				"operationId": "Logout",
+				"operationId": "RootController-Logout",
 				"responses": {
 					"200": {
 						"description": "Ok",
@@ -443,7 +443,7 @@
 		},
 		"/api/send-code": {
 			"post": {
-				"operationId": "SendCode",
+				"operationId": "RootController-SendCode",
 				"responses": {
 					"200": {
 						"description": "Ok",
@@ -475,7 +475,7 @@
 		},
 		"/api/repo/list": {
 			"get": {
-				"operationId": "GetList",
+				"operationId": "RepoController-GetList",
 				"responses": {
 					"200": {
 						"description": "Ok",
@@ -499,7 +499,7 @@
 		},
 		"/api/repo": {
 			"post": {
-				"operationId": "Create",
+				"operationId": "RepoController-Create",
 				"responses": {
 					"200": {
 						"description": "Ok",
@@ -531,7 +531,7 @@
 				}
 			},
 			"delete": {
-				"operationId": "Remove",
+				"operationId": "RepoController-Remove",
 				"responses": {
 					"200": {
 						"description": "Ok",
@@ -570,7 +570,7 @@
 				]
 			},
 			"get": {
-				"operationId": "Get",
+				"operationId": "RepoController-Get",
 				"responses": {
 					"200": {
 						"description": "Ok",
@@ -611,7 +611,7 @@
 		},
 		"/api/repo/add-folder": {
 			"post": {
-				"operationId": "AddFolder",
+				"operationId": "RepoController-AddFolder",
 				"responses": {
 					"200": {
 						"description": "Ok",
@@ -657,7 +657,7 @@
 		},
 		"/api/repo/upload-file": {
 			"post": {
-				"operationId": "UploadFile",
+				"operationId": "RepoController-UploadFile",
 				"responses": {
 					"200": {
 						"description": "Ok",
@@ -703,7 +703,7 @@
 		},
 		"/api/me": {
 			"get": {
-				"operationId": "Get",
+				"operationId": "MeController-Get",
 				"responses": {
 					"200": {
 						"description": "Ok",
@@ -724,7 +724,7 @@
 				"parameters": []
 			},
 			"put": {
-				"operationId": "Update",
+				"operationId": "MeController-Update",
 				"responses": {
 					"200": {
 						"description": "Ok",

@@ -8,7 +8,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type UploadFileBody = {
+export type RepoUploadFileBody = {
   repo: string;
   path: string;
 };

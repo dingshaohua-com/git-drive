@@ -11,6 +11,21 @@ export default defineConfig({
       mock: false, // ⑥ 同时生成 MSW mock
       clean: true, // 👈 每次生成前清目录
       override: {
+        operationName: (operation, route, verb) => {
+          const operationId = operation.operationId;
+          if (!operationId) {
+            // 如果没有 operationId，使用默认逻辑生成
+            return `${verb}${route.replace(/[{}]/g, '').replace(/\//g, '')}`;
+          }
+
+          // 去掉 Controller 字段
+          // 例如：'userController-get' -> 'user-get'
+          // 例如：'userControllerGet' -> 'userGet'
+          const newOperationId = operationId.replace(/Controller/g, '');
+          console.log(newOperationId);
+          
+          return newOperationId;
+        },
         // 自定义 axios 实例，让 Orval 知道我们的拦截器已经解构了 response.data
         mutator: {
           path: './src/lib/api/api.base.ts',

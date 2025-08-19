@@ -62,7 +62,7 @@
     loading = true;
     // 判断是否获取仓库列表（如果为'/'，则是）
     if (isRoot) {
-      list = await api.repo.list();
+      list = await api.repo.getList();
     } else {
       list = await api.repo.get({ repo, path });
     }

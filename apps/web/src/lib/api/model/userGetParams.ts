@@ -8,7 +8,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type RemoveParams = {
-repo: string;
-path: string;
+export type UserGetParams = {
+userId: string;
 };

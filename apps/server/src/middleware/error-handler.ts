@@ -42,7 +42,7 @@ const errorHandler = (): Middleware => {
         ctx.body = JsonResult.failed(error.message || '权限不足');
       } else {
         // 其他未知错误
-        ctx.status = 500;
+        ctx.status = 200;
         ctx.body = JsonResult.failed('服务器内部错误：' + error.message);
       }
     }
