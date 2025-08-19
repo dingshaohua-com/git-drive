@@ -1,3 +1,4 @@
+import type { RepoOrDirOrFile } from "$lib/api/model";
 
 
 export const formatFileSize = (size: number) => {
@@ -6,7 +7,7 @@ export const formatFileSize = (size: number) => {
     return `${(size / 1024 / 1024).toFixed(1)} MB`;
 }
 
-export const getFileIcon = (item: any) => {
+export const getFileIcon = (item: RepoOrDirOrFile) => {
     if (item.type === 'repo') {
         return 'ri-hard-drive-3-line text-2xl text-gray-400';
     }

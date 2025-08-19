@@ -156,6 +156,57 @@
 				"$ref": "#/components/schemas/JsonResultType_any_",
 				"description": "控制器方法返回类型的通用别名\n用于简化 Promise<JsonResultType<T>> 的写法"
 			},
+			"RepoOrDirOrFile": {
+				"properties": {
+					"url": {
+						"type": "string"
+					},
+					"size": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"type": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"url",
+					"name",
+					"type"
+				],
+				"type": "object"
+			},
+			"JsonResultType_RepoOrDirOrFile-Array_": {
+				"properties": {
+					"code": {
+						"type": "number",
+						"format": "double"
+					},
+					"msg": {
+						"type": "string"
+					},
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/RepoOrDirOrFile"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"code",
+					"msg",
+					"data"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ApiResponse_RepoOrDirOrFile-Array_": {
+				"$ref": "#/components/schemas/JsonResultType_RepoOrDirOrFile-Array_",
+				"description": "控制器方法返回类型的通用别名\n用于简化 Promise<JsonResultType<T>> 的写法"
+			},
 			"DefaultSelection_Prisma._36_repoPayload_": {
 				"properties": {
 					"rname": {
@@ -482,7 +533,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/ApiResponse_Repo_"
+									"$ref": "#/components/schemas/ApiResponse_RepoOrDirOrFile-Array_"
 								}
 							}
 						}
@@ -577,7 +628,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/ApiResponse_Repo_"
+									"$ref": "#/components/schemas/ApiResponse_RepoOrDirOrFile-Array_"
 								}
 							}
 						}

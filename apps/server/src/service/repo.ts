@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import { Buffer } from 'buffer';
 import reqCtx from '@/middleware/req-ctx';
 import { BRANCH, getGhubApi, OWNER } from '@/utils/ghub-helper';
+import type { RepoOrDirOrFile } from '../types/repo.dto';
 
 /**
  * 创建 GitHub 仓库
@@ -26,7 +27,7 @@ export const createGithubRepo = async (repoName: string, description: string = '
  * @param {string} [keyword] 仓库名关键字（可选）
  * @returns {Promise<any[]>}
  */
-export const queryList = async (keyword: string = '') => {
+export const queryList = async (keyword: string = ''): Promise<RepoOrDirOrFile[]> => {
   const user = reqCtx.get('user');
   const searchWord = user.username + '-' + keyword;
   const api = await getGhubApi();
@@ -47,7 +48,7 @@ export const queryList = async (keyword: string = '') => {
   return result;
 };
 
-export const queryOne = async (repo: string, path: string) => {
+export const queryOne = async (repo: string, path: string): Promise<RepoOrDirOrFile[]> => {
   const user = reqCtx.get('user');
   const api = await getGhubApi();
   const url = `/repos/${OWNER}/${repo}/contents/${path}`;

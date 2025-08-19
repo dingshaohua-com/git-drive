@@ -78,6 +78,26 @@ const models: TsoaRoute.Models = {
         "type": {"ref":"JsonResultType_any_","validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "RepoOrDirOrFile": {
+        "dataType": "refAlias",
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"url":{"dataType":"string","required":true},"size":{"dataType":"double"},"name":{"dataType":"string","required":true},"type":{"dataType":"string","required":true}},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "JsonResultType_RepoOrDirOrFile-Array_": {
+        "dataType": "refObject",
+        "properties": {
+            "code": {"dataType":"double","required":true},
+            "msg": {"dataType":"string","required":true},
+            "data": {"dataType":"array","array":{"dataType":"refAlias","ref":"RepoOrDirOrFile"},"required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ApiResponse_RepoOrDirOrFile-Array_": {
+        "dataType": "refAlias",
+        "type": {"ref":"JsonResultType_RepoOrDirOrFile-Array_","validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "DefaultSelection_Prisma._36_repoPayload_": {
         "dataType": "refAlias",
         "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"rname":{"dataType":"string","required":true},"uid":{"dataType":"double","required":true},"id":{"dataType":"double","required":true}},"validators":{}},

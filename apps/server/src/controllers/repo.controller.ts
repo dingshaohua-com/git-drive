@@ -1,5 +1,6 @@
 import { Context } from 'koa';
 import { Prisma, repo as Repo } from '@prisma/client';
+import type { RepoOrDirOrFile } from '../types/repo.dto';
 import JsonResult, { ApiResponse } from '../utils/json-result';
 import { addFolder, queryOne, uploadFile } from '@/service/repo';
 import { createGithubRepo, queryList, remove } from '@/service/repo';
@@ -13,7 +14,7 @@ export class RepoController extends Controller {
    * @summary 列表
    */
   @Get('list')
-  public async getList(): ApiResponse<Repo> {
+  public async getList(): ApiResponse<RepoOrDirOrFile[]> {
     const result = await queryList('');
     return JsonResult.success(result);
   }
@@ -43,7 +44,7 @@ export class RepoController extends Controller {
    * @summary 查询
    */
   @Get()
-  public async get(@Query() repo: string, @Query() path: string): ApiResponse<Repo> {
+  public async get(@Query() repo: string, @Query() path: string): ApiResponse<RepoOrDirOrFile[]> {
     const result = await queryOne(repo, path);
     return JsonResult.success(result);
   }

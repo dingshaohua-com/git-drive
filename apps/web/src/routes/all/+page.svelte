@@ -12,16 +12,10 @@
   import { goto } from '$app/navigation';
   import { onMount } from 'svelte';
   import { page } from '$app/state';
-
-  interface Item {
-    name: string;
-    url: string;
-    type: string;
-    size: number;
-  }
+  import type { RepoOrDirOrFile } from '$lib/api/model';
 
   let loading = $state(false);
-  let list = $state<Array<Item>>([]);
+  let list = $state<Array<RepoOrDirOrFile>>([]);
   let showFavoriteModal = $state(false);
   let showEditRepoModal = $state(false);
   let showCreateFolderModal = $state(false);
@@ -38,7 +32,6 @@
     const repo = page.url.searchParams.get('repo');
     let customUrl;
     if (repo) {
-      console.log(999);
       customUrl = buildCustomUrl({ repoName: repo, path: urlPath });
     }
     syncAnyLevel(customUrl);
@@ -66,6 +59,8 @@
     } else {
       list = await api.repo.get({ repo, path });
     }
+    console.log(111, list);
+    
     loading = false;
   };
 
@@ -119,10 +114,9 @@
     syncAnyLevel();
   };
 
-  let clickedItem = $state<Item | null>(null);
-  const clickItem = (item: Item) => {
+  let clickedItem = $state<RepoOrDirOrFile | null>(null);
+  const clickItem = (item: RepoOrDirOrFile) => {
     if (item.type === 'file') {
-      console.log(111222, '点击啦');
       clickedItem = item;
       showFilePreviewModal = true;
     } else {

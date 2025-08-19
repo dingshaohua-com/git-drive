@@ -1,8 +1,3 @@
-
-
-
-
-
 <script lang="ts">
   import { Toast } from 'flowbite-svelte';
   import { onMount } from 'svelte';

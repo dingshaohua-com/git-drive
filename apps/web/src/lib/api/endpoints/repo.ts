@@ -7,57 +7,107 @@
   这是一个基于 Koa + TSOA 的后端 API 服务
  * OpenAPI spec version: 1.0.0
  */
-import type { JsonResultTypeAny, JsonResultTypeRepo, PrismaRepoCreateInput, RepoAddFolderBody, RepoGetParams, RepoRemoveParams, RepoUploadFileBody } from '../model';
+import type {
+  JsonResultTypeAny,
+  JsonResultTypeRepo,
+  JsonResultTypeRepoOrDirOrFileArray,
+  PrismaRepoCreateInput,
+  RepoAddFolderBody,
+  RepoGetParams,
+  RepoRemoveParams,
+  RepoUploadFileBody
+} from '../model';
 
 import { customAxiosInstance } from '../api.base';
 
+
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
-/**
+
+  /**
  * 获取所有仓库信息
  * @summary 列表
  */
-export const getList = (options?: SecondParameter<typeof customAxiosInstance>) => {
-  return customAxiosInstance<JsonResultTypeRepo>({ url: `/api/repo/list`, method: 'GET' }, options);
-};
-/**
+export const getList = (
+    
+ options?: SecondParameter<typeof customAxiosInstance>,) => {
+      return customAxiosInstance<JsonResultTypeRepoOrDirOrFileArray>(
+      {url: `/api/repo/list`, method: 'GET'
+    },
+      options);
+    }
+  /**
  * 新增仓库
  * @summary 创建
  */
-export const create = (prismaRepoCreateInput: PrismaRepoCreateInput, options?: SecondParameter<typeof customAxiosInstance>) => {
-  return customAxiosInstance<JsonResultTypeRepo>({ url: `/api/repo`, method: 'POST', headers: { 'Content-Type': 'application/json' }, data: prismaRepoCreateInput }, options);
-};
-/**
+export const create = (
+    prismaRepoCreateInput: PrismaRepoCreateInput,
+ options?: SecondParameter<typeof customAxiosInstance>,) => {
+      return customAxiosInstance<JsonResultTypeRepo>(
+      {url: `/api/repo`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: prismaRepoCreateInput
+    },
+      options);
+    }
+  /**
  * 不单可以删除仓库，还支持删除文件夹、文件
  * @summary 删除
  */
-export const remove = (params: RepoRemoveParams, options?: SecondParameter<typeof customAxiosInstance>) => {
-  return customAxiosInstance<JsonResultTypeRepo>({ url: `/api/repo`, method: 'DELETE', params }, options);
-};
-/**
+export const remove = (
+    params: RepoRemoveParams,
+ options?: SecondParameter<typeof customAxiosInstance>,) => {
+      return customAxiosInstance<JsonResultTypeRepo>(
+      {url: `/api/repo`, method: 'DELETE',
+        params
+    },
+      options);
+    }
+  /**
  * 获取仓库信息
  * @summary 查询
  */
-export const get = (params: RepoGetParams, options?: SecondParameter<typeof customAxiosInstance>) => {
-  return customAxiosInstance<JsonResultTypeRepo>({ url: `/api/repo`, method: 'GET', params }, options);
-};
-/**
+export const get = (
+    params: RepoGetParams,
+ options?: SecondParameter<typeof customAxiosInstance>,) => {
+      return customAxiosInstance<JsonResultTypeRepoOrDirOrFileArray>(
+      {url: `/api/repo`, method: 'GET',
+        params
+    },
+      options);
+    }
+  /**
  * 创建文件夹到 repo 中
  * @summary 创建文件夹
  */
-export const addFolder = (repoAddFolderBody: RepoAddFolderBody, options?: SecondParameter<typeof customAxiosInstance>) => {
-  return customAxiosInstance<JsonResultTypeAny>({ url: `/api/repo/add-folder`, method: 'POST', headers: { 'Content-Type': 'application/json' }, data: repoAddFolderBody }, options);
-};
-/**
+export const addFolder = (
+    repoAddFolderBody: RepoAddFolderBody,
+ options?: SecondParameter<typeof customAxiosInstance>,) => {
+      return customAxiosInstance<JsonResultTypeAny>(
+      {url: `/api/repo/add-folder`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: repoAddFolderBody
+    },
+      options);
+    }
+  /**
  * 上传文件到 repo 中
  * @summary 创建文件夹
  */
-export const uploadFile = (repoUploadFileBody: RepoUploadFileBody, options?: SecondParameter<typeof customAxiosInstance>) => {
-  return customAxiosInstance<JsonResultTypeAny>({ url: `/api/repo/upload-file`, method: 'POST', headers: { 'Content-Type': 'application/json' }, data: repoUploadFileBody }, options);
-};
-export type GetList = NonNullable<Awaited<ReturnType<typeof getList>>>;
-export type Create = NonNullable<Awaited<ReturnType<typeof create>>>;
-export type Remove = NonNullable<Awaited<ReturnType<typeof remove>>>;
-export type Get = NonNullable<Awaited<ReturnType<typeof get>>>;
-export type AddFolder = NonNullable<Awaited<ReturnType<typeof addFolder>>>;
-export type UploadFile = NonNullable<Awaited<ReturnType<typeof uploadFile>>>;
+export const uploadFile = (
+    repoUploadFileBody: RepoUploadFileBody,
+ options?: SecondParameter<typeof customAxiosInstance>,) => {
+      return customAxiosInstance<JsonResultTypeAny>(
+      {url: `/api/repo/upload-file`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: repoUploadFileBody
+    },
+      options);
+    }
+  export type GetList = NonNullable<Awaited<ReturnType<typeof getList>>>
+export type Create = NonNullable<Awaited<ReturnType<typeof create>>>
+export type Remove = NonNullable<Awaited<ReturnType<typeof remove>>>
+export type Get = NonNullable<Awaited<ReturnType<typeof get>>>
+export type AddFolder = NonNullable<Awaited<ReturnType<typeof addFolder>>>
+export type UploadFile = NonNullable<Awaited<ReturnType<typeof uploadFile>>>
