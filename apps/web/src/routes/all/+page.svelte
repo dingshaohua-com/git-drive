@@ -70,7 +70,7 @@
   }
 
   function triggerUpload() {
-    loading = true;
+    // loading = true;
     triggerFileUpload({
       path: current.url,
       onSuccess: () => {
