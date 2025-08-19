@@ -1,6 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import {me} from "$lib/stores"
+  import {me} from "$/stores"
 
   // 状态管理
   let loading = $state(false);

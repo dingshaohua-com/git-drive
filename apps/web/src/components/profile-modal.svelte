@@ -1,6 +1,6 @@
 <script lang="ts">
     import { Modal, Button, Label, Input } from 'flowbite-svelte';
-    import { me } from '$lib/stores/me';
+    import { me } from '../stores/me';
     // import { api } from '$lib/api';
     import toast from '$lib/toast';
     

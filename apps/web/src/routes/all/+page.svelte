@@ -1,18 +1,18 @@
 <script lang="ts">
-  import EditRepoModal from '$lib/components/edit-repo-modal.svelte';
-  import CreateFolderModal from '$lib/components/create-folder-modal.svelte';
-  import Navigation from '$lib/components/navbar.svelte';
-  import ContextMenu from '$lib/components/context-menu.svelte';
+  import EditRepoModal from '$/components/edit-repo-modal.svelte';
+  import CreateFolderModal from '$/components/create-folder-modal.svelte';
+  import Navigation from '$/components/navbar.svelte';
+  import ContextMenu from '$/components/context-menu.svelte';
   import { formatFileSize, getFileIcon, parseCustomUrl, buildCustomUrl, getParentCustomUrl, getDisplayRepoName } from './helper';
   import toast from '$lib/toast';
-  import { triggerFileUpload } from '$lib/utils/file-uploader';
-  import copyToClipboard from '$lib/utils/copy-helper';
-  import FilePreviewModal from '$lib/components/file-preview-modal.svelte';
-  import FavoriteModal from '$lib/components/favorite-modal.svelte';
+  import { triggerFileUpload } from '../../utils/file-uploader';
+  import copyToClipboard from '../../utils/copy-helper';
+  import FilePreviewModal from '$/components/file-preview-modal.svelte';
+  import FavoriteModal from '$/components/favorite-modal.svelte';
   import { goto } from '$app/navigation';
   import { onMount } from 'svelte';
   import { page } from '$app/state';
-  import type { RepoOrDirOrFile } from '$lib/api/model';
+  import type { RepoOrDirOrFile } from '../../api/model';
 
   let loading = $state(false);
   let list = $state<Array<RepoOrDirOrFile>>([]);

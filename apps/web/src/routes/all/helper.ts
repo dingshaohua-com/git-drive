@@ -1,4 +1,4 @@
-import type { RepoOrDirOrFile } from "$lib/api/model";
+import type { RepoOrDirOrFile } from "$/api/model";
 
 
 export const formatFileSize = (size: number) => {

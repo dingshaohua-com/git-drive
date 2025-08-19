@@ -22,6 +22,7 @@ const config = {
     },
     alias: {
       // 你的路径别名配置
+      $: './src',
       $lib: './src/lib',
     },
   },

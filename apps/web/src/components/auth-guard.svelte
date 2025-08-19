@@ -2,7 +2,7 @@
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import { browser } from '$app/environment';
-  import { auth, me } from '$lib/stores';
+  import { auth, me } from '../stores';
   import { onMount } from 'svelte';
 
   let { children } = $props();

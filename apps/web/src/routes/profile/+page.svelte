@@ -1,10 +1,10 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { me } from '$lib/stores/me';
+  import { me } from '$/stores/me';
   import toast from '$lib/toast';
   import BasicInfo from './cmp/basic-info.svelte';
   import AccountSecurity from './cmp/account-security.svelte';
-  import Navigation from '$lib/components/navbar.svelte';
+  import Navigation from '$/components/navbar.svelte';
 
   // 当前选中的标签页
   let activeTab = $state('profile');

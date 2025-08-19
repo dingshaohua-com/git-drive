@@ -1,9 +1,9 @@
 <script lang="ts">
   import '../app.css';
-  import AuthGuard from '$lib/components/auth-guard.svelte';
-  import '$lib/api/global-api';
+  import AuthGuard from '$/components/auth-guard.svelte';
+  import '../api/global-api';
   import { onMount } from 'svelte';
-  import GlobalToast from '$lib/components/global-toast.svelte';
+  import GlobalToast from '$/components/global-toast.svelte';
   import { page } from '$app/state';
   import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
   const queryClient = new QueryClient();

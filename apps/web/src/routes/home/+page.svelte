@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query'
-  import Navbar from '$lib/components/navbar.svelte';
+  import Navbar from '$/components/navbar.svelte';
   import { parseCustomUrl } from '../all/helper';
   import { goto } from '$app/navigation';
 

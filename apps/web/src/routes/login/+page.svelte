@@ -1,12 +1,12 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import type { QuickLoginType, LoginFieldType } from '$lib/types/auth';
-  import { auth, me } from '$lib/stores';
+  import type { QuickLoginType, LoginFieldType } from '$/types/auth';
+  import { auth, me } from '../../stores';
   import toast, { error } from '$lib/toast';
   import { Modal, Spinner } from 'flowbite-svelte';
   import { slide } from 'svelte/transition';
-  import type { LoginParams } from '$lib/api/model/loginParams';
-  import '$lib/api/global-api'; // 确保全局 API 已初始化
+  import type { LoginParams } from '$/api/model/loginParams';
+  import '../../api/global-api'; // 确保全局 API 已初始化
 
   
 

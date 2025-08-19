@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
 import { me as meStore } from '.';
-import type { LoginParams } from '$lib/api/model';
+import type { LoginParams } from '$/api/model';
 
 
 // 认证状态类型

@@ -13,7 +13,7 @@ import fs from 'fs';
 import path from 'path';
 
 // 配置
-const ENDPOINTS_DIR = './src/lib/api/endpoints';
+const ENDPOINTS_DIR = './src/api/endpoints';
 
 /**
  * 转换方法名

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { Button, Label, Input } from 'flowbite-svelte';
-    import { me } from '$lib/stores/me';
+    import { me } from '$/stores/me';
     import toast from '$lib/toast';
     
     // 用户信息

@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
 import cloneDeep from 'lodash/cloneDeep';
 import { browser } from '$app/environment';
-import type { User } from '$lib/api/model/user';
+import type { User } from '$/api/model';
 
 // 用户信息类型
 export type Me = {

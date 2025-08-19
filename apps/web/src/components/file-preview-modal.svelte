@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Button, Modal } from 'flowbite-svelte';
-  import getFileType from '$lib/utils/file-type';
+  import getFileType from '$/utils/file-type';
 
   let { visible = $bindable(), data } = $props();
   let fileType = $derived(data ? getFileType(data.name) : 'unknown');

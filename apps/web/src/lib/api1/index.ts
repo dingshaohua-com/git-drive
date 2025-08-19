@@ -1,6 +1,6 @@
 // init.ts
 import axios from 'axios';
-import { auth } from '../stores';
+import { auth } from '../../stores';
 import toast from '$lib/toast';
 
 // const isDev = import.meta.env.MODE==='development';
