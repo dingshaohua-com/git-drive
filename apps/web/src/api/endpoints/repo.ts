@@ -97,11 +97,15 @@ export const addFolder = (
  */
 export const uploadFile = (
     repoUploadFileBody: RepoUploadFileBody,
- options?: SecondParameter<typeof customAxiosInstance>,) => {
+ options?: SecondParameter<typeof customAxiosInstance>,) => {const formData = new FormData();
+formData.append(`path`, repoUploadFileBody.path)
+formData.append(`repo`, repoUploadFileBody.repo)
+formData.append(`file`, repoUploadFileBody.file)
+
       return customAxiosInstance<JsonResultTypeAny>(
       {url: `/api/repo/upload-file`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: repoUploadFileBody
+      headers: {'Content-Type': 'multipart/form-data', },
+       data: formData
     },
       options);
     }

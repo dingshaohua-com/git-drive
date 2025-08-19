@@ -2,9 +2,9 @@
 // for information about these interfaces
 
 // 导入 Orval 生成的 API 类型
-import type * as MeApi from '$lib/api/endpoints/me';
-import type * as RepoApi from '$lib/api/endpoints/repo';
-import type * as RootApi from '$lib/api/endpoints/root';
+import type * as MeApi from '$/api/endpoints/me';
+import type * as RepoApi from '$/api/endpoints/repo';
+import type * as RootApi from '$/api/endpoints/root';
 
 interface Api {
   root: typeof RootApi;

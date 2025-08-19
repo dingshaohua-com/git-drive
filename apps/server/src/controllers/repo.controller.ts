@@ -4,7 +4,7 @@ import type { RepoOrDirOrFile } from '../types/repo.dto';
 import JsonResult, { ApiResponse } from '../utils/json-result';
 import { addFolder, queryOne, uploadFile } from '@/service/repo';
 import { createGithubRepo, queryList, remove } from '@/service/repo';
-import { Controller, Get, Post, Body, Route, Header, Tags, Hidden, Put, Delete, Query, BodyProp, UploadedFiles, Request } from 'tsoa';
+import { Controller, Get, Post, Body, Route, Header, Tags, Hidden, Put, Delete, Query, BodyProp, UploadedFiles, Request, FormField } from 'tsoa';
 
 @Route('api/repo')
 @Tags('repo')
@@ -58,15 +58,17 @@ export class RepoController extends Controller {
     const result = await addFolder(path, repo);
     return JsonResult.success(result);
   }
+  // public async uploadFile(@Body() formData: {path: string, repo: string},  @Request() ctx: Context): ApiResponse<any> {
 
   /**
    * 上传文件到 repo 中
    * @summary 创建文件夹
    */
   @Post('/upload-file')
-  public async uploadFile(@BodyProp() repo: string, @BodyProp() path: string, @Request() ctx: Context): ApiResponse<any> {
-    const { file } = (ctx.request as any).files || {};
-    const result = await uploadFile(file, path, repo);
+  public async uploadFile(@FormField() path: string, @FormField() repo: string, @FormField() file: File, @Request() ctx: Context): ApiResponse<any> {
+    const { file: myFile } = (ctx.request as any).files || {};
+    console.log(1111, myFile, file);
+    const result = await uploadFile(myFile, path, repo);
     return JsonResult.success(result);
   }
 }

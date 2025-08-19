@@ -9,6 +9,7 @@
  */
 
 export type RepoUploadFileBody = {
-  repo: string;
   path: string;
+  repo: string;
+  file: string;
 };

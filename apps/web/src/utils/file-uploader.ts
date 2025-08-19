@@ -17,20 +17,21 @@ export interface UploadOptions {
  */
 export const uploadFile = async (file: File, options: UploadOptions = {}) => {
   const { path = '', onProgress, onSuccess, onError } = options;
+  console.log(onProgress);
+  
 
   try {
     const { repo, path: filePath } = parseCustomUrl(path);
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('repo', repo);
-    formData.append('path', filePath);
+    // const formData = new FormData();
+    // formData.append('file', file);
+    // formData.append('repo', repo);
+    // formData.append('path', filePath);
 
-    const res = await globalThis.api.repo.uploadFile(formData);
-    
+    const res = await api.repo.uploadFile({ repo, path: filePath, file });
     toast.success('上传成功');
     onSuccess?.(res);
     return res;
-  } catch (error: any) {
+  } catch (error) {
     const errorMsg = error?.message || '上传出错';
     toast.error(errorMsg);
     onError?.(errorMsg);

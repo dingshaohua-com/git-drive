@@ -493,8 +493,9 @@ export function RegisterRoutes(router: KoaRouter) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsRepoController_uploadFile: Record<string, TsoaRoute.ParameterSchema> = {
-                repo: {"in":"body-prop","name":"repo","required":true,"dataType":"string"},
-                path: {"in":"body-prop","name":"path","required":true,"dataType":"string"},
+                path: {"in":"formData","name":"path","required":true,"dataType":"string"},
+                repo: {"in":"formData","name":"repo","required":true,"dataType":"string"},
+                file: {"in":"formData","name":"file","required":true,"dataType":"string"},
                 ctx: {"in":"request","name":"ctx","required":true,"dataType":"object"},
         };
         router.post('/api/repo/upload-file',

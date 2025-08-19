@@ -731,21 +731,25 @@
 				"requestBody": {
 					"required": true,
 					"content": {
-						"application/json": {
+						"multipart/form-data": {
 							"schema": {
+								"type": "object",
 								"properties": {
+									"path": {
+										"type": "string"
+									},
 									"repo": {
 										"type": "string"
 									},
-									"path": {
+									"file": {
 										"type": "string"
 									}
 								},
 								"required": [
+									"path",
 									"repo",
-									"path"
-								],
-								"type": "object"
+									"file"
+								]
 							}
 						}
 					}
