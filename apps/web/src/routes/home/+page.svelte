@@ -6,7 +6,7 @@
 
   const query = createQuery({
     queryKey: ['favorites'],
-    queryFn: ()=> api.favorite.list(),
+    queryFn: ()=> api.favorite.getList(),
   })
 
 

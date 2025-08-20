@@ -379,6 +379,107 @@
 					}
 				},
 				"type": "object"
+			},
+			"DefaultSelection_Prisma._36_favoritePayload_": {
+				"properties": {
+					"label": {
+						"type": "string"
+					},
+					"path": {
+						"type": "string"
+					},
+					"uid": {
+						"type": "number",
+						"format": "double"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"label",
+					"path",
+					"uid",
+					"id"
+				],
+				"type": "object"
+			},
+			"Favorite": {
+				"$ref": "#/components/schemas/DefaultSelection_Prisma._36_favoritePayload_",
+				"description": "Model favorite"
+			},
+			"JsonResultType_Favorite-Array_": {
+				"properties": {
+					"code": {
+						"type": "number",
+						"format": "double"
+					},
+					"msg": {
+						"type": "string"
+					},
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/Favorite"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"code",
+					"msg",
+					"data"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ApiResponse_Favorite-Array_": {
+				"$ref": "#/components/schemas/JsonResultType_Favorite-Array_",
+				"description": "控制器方法返回类型的通用别名\r\n用于简化 Promise<JsonResultType<T>> 的写法"
+			},
+			"JsonResultType_Favorite_": {
+				"properties": {
+					"code": {
+						"type": "number",
+						"format": "double"
+					},
+					"msg": {
+						"type": "string"
+					},
+					"data": {
+						"$ref": "#/components/schemas/Favorite"
+					}
+				},
+				"required": [
+					"code",
+					"msg",
+					"data"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ApiResponse_Favorite_": {
+				"$ref": "#/components/schemas/JsonResultType_Favorite_",
+				"description": "控制器方法返回类型的通用别名\r\n用于简化 Promise<JsonResultType<T>> 的写法"
+			},
+			"Pick_Prisma.favoriteCreateInput.Exclude_keyofPrisma.favoriteCreateInput.uid__": {
+				"properties": {
+					"path": {
+						"type": "string"
+					},
+					"label": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_Prisma.favoriteCreateInput.uid_": {
+				"$ref": "#/components/schemas/Pick_Prisma.favoriteCreateInput.Exclude_keyofPrisma.favoriteCreateInput.uid__",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"CreateFavoriteDto": {
+				"$ref": "#/components/schemas/Omit_Prisma.favoriteCreateInput.uid_"
 			}
 		},
 		"securitySchemes": {}
@@ -810,6 +911,64 @@
 					}
 				}
 			}
+		},
+		"/api/favorite/list": {
+			"get": {
+				"operationId": "FavoriteController-GetList",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse_Favorite-Array_"
+								}
+							}
+						}
+					}
+				},
+				"description": "获取所有仓库信息",
+				"summary": "列表",
+				"tags": [
+					"favorite"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/api/favorite": {
+			"post": {
+				"operationId": "FavoriteController-Create",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse_Favorite_"
+								}
+							}
+						}
+					}
+				},
+				"description": "新增收藏",
+				"summary": "创建",
+				"tags": [
+					"favorite"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateFavoriteDto"
+							}
+						}
+					}
+				}
+			}
 		}
 	},
 	"servers": [
@@ -837,6 +996,11 @@
 			"name": "repo",
 			"description": "对仓库的增删改查以及上传文件等等操作",
 			"x-displayName": "仓库"
+		},
+		{
+			"name": "favorite",
+			"description": "收藏管理 - 用户收藏的相关操作",
+			"x-displayName": "收藏"
 		}
 	]
 }

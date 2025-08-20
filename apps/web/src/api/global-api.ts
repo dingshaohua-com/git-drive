@@ -8,8 +8,7 @@
 import * as rootApi from './endpoints/root';
 import * as meApi from './endpoints/me';
 import * as repoApi from './endpoints/repo';
-// 当有其他 API 模块时，在这里导入
-// import * as userApi from './endpoints/user';
+import * as favoriteApi from './endpoints/favorite';
 
 /**
  * 创建全局 API 对象
@@ -18,9 +17,8 @@ const createGlobalApi = () => {
   const api = {
     root: rootApi,
     me: meApi,
-    repo: repoApi
-    // 当有其他 API 模块时，在这里添加
-    // user: userApi,
+    repo: repoApi,
+    favorite: favoriteApi
   };
 
   return api;

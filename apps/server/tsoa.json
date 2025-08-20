@@ -1,7 +1,9 @@
 {
   "entryFile": "src/app.ts",
   "noImplicitAdditionalProperties": "throw-on-extras",
-  "controllerPathGlobs": ["src/controllers/**"],
+  "controllerPathGlobs": [
+    "src/controllers/**"
+  ],
   "spec": {
     "operationIdTemplate": "{{controllerName}}-{{titleCase method.name}}",
     "outputDirectory": "src/static",
@@ -23,12 +25,17 @@
       {
         "name": "user",
         "description": "用户管理 - 用户相关的所有操作",
-         "x-displayName": "用户"
+        "x-displayName": "用户"
       },
       {
         "name": "repo",
         "description": "对仓库的增删改查以及上传文件等等操作",
         "x-displayName": "仓库"
+      },
+      {
+        "name": "favorite",
+        "description": "收藏管理 - 用户收藏的相关操作",
+        "x-displayName": "收藏"
       }
     ]
   },

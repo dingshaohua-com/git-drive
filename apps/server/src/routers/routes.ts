@@ -11,6 +11,8 @@ import { RootController } from './../controllers/root.controller';
 import { RepoController } from './../controllers/repo.controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { MeController } from './../controllers/me.controller';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { FavoriteController } from './../controllers/favorite.comtroller';
 import type { Context, Next, Middleware, Request as KRequest, Response as KResponse } from 'koa';
 import type * as KoaRouter from '@koa/router';
 const multer = require('@koa/multer');
@@ -147,6 +149,61 @@ const models: TsoaRoute.Models = {
     "Prisma.userUpdateInput": {
         "dataType": "refAlias",
         "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"avatar":{"dataType":"union","subSchemas":[{"ref":"Prisma.NullableStringFieldUpdateOperationsInput"},{"dataType":"string"},{"dataType":"enum","enums":[null]}]},"nickname":{"dataType":"union","subSchemas":[{"ref":"Prisma.NullableStringFieldUpdateOperationsInput"},{"dataType":"string"},{"dataType":"enum","enums":[null]}]},"des":{"dataType":"union","subSchemas":[{"ref":"Prisma.NullableStringFieldUpdateOperationsInput"},{"dataType":"string"},{"dataType":"enum","enums":[null]}]},"username":{"dataType":"union","subSchemas":[{"ref":"Prisma.NullableStringFieldUpdateOperationsInput"},{"dataType":"string"},{"dataType":"enum","enums":[null]}]},"role":{"dataType":"union","subSchemas":[{"ref":"Prisma.NullableStringFieldUpdateOperationsInput"},{"dataType":"string"},{"dataType":"enum","enums":[null]}]},"password":{"dataType":"union","subSchemas":[{"ref":"Prisma.NullableStringFieldUpdateOperationsInput"},{"dataType":"string"},{"dataType":"enum","enums":[null]}]},"email":{"dataType":"union","subSchemas":[{"ref":"Prisma.StringFieldUpdateOperationsInput"},{"dataType":"string"}]}},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "DefaultSelection_Prisma._36_favoritePayload_": {
+        "dataType": "refAlias",
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"label":{"dataType":"string","required":true},"path":{"dataType":"string","required":true},"uid":{"dataType":"double","required":true},"id":{"dataType":"double","required":true}},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Favorite": {
+        "dataType": "refAlias",
+        "type": {"ref":"DefaultSelection_Prisma._36_favoritePayload_","validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "JsonResultType_Favorite-Array_": {
+        "dataType": "refObject",
+        "properties": {
+            "code": {"dataType":"double","required":true},
+            "msg": {"dataType":"string","required":true},
+            "data": {"dataType":"array","array":{"dataType":"refAlias","ref":"Favorite"},"required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ApiResponse_Favorite-Array_": {
+        "dataType": "refAlias",
+        "type": {"ref":"JsonResultType_Favorite-Array_","validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "JsonResultType_Favorite_": {
+        "dataType": "refObject",
+        "properties": {
+            "code": {"dataType":"double","required":true},
+            "msg": {"dataType":"string","required":true},
+            "data": {"ref":"Favorite","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ApiResponse_Favorite_": {
+        "dataType": "refAlias",
+        "type": {"ref":"JsonResultType_Favorite_","validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Pick_Prisma.favoriteCreateInput.Exclude_keyofPrisma.favoriteCreateInput.uid__": {
+        "dataType": "refAlias",
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"path":{"dataType":"string"},"label":{"dataType":"string"}},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Omit_Prisma.favoriteCreateInput.uid_": {
+        "dataType": "refAlias",
+        "type": {"ref":"Pick_Prisma.favoriteCreateInput.Exclude_keyofPrisma.favoriteCreateInput.uid__","validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "CreateFavoriteDto": {
+        "dataType": "refAlias",
+        "type": {"ref":"Omit_Prisma.favoriteCreateInput.uid_","validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 };
@@ -584,6 +641,65 @@ export function RegisterRoutes(router: KoaRouter,opts?:{multer?:ReturnType<typeo
 
             return templateService.apiHandler({
               methodName: 'update',
+              controller,
+              context,
+              validatedArgs,
+              successStatus: undefined,
+            });
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsFavoriteController_getList: Record<string, TsoaRoute.ParameterSchema> = {
+        };
+        router.get('/api/favorite/list',
+            ...(fetchMiddlewares<Middleware>(FavoriteController)),
+            ...(fetchMiddlewares<Middleware>(FavoriteController.prototype.getList)),
+
+            async function FavoriteController_getList(context: Context, next: Next) {
+
+            let validatedArgs: any[] = [];
+            try {
+              validatedArgs = templateService.getValidatedArgs({ args: argsFavoriteController_getList, context, next });
+            } catch (err) {
+              const error = err as any;
+              error.message ||= JSON.stringify({ fields: error.fields });
+              context.status = error.status;
+              context.throw(context.status, error.message, error);
+            }
+
+            const controller = new FavoriteController();
+
+            return templateService.apiHandler({
+              methodName: 'getList',
+              controller,
+              context,
+              validatedArgs,
+              successStatus: undefined,
+            });
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsFavoriteController_create: Record<string, TsoaRoute.ParameterSchema> = {
+                favoriteParam: {"in":"body","name":"favoriteParam","required":true,"ref":"CreateFavoriteDto"},
+        };
+        router.post('/api/favorite',
+            ...(fetchMiddlewares<Middleware>(FavoriteController)),
+            ...(fetchMiddlewares<Middleware>(FavoriteController.prototype.create)),
+
+            async function FavoriteController_create(context: Context, next: Next) {
+
+            let validatedArgs: any[] = [];
+            try {
+              validatedArgs = templateService.getValidatedArgs({ args: argsFavoriteController_create, context, next });
+            } catch (err) {
+              const error = err as any;
+              error.message ||= JSON.stringify({ fields: error.fields });
+              context.status = error.status;
+              context.throw(context.status, error.message, error);
+            }
+
+            const controller = new FavoriteController();
+
+            return templateService.apiHandler({
+              methodName: 'create',
               controller,
               context,
               validatedArgs,

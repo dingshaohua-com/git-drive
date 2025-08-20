@@ -5,14 +5,13 @@
 import type * as MeApi from '$/api/endpoints/me';
 import type * as RepoApi from '$/api/endpoints/repo';
 import type * as RootApi from '$/api/endpoints/root';
+import type * as favoriteApi from '$/api/endpoints/favorite';
 
 interface Api {
   root: typeof RootApi;
   me: typeof MeApi;
   repo: typeof RepoApi;
-  // 当有其他 API 模块时，可以继续添加
-  // user: typeof UserApi;
-  // favorite: typeof FavoriteApi;
+  favorite: typeof favoriteApi;
 }
 
 declare global {
