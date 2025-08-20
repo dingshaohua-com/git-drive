@@ -11,5 +11,5 @@
 export type RepoUploadFileBody = {
   path: string;
   repo: string;
-  file: string;
+  file: Blob;
 };

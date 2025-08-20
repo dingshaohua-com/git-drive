@@ -13,6 +13,7 @@ import { RepoController } from './../controllers/repo.controller';
 import { MeController } from './../controllers/me.controller';
 import type { Context, Next, Middleware, Request as KRequest, Response as KResponse } from 'koa';
 import type * as KoaRouter from '@koa/router';
+const multer = require('@koa/multer');
 
 
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -154,13 +155,14 @@ const templateService = new KoaTemplateService(models, {"noImplicitAdditionalPro
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 
-export function RegisterRoutes(router: KoaRouter) {
+export function RegisterRoutes(router: KoaRouter,opts?:{multer?:ReturnType<typeof multer>}) {
 
     // ###########################################################################################################
     //  NOTE: If you do not see routes for all of your controllers in this file, then you might not have informed tsoa of where to look
     //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
     // ###########################################################################################################
 
+    const upload = opts?.multer ||  multer({"limits":{"fileSize":8388608}});
 
         const argsUserController_get: Record<string, TsoaRoute.ParameterSchema> = {
                 userId: {"in":"query","name":"userId","required":true,"dataType":"string"},
@@ -495,10 +497,16 @@ export function RegisterRoutes(router: KoaRouter) {
         const argsRepoController_uploadFile: Record<string, TsoaRoute.ParameterSchema> = {
                 path: {"in":"formData","name":"path","required":true,"dataType":"string"},
                 repo: {"in":"formData","name":"repo","required":true,"dataType":"string"},
-                file: {"in":"formData","name":"file","required":true,"dataType":"string"},
+                file: {"in":"formData","name":"file","required":true,"dataType":"file"},
                 ctx: {"in":"request","name":"ctx","required":true,"dataType":"object"},
         };
         router.post('/api/repo/upload-file',
+            upload.fields([
+                {
+                    name: "file",
+                    maxCount: 1
+                }
+            ]),
             ...(fetchMiddlewares<Middleware>(RepoController)),
             ...(fetchMiddlewares<Middleware>(RepoController.prototype.uploadFile)),
 

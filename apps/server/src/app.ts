@@ -3,7 +3,6 @@ import path from 'path';
 import chalk from 'chalk';
 import Router from '@koa/router';
 import staticServer from 'koa-static';
-import kBody from '@/utils/kbody-helper';
 import info from '@/middleware/sys-conf';
 import authGuard from '@/middleware/auth-guard';
 import { RegisterRoutes } from '@/routers/routes';
@@ -17,7 +16,6 @@ console.log('热更新测试成功! - 修改时间:', new Date().toLocaleTimeStr
 
 // 错误处理中间件必须最先注册
 app.use(errorHandler());
-app.use(kBody);
 app.use(staticServer(path.join(__dirname, 'www')));
 app.use(staticServer(path.join(__dirname, 'static')));
 app.use(feRouterBack());

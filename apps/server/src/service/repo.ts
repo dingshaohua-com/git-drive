@@ -87,6 +87,9 @@ export const uploadFile = async (file: any, pathTemp: string, repo: string) => {
   const api = await getGhubApi();
   const path = pathTemp ? pathTemp + '/' : pathTemp;
 
+  console.log('上传文件', path, repo,file, newFilename, filepath);
+  return 123;
+
   // 读取文件并转 base64
   const fileBuffer = fs.readFileSync(filepath);
   const base64Content = fileBuffer.toString('base64');
