@@ -1,7 +1,7 @@
 <script lang="ts">
     import { Button, Label, Input } from 'flowbite-svelte';
     import { me } from '$/stores/me';
-    import toast from '$lib/toast';
+    import toast from '../$/utils/toast';
     
     // 用户信息
     let userInfo = $state({

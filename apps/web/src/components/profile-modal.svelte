@@ -2,7 +2,7 @@
     import { Modal, Button, Label, Input } from 'flowbite-svelte';
     import { me } from '../stores/me';
     // import { api } from '$lib/api';
-    import toast from '$lib/toast';
+    import toast from '$/utils/toast';
     
     let { visible = $bindable() } = $props();
     

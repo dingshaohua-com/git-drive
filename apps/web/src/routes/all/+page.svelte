@@ -4,7 +4,7 @@
   import Navigation from '$/components/navbar.svelte';
   import ContextMenu from '$/components/context-menu.svelte';
   import { formatFileSize, getFileIcon, parseCustomUrl, buildCustomUrl, getParentCustomUrl, getDisplayRepoName } from './helper';
-  import toast from '$lib/toast';
+  import toast from '$/utils/toast';
   import { triggerFileUpload } from '../../utils/file-uploader';
   import copyToClipboard from '../../utils/copy-helper';
   import FilePreviewModal from '$/components/file-preview-modal.svelte';

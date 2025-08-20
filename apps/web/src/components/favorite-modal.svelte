@@ -1,7 +1,8 @@
 <script lang="ts">
   import { parseCustomUrl } from '$/routes/all/helper';
-  import toast from '$lib/toast';
+  import toast from '$/utils/toast';
   import { Button, label, Modal } from 'flowbite-svelte';
+  import {me} from "$/stores";
 
   let { visible = $bindable(), data, onSuccess } = $props();
   let addError = $state('');
@@ -9,7 +10,7 @@
   let folderName = $state('');
   $effect(()=>{
     if(visible){
-      folderName = data.name;
+      folderName = data.name.replace($me.username+'-','');
     }
   })
 
@@ -64,8 +65,9 @@
 <Modal title="书签信息" bind:open={visible} autoclose={false} class="w-11/12 max-w-120">
   <form onsubmit={onSubmit} class="flex flex-col gap-4 p-2">
     <div class="flex gap-2 items-center">
-      <label class="font-medium text-gray-700 min-w-[60px]">名称 <span class="text-red-500">*</span></label>
-      <input class="flex-1 border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-300" placeholder="请输入" bind:value={folderName} required autofocus />
+      <!-- svelte-ignore component_name_lowercase -->
+      <label class="font-medium text-gray-700 min-w-[60px]" for="name">名称 <span class="text-red-500">*</span></label>
+      <input id="name" class="flex-1 border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-300" placeholder="请输入" bind:value={folderName} required autofocus />
     </div>
 
     <div class="flex gap-2 ">

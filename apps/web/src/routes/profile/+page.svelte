@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { me } from '$/stores/me';
-  import toast from '$lib/toast';
+  import toast from '$/utils/toast';
   import BasicInfo from './cmp/basic-info.svelte';
   import AccountSecurity from './cmp/account-security.svelte';
   import Navigation from '$/components/navbar.svelte';

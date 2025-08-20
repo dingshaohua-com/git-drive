@@ -1,5 +1,5 @@
 
-import toast from '$lib/toast';
+import toast from './toast';
 import { parseCustomUrl } from '$/routes/all/helper';
 
 export interface UploadOptions {

@@ -2,7 +2,7 @@
   import { goto } from '$app/navigation';
   import type { QuickLoginType, LoginFieldType } from '../../types/auth';
   import { auth, me } from '../../stores';
-  import toast, { error } from '$lib/toast';
+  import toast, { error } from '$/utils/toast';
   import { Modal, Spinner } from 'flowbite-svelte';
   import { slide } from 'svelte/transition';
 

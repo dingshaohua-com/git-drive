@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
-  import { auth, me } from '../stores';
+  import { auth, me } from '$/stores';
   import ProfileModal from  '$/components/profile-modal.svelte';
 
 

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { parseCustomUrl } from '$/routes/all/helper';
-  import toast from '$lib/toast';
+  import toast from '$/utils/toast';
   import { Button, Modal } from 'flowbite-svelte';
 
   let { visible = $bindable(), currentPath = '', onSuccess } = $props();

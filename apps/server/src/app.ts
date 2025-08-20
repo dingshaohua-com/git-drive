@@ -10,6 +10,7 @@ import { RegisterRoutes } from '@/routers/routes';
 import errorHandler from '@/middleware/error-handler';
 import feRouterBack from '@/middleware/fe-router-back';
 import { reqCtxMiddleware } from '@/middleware/req-ctx';
+import koaBody from 'koa-body';
 
 const app = new Koa();
 
@@ -23,6 +24,7 @@ app.use(feRouterBack());
 app.use(reqCtxMiddleware()); // 创建上下文容器中间件
 app.use(info);
 app.use(authGuard);
+app.use(koaBody());
 const router = new Router();
 RegisterRoutes(router, {
   multer: multerConfig,

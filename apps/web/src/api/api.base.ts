@@ -1,8 +1,8 @@
 // init.ts
 import axios from 'axios';
 import type { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { auth } from '../stores';
-import toast from '$lib/toast';
+import { auth } from '$/stores';
+import toast from '$/utils/toast';
 
 // ---===全局默认axios配置===---
 // const whitePath = ["/login", "/sms-send"]; // 白名单
