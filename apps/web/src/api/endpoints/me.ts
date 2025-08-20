@@ -22,7 +22,7 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
   /**
  * @summary 获取
  */
-export const Me-Get = (
+export const get = (
     
  options?: SecondParameter<typeof customAxiosInstance>,) => {
       return customAxiosInstance<JsonResultTypeUser>(
@@ -33,7 +33,7 @@ export const Me-Get = (
   /**
  * @summary 更新
  */
-export const Me-Update = (
+export const update = (
     prismaUserUpdateInput: PrismaUserUpdateInput,
  options?: SecondParameter<typeof customAxiosInstance>,) => {
       return customAxiosInstance<JsonResultTypeUser>(
@@ -43,5 +43,5 @@ export const Me-Update = (
     },
       options);
     }
-  export type MeGetResult = NonNullable<Awaited<ReturnType<typeof Me-Get>>>
-export type MeUpdateResult = NonNullable<Awaited<ReturnType<typeof Me-Update>>>
+  export type GetResult = NonNullable<Awaited<ReturnType<typeof get>>>
+export type UpdateResult = NonNullable<Awaited<ReturnType<typeof update>>>
