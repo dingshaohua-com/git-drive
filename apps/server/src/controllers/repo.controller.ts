@@ -1,10 +1,9 @@
-import { Context } from 'koa';
 import { Prisma, repo as Repo } from '@prisma/client';
 import type { RepoOrDirOrFile } from '../types/repo.dto';
 import JsonResult, { ApiResponse } from '../utils/json-result';
 import { addFolder, queryOne, uploadFile } from '@/service/repo';
 import { createGithubRepo, queryList, remove } from '@/service/repo';
-import { Controller, Get, Post, Body, Route, Header, Tags, Hidden, Put, Delete, Query, BodyProp, UploadedFiles, Request, FormField, UploadedFile } from 'tsoa';
+import { Controller, Get, Post, Body, Route, Tags, Delete, Query, BodyProp, FormField, UploadedFile, File } from 'tsoa';
 
 @Route('api/repo')
 @Tags('repo')
@@ -58,14 +57,18 @@ export class RepoController extends Controller {
     const result = await addFolder(path, repo);
     return JsonResult.success(result);
   }
-  // public async uploadFile(@Body() formData: {path: string, repo: string},  @Request() ctx: Context): ApiResponse<any> {
 
   /**
    * 上传文件到 repo 中
-   * @summary 创建文件夹
+   * @summary 上传文件
    */
   @Post('/upload-file')
-  public async uploadFile(@FormField() path: string, @FormField() repo: string, @UploadedFile() file: File, @Request() ctx: Context): ApiResponse<any> {
+  public async uploadFile(@FormField() path: string, @FormField() repo: string, @UploadedFile("file") file: File): ApiResponse<any> {
+    if (!file) {
+      throw new Error(JSON.stringify({ fields: { file: { message: "'file' is required" } } }));
+    }
+
+    console.log('上传文件信息:', file);
     const result = await uploadFile(file, path, repo);
     return JsonResult.success(result);
   }

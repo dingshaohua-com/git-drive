@@ -498,7 +498,6 @@ export function RegisterRoutes(router: KoaRouter,opts?:{multer?:ReturnType<typeo
                 path: {"in":"formData","name":"path","required":true,"dataType":"string"},
                 repo: {"in":"formData","name":"repo","required":true,"dataType":"string"},
                 file: {"in":"formData","name":"file","required":true,"dataType":"file"},
-                ctx: {"in":"request","name":"ctx","required":true,"dataType":"object"},
         };
         router.post('/api/repo/upload-file',
             upload.fields([

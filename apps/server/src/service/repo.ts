@@ -3,6 +3,7 @@ import { Buffer } from 'buffer';
 import reqCtx from '@/middleware/req-ctx';
 import { BRANCH, getGhubApi, OWNER } from '@/utils/ghub-helper';
 import type { RepoOrDirOrFile } from '../types/repo.dto';
+import {File} from "tsoa"
 
 /**
  * 创建 GitHub 仓库
@@ -82,13 +83,11 @@ export const queryOne = async (repo: string, path: string): Promise<RepoOrDirOrF
   }
 };
 
-export const uploadFile = async (file: any, pathTemp: string, repo: string) => {
-  const { newFilename, filepath } = file;
+export const uploadFile = async (file: File, pathTemp: string, repo: string) => {
+  const { filename: newFilename, path: filepath } = file;
   const api = await getGhubApi();
   const path = pathTemp ? pathTemp + '/' : pathTemp;
 
-  console.log('上传文件', path, repo,file, newFilename, filepath);
-  return 123;
 
   // 读取文件并转 base64
   const fileBuffer = fs.readFileSync(filepath);

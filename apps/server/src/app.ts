@@ -5,6 +5,7 @@ import Router from '@koa/router';
 import staticServer from 'koa-static';
 import info from '@/middleware/sys-conf';
 import authGuard from '@/middleware/auth-guard';
+import multerConfig from '@/utils/multer-config';
 import { RegisterRoutes } from '@/routers/routes';
 import errorHandler from '@/middleware/error-handler';
 import feRouterBack from '@/middleware/fe-router-back';
@@ -23,7 +24,9 @@ app.use(reqCtxMiddleware()); // 创建上下文容器中间件
 app.use(info);
 app.use(authGuard);
 const router = new Router();
-RegisterRoutes(router);
+RegisterRoutes(router, {
+  multer: multerConfig,
+});
 app.use(router.routes());
 app.listen(3003, '0.0.0.0', () => {
   const { green, blue, bold } = chalk;

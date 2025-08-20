@@ -1,0 +1,11 @@
+# local
+# NEXT_PUBLIC_API_HOST=http://teacher-api.local.xiaoluxue.cn
+# NEXT_PUBLIC_UCENTER_API_URL=http://ucenter-api.local.xiaoluxue.cn
+
+# # dev
+# NEXT_PUBLIC_API_HOST=https://gw-tch.dev.xiaoluxue.cn
+# NEXT_PUBLIC_UCENTER_API_URL=https://gw-tch.dev.xiaoluxue.cn
+
+# test
+NEXT_PUBLIC_API_HOST=https://gw-tch.test.xiaoluxue.cn
+NEXT_PUBLIC_UCENTER_API_URL=https://gw-tch.test.xiaoluxue.cn/ucenter-api

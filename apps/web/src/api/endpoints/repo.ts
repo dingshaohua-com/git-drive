@@ -93,7 +93,7 @@ export const addFolder = (
     }
   /**
  * 上传文件到 repo 中
- * @summary 创建文件夹
+ * @summary 上传文件
  */
 export const uploadFile = (
     repoUploadFileBody: RepoUploadFileBody,
