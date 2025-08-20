@@ -5,7 +5,7 @@ import { parseCustomUrl } from '$/routes/all/helper';
 export interface UploadOptions {
   path?: string;
   onProgress?: (progress: number) => void;
-  onSuccess?: (result: any) => void;
+  onSuccess?: (result) => void;
   onError?: (error: string) => void;
 }
 

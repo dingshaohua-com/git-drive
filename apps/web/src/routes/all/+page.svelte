@@ -59,8 +59,6 @@
     } else {
       list = await api.repo.get({ repo, path });
     }
-    console.log(111, list);
-    
     loading = false;
   };
 

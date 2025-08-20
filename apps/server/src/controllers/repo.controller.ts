@@ -64,11 +64,6 @@ export class RepoController extends Controller {
    */
   @Post('/upload-file')
   public async uploadFile(@FormField() path: string, @FormField() repo: string, @UploadedFile("file") file: File): ApiResponse<any> {
-    if (!file) {
-      throw new Error(JSON.stringify({ fields: { file: { message: "'file' is required" } } }));
-    }
-
-    console.log('上传文件信息:', file);
     const result = await uploadFile(file, path, repo);
     return JsonResult.success(result);
   }
