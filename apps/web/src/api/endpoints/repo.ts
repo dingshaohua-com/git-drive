@@ -29,7 +29,7 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
  * 获取所有仓库信息
  * @summary 列表
  */
-export const getList = (
+export const Repo-GetList = (
     
  options?: SecondParameter<typeof customAxiosInstance>,) => {
       return customAxiosInstance<JsonResultTypeRepoOrDirOrFileArray>(
@@ -41,7 +41,7 @@ export const getList = (
  * 新增仓库
  * @summary 创建
  */
-export const create = (
+export const Repo-Create = (
     prismaRepoCreateInput: PrismaRepoCreateInput,
  options?: SecondParameter<typeof customAxiosInstance>,) => {
       return customAxiosInstance<JsonResultTypeRepo>(
@@ -55,7 +55,7 @@ export const create = (
  * 不单可以删除仓库，还支持删除文件夹、文件
  * @summary 删除
  */
-export const remove = (
+export const Repo-Remove = (
     params: RepoRemoveParams,
  options?: SecondParameter<typeof customAxiosInstance>,) => {
       return customAxiosInstance<JsonResultTypeRepo>(
@@ -68,7 +68,7 @@ export const remove = (
  * 获取仓库信息
  * @summary 查询
  */
-export const get = (
+export const Repo-Get = (
     params: RepoGetParams,
  options?: SecondParameter<typeof customAxiosInstance>,) => {
       return customAxiosInstance<JsonResultTypeRepoOrDirOrFileArray>(
@@ -81,7 +81,7 @@ export const get = (
  * 创建文件夹到 repo 中
  * @summary 创建文件夹
  */
-export const addFolder = (
+export const Repo-AddFolder = (
     repoAddFolderBody: RepoAddFolderBody,
  options?: SecondParameter<typeof customAxiosInstance>,) => {
       return customAxiosInstance<JsonResultTypeAny>(
@@ -95,7 +95,7 @@ export const addFolder = (
  * 上传文件到 repo 中
  * @summary 创建文件夹
  */
-export const uploadFile = (
+export const Repo-UploadFile = (
     repoUploadFileBody: RepoUploadFileBody,
  options?: SecondParameter<typeof customAxiosInstance>,) => {const formData = new FormData();
 formData.append(`path`, repoUploadFileBody.path)
@@ -109,9 +109,9 @@ formData.append(`file`, repoUploadFileBody.file)
     },
       options);
     }
-  export type GetList = NonNullable<Awaited<ReturnType<typeof getList>>>
-export type Create = NonNullable<Awaited<ReturnType<typeof create>>>
-export type Remove = NonNullable<Awaited<ReturnType<typeof remove>>>
-export type Get = NonNullable<Awaited<ReturnType<typeof get>>>
-export type AddFolder = NonNullable<Awaited<ReturnType<typeof addFolder>>>
-export type UploadFile = NonNullable<Awaited<ReturnType<typeof uploadFile>>>
+  export type RepoGetListResult = NonNullable<Awaited<ReturnType<typeof Repo-GetList>>>
+export type RepoCreateResult = NonNullable<Awaited<ReturnType<typeof Repo-Create>>>
+export type RepoRemoveResult = NonNullable<Awaited<ReturnType<typeof Repo-Remove>>>
+export type RepoGetResult = NonNullable<Awaited<ReturnType<typeof Repo-Get>>>
+export type RepoAddFolderResult = NonNullable<Awaited<ReturnType<typeof Repo-AddFolder>>>
+export type RepoUploadFileResult = NonNullable<Awaited<ReturnType<typeof Repo-UploadFile>>>

@@ -22,7 +22,7 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
   /**
  * @summary 获取
  */
-export const get = (
+export const User-Get = (
     params: UserGetParams,
  options?: SecondParameter<typeof customAxiosInstance>,) => {
       return customAxiosInstance<JsonResultTypeUser>(
@@ -31,4 +31,4 @@ export const get = (
     },
       options);
     }
-  export type Get = NonNullable<Awaited<ReturnType<typeof get>>>
+  export type UserGetResult = NonNullable<Awaited<ReturnType<typeof User-Get>>>

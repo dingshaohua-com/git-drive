@@ -11,6 +11,7 @@ export default defineConfig({
       mock: false, // ⑥ 同时生成 MSW mock
       clean: true, // 👈 每次生成前清目录
       override: {
+        transformer: 'scripts/abc.js',
         operationName: (operation, route, verb) => {
           const operationId = operation.operationId;
           if (!operationId) {

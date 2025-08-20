@@ -30,7 +30,7 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 | 邮箱验证码 | email, code | 邮箱 + 验证码登录 |
  * @summary 登录
  */
-export const login = (
+export const Root-Login = (
     loginParams: LoginParams,
  options?: SecondParameter<typeof customAxiosInstance>,) => {
       return customAxiosInstance<JsonResultTypeTokenStringMeUser>(
@@ -44,7 +44,7 @@ export const login = (
  * 退出登录
  * @summary 登出
  */
-export const logout = (
+export const Root-Logout = (
     
  options?: SecondParameter<typeof customAxiosInstance>,) => {
       return customAxiosInstance<JsonResultTypeAny>(
@@ -56,7 +56,7 @@ export const logout = (
  * 发送证码 接口
  * @summary 发送证码
  */
-export const sendCode = (
+export const Root-SendCode = (
     rootSendCodeBody: unknown,
  options?: SecondParameter<typeof customAxiosInstance>,) => {
       return customAxiosInstance<JsonResultTypeAny>(
@@ -66,6 +66,6 @@ export const sendCode = (
     },
       options);
     }
-  export type Login = NonNullable<Awaited<ReturnType<typeof login>>>
-export type Logout = NonNullable<Awaited<ReturnType<typeof logout>>>
-export type SendCode = NonNullable<Awaited<ReturnType<typeof sendCode>>>
+  export type RootLoginResult = NonNullable<Awaited<ReturnType<typeof Root-Login>>>
+export type RootLogoutResult = NonNullable<Awaited<ReturnType<typeof Root-Logout>>>
+export type RootSendCodeResult = NonNullable<Awaited<ReturnType<typeof Root-SendCode>>>
