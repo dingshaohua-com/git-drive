@@ -22,59 +22,6 @@
     goto(`/all?${params.toString()}`, { replaceState: true });
   };
 
-  // 获取文件/文件夹图标
-  const getFavoriteIcon = (favorite: any) => {
-    const { repo, path } = parseCustomUrl(favorite.path);
-
-    // 如果没有路径，说明是仓库根目录
-    if (!path) {
-      return 'ri-hard-drive-3-line text-blue-500';
-    }
-
-    // 根据路径判断是否为文件夹（简单判断，没有扩展名的认为是文件夹）
-    const isFolder = !path.includes('.') || path.endsWith('/');
-    if (isFolder) {
-      return 'ri-folder-fill text-yellow-500';
-    }
-
-    // 根据文件扩展名返回不同图标
-    const ext = path.split('.').pop()?.toLowerCase();
-    switch (ext) {
-      case 'js':
-      case 'ts':
-      case 'jsx':
-      case 'tsx':
-        return 'ri-javascript-line text-yellow-600';
-      case 'vue':
-      case 'svelte':
-        return 'ri-vuejs-line text-green-500';
-      case 'css':
-      case 'scss':
-      case 'sass':
-        return 'ri-css3-line text-blue-600';
-      case 'html':
-        return 'ri-html5-line text-orange-500';
-      case 'json':
-        return 'ri-braces-line text-green-600';
-      case 'md':
-        return 'ri-markdown-line text-gray-600';
-      case 'png':
-      case 'jpg':
-      case 'jpeg':
-      case 'gif':
-      case 'svg':
-        return 'ri-image-line text-purple-500';
-      case 'pdf':
-        return 'ri-file-pdf-line text-red-500';
-      case 'zip':
-      case 'rar':
-      case '7z':
-        return 'ri-file-zip-line text-gray-500';
-      default:
-        return 'ri-file-text-line text-gray-500';
-    }
-  };
-
   // 获取显示路径
   const getDisplayPath = (favorite: any) => {
     const { repo, path } = parseCustomUrl(favorite.path);
@@ -107,11 +54,14 @@
   <!-- 主要内容 -->
   <main class="pt-20 pb-8">
     <div class="max-w-7xl mx-auto px-6">
-      <!-- 页面标题 -->
-      <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900 mb-2">我的收藏</h1>
-        <p class="text-gray-600">快速访问您收藏的文件和文件夹</p>
-      </div>
+       <!-- 统计信息 -->
+      {#if $query.isSuccess && $query.data && $query.data.length > 0}
+        <div class="mb-6">
+          <p class="text-sm text-gray-500">
+            共 <span class="font-medium text-gray-700">{$query.data.length}</span> 个收藏项
+          </p>
+        </div>
+      {/if}
 
       <!-- 收藏列表 -->
       <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
@@ -144,7 +94,7 @@
                   <!-- 图标 -->
                   <div class="flex-shrink-0">
                     <div class="w-12 h-12 rounded-lg bg-gray-50 group-hover:bg-white border border-gray-200 group-hover:border-gray-300 flex items-center justify-center transition-all duration-200">
-                      <i class="{getFavoriteIcon(favorite)} text-xl"></i>
+                      🩷
                     </div>
                   </div>
 
@@ -189,14 +139,7 @@
         {/if}
       </div>
 
-      <!-- 统计信息 -->
-      {#if $query.isSuccess && $query.data && $query.data.length > 0}
-        <div class="mt-6 text-center">
-          <p class="text-sm text-gray-500">
-            共 <span class="font-medium text-gray-700">{$query.data.length}</span> 个收藏项
-          </p>
-        </div>
-      {/if}
+     
     </div>
   </main>
 </div>

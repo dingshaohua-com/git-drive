@@ -1,9 +1,9 @@
 import * as fs from 'fs';
+import { File } from 'tsoa';
 import { Buffer } from 'buffer';
 import reqCtx from '@/middleware/req-ctx';
-import { BRANCH, getGhubApi, OWNER } from '@/utils/ghub-helper';
 import type { RepoOrDirOrFile } from '../types/repo.dto';
-import {File} from "tsoa"
+import { BRANCH, getGhubApi, OWNER } from '@/utils/ghub-helper';
 
 /**
  * 创建 GitHub 仓库
@@ -45,7 +45,6 @@ export const queryList = async (keyword: string = ''): Promise<RepoOrDirOrFile[]
     name: repo.name,
     url: `https://file.dingshaohua.com/${repo.name}`,
   }));
-
   return result;
 };
 
@@ -87,7 +86,6 @@ export const uploadFile = async (file: File, pathTemp: string, repo: string) => 
   const { filename: newFilename, path: filepath } = file;
   const api = await getGhubApi();
   const path = pathTemp ? pathTemp + '/' : pathTemp;
-
 
   // 读取文件并转 base64
   const fileBuffer = fs.readFileSync(filepath);
@@ -217,5 +215,67 @@ export const deleteRepo = async (repoName: string) => {
   } catch (error: any) {
     console.error('删除仓库失败:', error.response?.data || error.message);
     throw new Error(`删除仓库失败: ${error.response?.data?.message || error.message}`);
+  }
+};
+
+/**
+ * 重命名 GitHub 仓库中的文件或文件夹
+ */
+export const rename = async (path: string, repo: string, newName: string, oldName: string) => {
+  const api = await getGhubApi();
+
+  // 构建完整的原路径和新路径
+  const oldPath = path ? `${path}/${oldName}` : oldName;
+  const newPath = path ? `${path}/${newName}` : newName;
+
+  try {
+    // 获取原文件信息
+    const getRes = await api.get(`/repos/${OWNER}/${repo}/contents/${oldPath}`);
+
+    if (Array.isArray(getRes.data)) {
+      // 文件夹重命名：递归复制所有内容到新路径，然后删除旧文件夹
+      const copyFolderContents = async (items: any[]) => {
+        for (const item of items) {
+          const itemNewPath = item.path.replace(oldPath, newPath);
+
+          if (item.type === 'file') {
+            // 获取文件内容并复制到新位置
+            const fileRes = await api.get(`/repos/${OWNER}/${repo}/contents/${item.path}`);
+            await api.put(`/repos/${OWNER}/${repo}/contents/${itemNewPath}`, {
+              message: `重命名文件 ${item.path} 为 ${itemNewPath}`,
+              content: fileRes.data.content,
+              branch: BRANCH,
+            });
+          } else if (item.type === 'dir') {
+            // 递归处理子文件夹
+            const subRes = await api.get(`/repos/${OWNER}/${repo}/contents/${item.path}`);
+            await copyFolderContents(subRes.data);
+          }
+        }
+      };
+
+      await copyFolderContents(getRes.data);
+      await remove(repo, oldPath);
+      return { message: `文件夹 ${oldName} 重命名为 ${newName}` };
+    } else {
+      // 文件重命名：创建新文件，删除旧文件
+      await api.put(`/repos/${OWNER}/${repo}/contents/${newPath}`, {
+        message: `重命名 ${oldName} 为 ${newName}`,
+        content: getRes.data.content,
+        branch: BRANCH,
+      });
+
+      await api.delete(`/repos/${OWNER}/${repo}/contents/${oldPath}`, {
+        data: {
+          message: `删除旧文件 ${oldName}`,
+          sha: getRes.data.sha,
+          branch: BRANCH,
+        },
+      });
+
+      return { message: `文件 ${oldName} 重命名为 ${newName}` };
+    }
+  } catch (error: any) {
+    throw new Error(`重命名失败: ${error.response?.data?.message || error.message}`);
   }
 };

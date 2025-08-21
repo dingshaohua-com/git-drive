@@ -48,6 +48,7 @@ export * from './repoAddFolderBody';
 export * from './repoGetParams';
 export * from './repoOrDirOrFile';
 export * from './repoRemoveParams';
+export * from './repoRenameBody';
 export * from './repoUploadFileBody';
 export * from './user';
 export * from './userGetParams';

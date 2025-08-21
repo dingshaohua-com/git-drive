@@ -13,6 +13,7 @@
   import { onMount } from 'svelte';
   import { page } from '$app/state';
   import type { RepoOrDirOrFile } from '../../api/model';
+  import { getIcon } from '$/utils/file-icon';
 
   let loading = $state(false);
   let list = $state<Array<RepoOrDirOrFile>>([]);
@@ -86,7 +87,10 @@
     syncAnyLevel(current.url);
   };
 
-  const handleRename = (item: any) => {};
+  const handleRename = (item: any) => {
+    clickedItem = item;
+    showCreateFolderModal = true;
+  };
 
   const handleDelete = async (item: any) => {
     loading = true;
@@ -153,7 +157,7 @@
                       <i class="ri-file-add-line text-xl text-blue-600"></i>
                     </button>
                   {:else}
-                    <button title="新建文件夹" class="cursor-pointer p-1 rounded hover:bg-green-100 transition-colors" onclick={() => (showCreateFolderModal = true)}>
+                    <button title="新建文件夹" class="cursor-pointer p-1 rounded hover:bg-green-100 transition-colors" onclick={() => {showCreateFolderModal = true; clickedItem=null}}>
                       <i class="ri-folder-add-line text-xl text-green-600"></i>
                     </button>
                     <button title="上传文件" class="cursor-pointer p-1 rounded hover:bg-purple-100 transition-colors" onclick={triggerUpload}>
@@ -189,7 +193,7 @@
               </div>
               <hr class="my-2 border-gray-200" />
               <!-- 文件列表 -->
-              <div class="p-4 relative min-h-60">
+              <div class=" relative min-h-60">
                 {#if loading}
                   <div class="absolute inset-0 bg-white/88 flex items-center justify-center z-10">
                     <div class="text-center text-gray-500">
@@ -211,11 +215,13 @@
                     {#each list.filter((item) => item.name !== '.gitkeep') as item (item.url)}
                       <ContextMenu>
                         {#snippet children()}
-                          <div class="w-24 h-20 border border-gray-200 rounded-lg p-2 hover:bg-gray-50 transition-colors">
+                          <div class="w-23 min-h-20 border border-gray-200 rounded-lg py-2 px-1 hover:bg-gray-50 transition-colors">
                             <div class="flex flex-col items-center cursor-pointer" onclick={() => clickItem(item)}>
-                              <i class="{getFileIcon(item)} text-3xl"></i>
+                              <!-- <i class="{getFileIcon(item)} text-3xl"></i> -->
+                              <i class="{getIcon(item.url, item.type)} text-3xl"></i>
+                              
                               <div class="mt-1 w-full text-center">
-                                <p class="text-xs font-medium text-gray-900 truncate" title={item.name}>
+                                <p class="text-xs font-medium text-gray-900 line-clamp-2 break-all" title={item.name}>
                                   {item.type === 'repo' ? getDisplayRepoName(item.name) : item.name}
                                 </p>
                                 {#if item.type === 'file'}
@@ -263,4 +269,4 @@
 <FavoriteModal bind:visible={showFavoriteModal} data={clickedItem} onSuccess={handleFavoriteCreated} />
 <FilePreviewModal bind:visible={showFilePreviewModal} data={clickedItem} />
 <EditRepoModal bind:visible={showEditRepoModal} onSuccess={handleRepoCreated} />
-<CreateFolderModal bind:visible={showCreateFolderModal} currentPath={current.url} onSuccess={handleFolderCreated} />
+<CreateFolderModal data={clickedItem} bind:visible={showCreateFolderModal} currentPath={current.url} onSuccess={handleFolderCreated} />

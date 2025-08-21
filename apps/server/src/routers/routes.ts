@@ -589,6 +589,39 @@ export function RegisterRoutes(router: KoaRouter,opts?:{multer?:ReturnType<typeo
             });
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsRepoController_rename: Record<string, TsoaRoute.ParameterSchema> = {
+                path: {"in":"body-prop","name":"path","required":true,"dataType":"string"},
+                repo: {"in":"body-prop","name":"repo","required":true,"dataType":"string"},
+                newName: {"in":"body-prop","name":"newName","required":true,"dataType":"string"},
+                oldName: {"in":"body-prop","name":"oldName","required":true,"dataType":"string"},
+        };
+        router.post('/api/repo/rename',
+            ...(fetchMiddlewares<Middleware>(RepoController)),
+            ...(fetchMiddlewares<Middleware>(RepoController.prototype.rename)),
+
+            async function RepoController_rename(context: Context, next: Next) {
+
+            let validatedArgs: any[] = [];
+            try {
+              validatedArgs = templateService.getValidatedArgs({ args: argsRepoController_rename, context, next });
+            } catch (err) {
+              const error = err as any;
+              error.message ||= JSON.stringify({ fields: error.fields });
+              context.status = error.status;
+              context.throw(context.status, error.message, error);
+            }
+
+            const controller = new RepoController();
+
+            return templateService.apiHandler({
+              methodName: 'rename',
+              controller,
+              context,
+              validatedArgs,
+              successStatus: undefined,
+            });
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsMeController_get: Record<string, TsoaRoute.ParameterSchema> = {
         };
         router.get('/api/me',

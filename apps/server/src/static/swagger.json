@@ -858,6 +858,60 @@
 				}
 			}
 		},
+		"/api/repo/rename": {
+			"post": {
+				"operationId": "RepoController-Rename",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse_any_"
+								}
+							}
+						}
+					}
+				},
+				"description": "上传文件到 repo 中",
+				"summary": "上传文件",
+				"tags": [
+					"repo"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"path": {
+										"type": "string"
+									},
+									"repo": {
+										"type": "string"
+									},
+									"newName": {
+										"type": "string"
+									},
+									"oldName": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"path",
+									"repo",
+									"newName",
+									"oldName"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
 		"/api/me": {
 			"get": {
 				"operationId": "MeController-Get",

@@ -1,7 +1,7 @@
 import { Prisma, repo as Repo } from '@prisma/client';
 import type { RepoOrDirOrFile } from '../types/repo.dto';
 import JsonResult, { ApiResponse } from '../utils/json-result';
-import { addFolder, queryOne, uploadFile } from '@/service/repo';
+import { addFolder, queryOne, uploadFile, rename } from '@/service/repo';
 import { createGithubRepo, queryList, remove } from '@/service/repo';
 import { Controller, Get, Post, Body, Route, Tags, Delete, Query, BodyProp, FormField, UploadedFile, File } from 'tsoa';
 
@@ -66,5 +66,15 @@ export class RepoController extends Controller {
   public async uploadFile(@FormField() path: string, @FormField() repo: string, @UploadedFile("file") file: File): ApiResponse<any> {
     const result = await uploadFile(file, path, repo);
     return JsonResult.success(result);
+  }
+
+   /**
+   * 上传文件到 repo 中
+   * @summary 上传文件
+   */
+  @Post('/rename')
+  public async rename(@BodyProp() path: string, @BodyProp() repo: string, @BodyProp() newName: string, @BodyProp() oldName: string): ApiResponse<any> {
+    const result = await rename(path, repo, newName, oldName)
+    return JsonResult.success();
   }
 }

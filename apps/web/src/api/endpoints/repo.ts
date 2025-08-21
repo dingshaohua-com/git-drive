@@ -15,6 +15,7 @@ import type {
   RepoAddFolderBody,
   RepoGetParams,
   RepoRemoveParams,
+  RepoRenameBody,
   RepoUploadFileBody
 } from '../model';
 
@@ -109,9 +110,24 @@ formData.append(`file`, repoUploadFileBody.file)
     },
       options);
     }
+  /**
+ * 上传文件到 repo 中
+ * @summary 上传文件
+ */
+export const rename = (
+    repoRenameBody: RepoRenameBody,
+ options?: SecondParameter<typeof customAxiosInstance>,) => {
+      return customAxiosInstance<JsonResultTypeAny>(
+      {url: `/api/repo/rename`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: repoRenameBody
+    },
+      options);
+    }
   export type GetListResult = NonNullable<Awaited<ReturnType<typeof getList>>>
 export type CreateResult = NonNullable<Awaited<ReturnType<typeof create>>>
 export type RemoveResult = NonNullable<Awaited<ReturnType<typeof remove>>>
 export type GetResult = NonNullable<Awaited<ReturnType<typeof get>>>
 export type AddFolderResult = NonNullable<Awaited<ReturnType<typeof addFolder>>>
 export type UploadFileResult = NonNullable<Awaited<ReturnType<typeof uploadFile>>>
+export type RenameResult = NonNullable<Awaited<ReturnType<typeof rename>>>

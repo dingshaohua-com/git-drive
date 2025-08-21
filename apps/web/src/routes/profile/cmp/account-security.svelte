@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Button, Label, Input } from 'flowbite-svelte';
   import { me } from '$/stores/me';
-  import toast from '../$/utils/toast';
+  import toast from '$/utils/toast';
 
   // 密码修改表单
   let passwordForm = $state({

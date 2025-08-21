@@ -1,39 +1,39 @@
 <script lang="ts">
   import { parseCustomUrl } from '$/routes/all/helper';
   import toast from '$/utils/toast';
-  import { Button, Modal } from 'flowbite-svelte';
+  import { Button, fileupload, Modal } from 'flowbite-svelte';
+  import { checkNormalStr } from '$/utils/form-check';
 
-  let { visible = $bindable(), currentPath = '', onSuccess } = $props();
+  let { visible = $bindable(), currentPath = '', onSuccess, data } = $props();
   let addError = $state('');
   let addLoading = $state(false);
   let folderName = $state('');
 
   async function onSubmit(event?: Event) {
     if (event) event.preventDefault();
-    addError = '';
-    if (!folderName.trim()) {
-      addError = '文件夹名称不能为空';
-      return;
-    }
-
-    // 验证文件夹名称格式
-    const invalidChars = /[<>:"/\\|?*]/;
-    if (invalidChars.test(folderName)) {
-      addError = '文件夹名称包含非法字符';
-      return;
-    }
-
+    const isEdit = !!data;
+    addError = checkNormalStr(folderName) || '';
+    if (addError) return;
     addLoading = true;
     const { repo, path } = parseCustomUrl(currentPath);
-    console.log('文件夹的时候', currentPath, path);
     try {
-      // 这里需要调用创建文件夹的 API
-      await api.repo.addFolder({
-        repo,
-        path: path + (path?'/':'') + folderName.trim(),
-      });
+      if (isEdit) {
+        await api.repo.rename({
+          repo,
+          path: path,
+          oldName: data.name,
+          newName: folderName.trim(),
+        });
+        
+      } else {
+        // 这里需要调用创建文件夹的 API
+        await api.repo.addFolder({
+          repo,
+          path: path + (path ? '/' : '') + folderName.trim(),
+        });
+      }
 
-      toast.success('文件夹创建成功');
+      toast.success('保存成功');
       visible = false;
       folderName = ''; // 重置表单
 
@@ -54,11 +54,13 @@
     if (!visible) {
       folderName = '';
       addError = '';
+    } else {
+      folderName = data?.name || '';
     }
   });
 </script>
 
-<Modal title="新建文件夹" bind:open={visible} autoclose={false} class="w-11/12 max-w-120">
+<Modal title={data ? '编辑文件夹' : '新建文件夹'} bind:open={visible} autoclose={false} class="w-11/12 max-w-120">
   <form onsubmit={onSubmit} class="flex flex-col gap-4 p-2">
     <div class="flex gap-2 items-center">
       <label class="font-medium text-gray-700 min-w-[60px]">文件夹名称 <span class="text-red-500">*</span></label>
@@ -84,7 +86,7 @@
         {#if addLoading}
           <span class="animate-spin mr-2 inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full align-middle"></span>
         {/if}
-        创建
+        保存
       </Button>
     </div>
   </form>
