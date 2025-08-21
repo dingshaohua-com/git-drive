@@ -43,7 +43,7 @@
     </div>
     <div class="flex  gap-2">
       <label class="font-medium text-gray-700 min-w-[60px]">简介</label>
-      <textarea class="flex-1 border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-300" placeholder="请输入" bind:value={repoDesc}  />
+      <textarea class="flex-1 border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-300" placeholder="请输入" bind:value={repoDesc}></textarea>
     </div>
     {#if addError}
       <div class="text-red-500 text-sm">{addError}</div>
