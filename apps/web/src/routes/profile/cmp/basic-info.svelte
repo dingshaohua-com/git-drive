@@ -70,7 +70,7 @@
         
         isUpdatingProfile = true;
         try {
-            await api.me.put({
+            await api.me.update({
                 nickname: userInfo.nickname,
                 username: userInfo.username,
                 avatar: userInfo.avatar
