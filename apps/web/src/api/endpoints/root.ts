@@ -10,7 +10,8 @@
 import type {
   JsonResultTypeAny,
   JsonResultTypeTokenStringMeUser,
-  LoginParams
+  LoginParams,
+  RootSendCodeBody
 } from '../model';
 
 import { customAxiosInstance } from '../api.base';
@@ -21,7 +22,7 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
   /**
- * 支持多种登录方式。   
+ * 支持多种登录方式。
 首次登录请用邮箱验证码登录方式，进去之后再设置密码，以后便可以用账密方式登录了！
 
 | 登录方式 | 字段 | 说明 |
@@ -57,7 +58,7 @@ export const logout = (
  * @summary 发送证码
  */
 export const sendCode = (
-    rootSendCodeBody: unknown,
+    rootSendCodeBody: RootSendCodeBody,
  options?: SecondParameter<typeof customAxiosInstance>,) => {
       return customAxiosInstance<JsonResultTypeAny>(
       {url: `/api/send-code`, method: 'POST',

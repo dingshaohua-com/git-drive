@@ -46,10 +46,10 @@ export const login = async (params): Promise<string> => {
 };
 
 export const sendCode = async (params) => {
-  const { email, phone } = params;
+  const { email, phone, type="login" } = params;
   if (email) {
     // 检查上次验证码是否还在有效期内
-    const existingCode = await redis.get(`email:${email}`);
+    const existingCode = await redis.get(`email-${type}:${email}`);
     if (existingCode) {
       throw new NormalError('上次验证码还在有效期范围内！');
     }
@@ -58,12 +58,12 @@ export const sendCode = async (params) => {
     const verifyCode = Math.floor(Math.random() * 1000000)
       .toString()
       .padStart(6, '0');
-    const sendRes = sendMail(email, verifyCode);
+    const sendRes = sendMail(email, verifyCode, type);
     // 发送验证码 // 存储邮箱验证码（1分钟过期）
-    await redis.set(`email:${email}`, verifyCode, 'EX', 60 * 1);
+    await redis.set(`email-${type}:${email}`, verifyCode, 'EX', 60 * 1);
   } else if (phone) {
     // 检查上次验证码是否还在有效期内
-    const existingCode = await redis.get(`phone:${phone}`);
+    const existingCode = await redis.get(`phone-${type}:${phone}`);
     if (existingCode) {
       throw new NormalError('上次验证码还在有效期范围内！');
     }

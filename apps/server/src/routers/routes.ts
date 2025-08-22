@@ -370,7 +370,7 @@ export function RegisterRoutes(router: KoaRouter,opts?:{multer?:ReturnType<typeo
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsRootController_sendCode: Record<string, TsoaRoute.ParameterSchema> = {
-                requestBody: {"in":"body","name":"requestBody","required":true,"dataType":"any"},
+                params: {"in":"body","name":"params","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"type":{"dataType":"string"},"phone":{"dataType":"string"},"email":{"dataType":"string"}}},
         };
         router.post('/api/send-code',
             ...(fetchMiddlewares<Middleware>(RootController)),
@@ -674,6 +674,36 @@ export function RegisterRoutes(router: KoaRouter,opts?:{multer?:ReturnType<typeo
 
             return templateService.apiHandler({
               methodName: 'update',
+              controller,
+              context,
+              validatedArgs,
+              successStatus: undefined,
+            });
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsMeController_resetEmail: Record<string, TsoaRoute.ParameterSchema> = {
+                params: {"in":"body","name":"params","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"code":{"dataType":"string","required":true},"email":{"dataType":"string","required":true}}},
+        };
+        router.post('/api/me/reset-email',
+            ...(fetchMiddlewares<Middleware>(MeController)),
+            ...(fetchMiddlewares<Middleware>(MeController.prototype.resetEmail)),
+
+            async function MeController_resetEmail(context: Context, next: Next) {
+
+            let validatedArgs: any[] = [];
+            try {
+              validatedArgs = templateService.getValidatedArgs({ args: argsMeController_resetEmail, context, next });
+            } catch (err) {
+              const error = err as any;
+              error.message ||= JSON.stringify({ fields: error.fields });
+              context.status = error.status;
+              context.throw(context.status, error.message, error);
+            }
+
+            const controller = new MeController();
+
+            return templateService.apiHandler({
+              methodName: 'resetEmail',
               controller,
               context,
               validatedArgs,

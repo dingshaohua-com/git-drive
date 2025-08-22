@@ -15,23 +15,15 @@
     verificationCode: '',
   });
 
-  // 手机号修改表单
-  let phoneForm = $state({
-    newPhone: '',
-    verificationCode: '',
-  });
-
   // 状态管理
   let isUpdatingPassword = $state(false);
   let isUpdatingEmail = $state(false);
   let isUpdatingPhone = $state(false);
   let isSendingEmailCode = $state(false);
-  let isSendingPhoneCode = $state(false);
 
   // 表单验证错误
   let passwordErrors = $state({ oldPassword: '', newPassword: '' });
   let emailErrors = $state({ newEmail: '', verificationCode: '' });
-  let phoneErrors = $state({ newPhone: '', verificationCode: '' });
 
   // 验证密码表单
   const validatePasswordForm = () => {
@@ -50,16 +42,6 @@
     else if (!emailRegex.test(emailForm.newEmail)) emailErrors.newEmail = '请输入有效的邮箱地址';
     if (!emailForm.verificationCode) emailErrors.verificationCode = '请输入验证码';
     return !emailErrors.newEmail && !emailErrors.verificationCode;
-  };
-
-  // 验证手机号表单
-  const validatePhoneForm = () => {
-    phoneErrors = { newPhone: '', verificationCode: '' };
-    const phoneRegex = /^1[3-9]\d{9}$/;
-    if (!phoneForm.newPhone) phoneErrors.newPhone = '请输入新手机号';
-    else if (!phoneRegex.test(phoneForm.newPhone)) phoneErrors.newPhone = '请输入有效的手机号';
-    if (!phoneForm.verificationCode) phoneErrors.verificationCode = '请输入验证码';
-    return !phoneErrors.newPhone && !phoneErrors.verificationCode;
   };
 
   // 更新密码
@@ -97,10 +79,8 @@
 
     isSendingEmailCode = true;
     try {
-      await api.me.sendEmailCode({ email: emailForm.newEmail });
+      await api.root.sendCode({ email: emailForm.newEmail, type: 'resetEmail' });
       toast.success('验证码已发送到邮箱');
-    } catch (error) {
-      toast.error('验证码发送失败');
     } finally {
       isSendingEmailCode = false;
     }
@@ -112,61 +92,15 @@
 
     isUpdatingEmail = true;
     try {
-      await api.me.put({
+      await api.me.resetEmail({
         email: emailForm.newEmail,
-        emailCode: emailForm.verificationCode,
+        code: emailForm.verificationCode,
       });
       await me.sync();
       emailForm = { newEmail: '', verificationCode: '' };
       toast.success('邮箱更新成功');
-    } catch (error) {
-      toast.error('邮箱更新失败');
-    } finally {
+    }finally {
       isUpdatingEmail = false;
-    }
-  };
-
-  // 发送手机验证码
-  const sendPhoneCode = async () => {
-    if (!phoneForm.newPhone) {
-      toast.error('请先输入手机号');
-      return;
-    }
-
-    const phoneRegex = /^1[3-9]\d{9}$/;
-    if (!phoneRegex.test(phoneForm.newPhone)) {
-      toast.error('请输入有效的手机号');
-      return;
-    }
-
-    isSendingPhoneCode = true;
-    try {
-      await api.me.sendPhoneCode({ phone: phoneForm.newPhone });
-      toast.success('验证码已发送到手机');
-    } catch (error) {
-      toast.error('验证码发送失败');
-    } finally {
-      isSendingPhoneCode = false;
-    }
-  };
-
-  // 更新手机号
-  const updatePhone = async () => {
-    if (!validatePhoneForm()) return;
-
-    isUpdatingPhone = true;
-    try {
-      await api.me.put({
-        phone: phoneForm.newPhone,
-        phoneCode: phoneForm.verificationCode,
-      });
-      await me.sync();
-      phoneForm = { newPhone: '', verificationCode: '' };
-      toast.success('手机号更新成功');
-    } catch (error) {
-      toast.error('手机号更新失败');
-    } finally {
-      isUpdatingPhone = false;
     }
   };
 </script>
@@ -244,36 +178,13 @@
 
   <!-- 手机号设置 -->
   <div>
-    <h3 class="text-lg font-medium text-gray-900 mb-4">手机号设置</h3>
+    <h3 class="text-lg font-medium text-gray-900 mb-4">注销账号</h3>
     <div class="space-y-4">
-      <div class="flex items-center space-x-4">
-        <Label for="newPhone" class="w-12 flex-shrink-0">新手机</Label>
-        <div class="flex-1">
-          <Input id="newPhone" bind:value={phoneForm.newPhone} placeholder="请输入新的手机号" />
-          {#if phoneErrors.newPhone}
-            <p class="text-red-500 text-sm mt-1">{phoneErrors.newPhone}</p>
-          {/if}
-        </div>
-      </div>
-
-      <div class="flex items-center space-x-4">
-        <Label for="phoneCode" class="w-12 flex-shrink-0">验证码</Label>
-        <div class="flex-1">
-          <div class="flex space-x-2">
-            <Input id="phoneCode" bind:value={phoneForm.verificationCode} placeholder="请输入验证码" class="flex-1" />
-            <Button color="light" onclick={sendPhoneCode} disabled={isSendingPhoneCode}>
-              {isSendingPhoneCode ? '发送中...' : '发验证码'}
-            </Button>
-          </div>
-          {#if phoneErrors.verificationCode}
-            <p class="text-red-500 text-sm mt-1">{phoneErrors.verificationCode}</p>
-          {/if}
-        </div>
-      </div>
+      注销账号后，账号信息被永久删除且无法恢复，请谨慎操作。
 
       <div class="flex justify-end">
-        <Button onclick={updatePhone} disabled={isUpdatingPhone}>
-          {isUpdatingPhone ? '更新中...' : '保存'}
+        <Button disabled={isUpdatingPhone}>
+          {isUpdatingPhone ? '更新中...' : '确定'}
         </Button>
       </div>
     </div>

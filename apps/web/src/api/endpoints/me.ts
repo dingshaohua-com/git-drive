@@ -8,7 +8,9 @@
  * OpenAPI spec version: 1.0.0
  */
 import type {
+  JsonResultTypeAny,
   JsonResultTypeUser,
+  MeResetEmailBody,
   PrismaUserUpdateInput
 } from '../model';
 
@@ -43,5 +45,19 @@ export const update = (
     },
       options);
     }
+  /**
+ * @summary 重置邮箱
+ */
+export const resetEmail = (
+    meResetEmailBody: MeResetEmailBody,
+ options?: SecondParameter<typeof customAxiosInstance>,) => {
+      return customAxiosInstance<JsonResultTypeAny>(
+      {url: `/api/me/reset-email`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: meResetEmailBody
+    },
+      options);
+    }
   export type GetResult = NonNullable<Awaited<ReturnType<typeof get>>>
 export type UpdateResult = NonNullable<Awaited<ReturnType<typeof update>>>
+export type ResetEmailResult = NonNullable<Awaited<ReturnType<typeof resetEmail>>>

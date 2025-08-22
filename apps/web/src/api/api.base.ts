@@ -41,7 +41,7 @@ axios.interceptors.response.use(
     if (error.status === 401) {
       toast.error('登录失效，即将跳转至登录');
       // 清除认证状态
-      auth.logout();
+      auth.logout(false);
       setTimeout(() => {
         location.href = '/login';
       }, 2000);
