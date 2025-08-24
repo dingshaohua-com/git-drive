@@ -11,6 +11,7 @@ import type {
   JsonResultTypeAny,
   JsonResultTypeUser,
   MeResetEmailBody,
+  MeResetPwdBody,
   PrismaUserUpdateInput
 } from '../model';
 
@@ -58,6 +59,20 @@ export const resetEmail = (
     },
       options);
     }
+  /**
+ * @summary 重置密码
+ */
+export const resetPwd = (
+    meResetPwdBody: MeResetPwdBody,
+ options?: SecondParameter<typeof customAxiosInstance>,) => {
+      return customAxiosInstance<JsonResultTypeAny>(
+      {url: `/api/me/reset-pwd`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: meResetPwdBody
+    },
+      options);
+    }
   export type GetResult = NonNullable<Awaited<ReturnType<typeof get>>>
 export type UpdateResult = NonNullable<Awaited<ReturnType<typeof update>>>
 export type ResetEmailResult = NonNullable<Awaited<ReturnType<typeof resetEmail>>>
+export type ResetPwdResult = NonNullable<Awaited<ReturnType<typeof resetPwd>>>

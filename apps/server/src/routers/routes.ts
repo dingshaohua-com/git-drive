@@ -711,6 +711,36 @@ export function RegisterRoutes(router: KoaRouter,opts?:{multer?:ReturnType<typeo
             });
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsMeController_resetPwd: Record<string, TsoaRoute.ParameterSchema> = {
+                params: {"in":"body","name":"params","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"newPwd":{"dataType":"string","required":true}}},
+        };
+        router.post('/api/me/reset-pwd',
+            ...(fetchMiddlewares<Middleware>(MeController)),
+            ...(fetchMiddlewares<Middleware>(MeController.prototype.resetPwd)),
+
+            async function MeController_resetPwd(context: Context, next: Next) {
+
+            let validatedArgs: any[] = [];
+            try {
+              validatedArgs = templateService.getValidatedArgs({ args: argsMeController_resetPwd, context, next });
+            } catch (err) {
+              const error = err as any;
+              error.message ||= JSON.stringify({ fields: error.fields });
+              context.status = error.status;
+              context.throw(context.status, error.message, error);
+            }
+
+            const controller = new MeController();
+
+            return templateService.apiHandler({
+              methodName: 'resetPwd',
+              controller,
+              context,
+              validatedArgs,
+              successStatus: undefined,
+            });
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsFavoriteController_getList: Record<string, TsoaRoute.ParameterSchema> = {
         };
         router.get('/api/favorite/list',

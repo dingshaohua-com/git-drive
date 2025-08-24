@@ -3,6 +3,7 @@ import { queryOne, update, resetEmail } from '@/service/user';
 import { user as User, Prisma } from '@prisma/client';
 import JsonResult, { ApiResponse } from '../utils/json-result';
 import { Controller, Get, Post, Body, Route, Header, Tags, Hidden, Put } from 'tsoa';
+import { decrypt } from '@/utils/crypto-helper';
 
 @Route('api/me')
 @Tags('me')
@@ -34,5 +35,17 @@ export class MeController extends Controller {
   public async resetEmail(@Body() params: { email: string; code: string }): ApiResponse {
     const results = await resetEmail(params);
     return JsonResult.success(results);
+  }
+
+   /**
+   * @summary 重置密码
+   */
+  @Post('reset-pwd')
+  public async resetPwd(@Body() params: { newPwd: string}): ApiResponse {
+    console.log(params.newPwd);
+    const decryptedData = decrypt(params.newPwd);
+    console.log(decryptedData.toString());
+    
+    return JsonResult.success();
   }
 }

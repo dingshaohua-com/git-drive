@@ -1024,6 +1024,47 @@
 				}
 			}
 		},
+		"/api/me/reset-pwd": {
+			"post": {
+				"operationId": "MeController-ResetPwd",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse"
+								}
+							}
+						}
+					}
+				},
+				"summary": "重置密码",
+				"tags": [
+					"me"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"newPwd": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"newPwd"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
 		"/api/favorite/list": {
 			"get": {
 				"operationId": "FavoriteController-GetList",

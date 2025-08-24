@@ -21,9 +21,11 @@ model repo {
 }
 
 model sys_conf {
-  gtoken String @db.VarChar(255)
-  id     Int    @id @default(autoincrement())
-  vcode  Int?
+  gtoken     String  @db.VarChar(255)
+  id         Int     @id @default(autoincrement())
+  vcode      Int?
+  publicKey  String? @db.Text
+  privateKey String? @db.Text
 }
 
 model user {

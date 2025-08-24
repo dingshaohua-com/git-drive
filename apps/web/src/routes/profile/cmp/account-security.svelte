@@ -2,6 +2,7 @@
   import { Button, Label, Input } from 'flowbite-svelte';
   import { me } from '$/stores/me';
   import toast from '$/utils/toast';
+  import { encrypt } from '$/utils/crypto-helper';
 
   // 密码修改表单
   let passwordForm = $state({
@@ -51,11 +52,16 @@
     isUpdatingPassword = true;
     try {
       const requestData = { newPassword: passwordForm.newPassword };
-      if ($me.hasPwd) requestData.oldPassword = passwordForm.oldPassword;
+      // if ($me.hasPwd) requestData.oldPassword = passwordForm.oldPassword;
 
-      await api.me.put(requestData);
-      passwordForm = { oldPassword: '', newPassword: '' };
-      toast.success($me.hasPwd ? '密码修改成功' : '密码设置成功');
+      const encryptedNewPassword = await encrypt(requestData.newPassword);
+      requestData.newPassword = encryptedNewPassword;
+      console.log(requestData);
+      api.me.resetPwd({newPwd: requestData.newPassword});
+
+      // await api.me.put(requestData);
+      // passwordForm = { oldPassword: '', newPassword: '' };
+      // toast.success($me.hasPwd ? '密码修改成功' : '密码设置成功');
       await me.sync();
     } catch (error) {
       toast.error($me.hasPwd ? '密码修改失败' : '密码设置失败');

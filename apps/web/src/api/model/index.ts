@@ -31,6 +31,7 @@ export * from './jsonResultTypeTokenStringMeUserData';
 export * from './jsonResultTypeUser';
 export * from './loginParams';
 export * from './meResetEmailBody';
+export * from './meResetPwdBody';
 export * from './omitPrismaFavoriteCreateInputUid';
 export * from './pickPrismaFavoriteCreateInputExcludeKeyofPrismaFavoriteCreateInputUid';
 export * from './prismaNullableStringFieldUpdateOperationsInput';

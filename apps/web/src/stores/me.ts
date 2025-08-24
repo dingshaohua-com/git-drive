@@ -29,7 +29,7 @@ function createMeStore() {
   const getInitialState = (): Me => {
     if (browser) {
       const meStorage = localStorage.getItem('me');
-      return meStorage ? { ...JSON.parse(meStorage), isLoading: false } : cloneDeep(initUserVal);
+      return (meStorage && meStorage!=='undefined') ? { ...JSON.parse(meStorage), isLoading: false } : cloneDeep(initUserVal);
     }
     return cloneDeep(initUserVal);
   };
