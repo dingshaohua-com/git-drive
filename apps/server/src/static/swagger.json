@@ -1051,11 +1051,15 @@
 						"application/json": {
 							"schema": {
 								"properties": {
+									"aseKeyEncrypt": {
+										"type": "string"
+									},
 									"newPwd": {
 										"type": "string"
 									}
 								},
 								"required": [
+									"aseKeyEncrypt",
 									"newPwd"
 								],
 								"type": "object"

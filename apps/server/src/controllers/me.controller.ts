@@ -1,9 +1,9 @@
 import reqCtx from '@/middleware/req-ctx';
-import { queryOne, update, resetEmail } from '@/service/user';
 import { user as User, Prisma } from '@prisma/client';
+import { queryOne, update, resetEmail } from '@/service/user';
 import JsonResult, { ApiResponse } from '../utils/json-result';
+import { decrypt, decryptByAesStr } from '@/utils/crypto-helper';
 import { Controller, Get, Post, Body, Route, Header, Tags, Hidden, Put } from 'tsoa';
-import { decrypt } from '@/utils/crypto-helper';
 
 @Route('api/me')
 @Tags('me')
@@ -37,15 +37,19 @@ export class MeController extends Controller {
     return JsonResult.success(results);
   }
 
-   /**
+  /**
    * @summary 重置密码
    */
   @Post('reset-pwd')
-  public async resetPwd(@Body() params: { newPwd: string}): ApiResponse {
+  public async resetPwd(@Body() params: { newPwd: string; aseKeyEncrypt: string }): ApiResponse {
     console.log(params.newPwd);
-    const decryptedData = decrypt(params.newPwd);
-    console.log(decryptedData.toString());
+     console.log(params.aseKeyEncrypt);
+    const aseKeyStr = decrypt(params.aseKeyEncrypt);
     
+    // const newPwd = decryptByAesStr(params.newPwd, aseKeyStr);
+
+    // console.log(newPwd);
+
     return JsonResult.success();
   }
 }

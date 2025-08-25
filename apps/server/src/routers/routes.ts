@@ -712,7 +712,7 @@ export function RegisterRoutes(router: KoaRouter,opts?:{multer?:ReturnType<typeo
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsMeController_resetPwd: Record<string, TsoaRoute.ParameterSchema> = {
-                params: {"in":"body","name":"params","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"newPwd":{"dataType":"string","required":true}}},
+                params: {"in":"body","name":"params","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"aseKeyEncrypt":{"dataType":"string","required":true},"newPwd":{"dataType":"string","required":true}}},
         };
         router.post('/api/me/reset-pwd',
             ...(fetchMiddlewares<Middleware>(MeController)),

@@ -2,7 +2,7 @@
   import { Button, Label, Input } from 'flowbite-svelte';
   import { me } from '$/stores/me';
   import toast from '$/utils/toast';
-  import { encrypt } from '$/utils/crypto-helper';
+  import { genAesAndEncrypt } from '$/utils/crypto-helper';
 
   // 密码修改表单
   let passwordForm = $state({
@@ -54,10 +54,11 @@
       const requestData = { newPassword: passwordForm.newPassword };
       // if ($me.hasPwd) requestData.oldPassword = passwordForm.oldPassword;
 
-      const encryptedNewPassword = await encrypt(requestData.newPassword);
-      requestData.newPassword = encryptedNewPassword;
-      console.log(requestData);
-      api.me.resetPwd({newPwd: requestData.newPassword});
+      const res = await genAesAndEncrypt(requestData.newPassword);
+      console.log(res);
+      
+      requestData.newPassword = res.contentEncrypt;
+      api.me.resetPwd({newPwd: requestData.newPassword, aseKeyEncrypt: res.aseKeyEncrypt});
 
       // await api.me.put(requestData);
       // passwordForm = { oldPassword: '', newPassword: '' };
