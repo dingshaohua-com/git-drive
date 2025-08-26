@@ -37,4 +37,5 @@ model user {
   des      String? @db.VarChar(255)
   nickname String? @db.VarChar(255)
   avatar   String? @db.VarChar(255)
+  salt     String? @db.VarChar(255)
 }

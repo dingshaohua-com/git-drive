@@ -9,6 +9,9 @@
 		"schemas": {
 			"DefaultSelection_Prisma._36_userPayload_": {
 				"properties": {
+					"salt": {
+						"type": "string"
+					},
 					"avatar": {
 						"type": "string"
 					},
@@ -36,6 +39,7 @@
 					}
 				},
 				"required": [
+					"salt",
 					"avatar",
 					"nickname",
 					"des",
@@ -301,6 +305,17 @@
 			},
 			"Prisma.userUpdateInput": {
 				"properties": {
+					"salt": {
+						"anyOf": [
+							{
+								"$ref": "#/components/schemas/Prisma.NullableStringFieldUpdateOperationsInput"
+							},
+							{
+								"type": "string"
+							}
+						],
+						"nullable": true
+					},
 					"avatar": {
 						"anyOf": [
 							{

@@ -1,5 +1,6 @@
 import reqCtx from '@/middleware/req-ctx';
 import { user as User, Prisma } from '@prisma/client';
+import { toHash } from '@/utils/crypto-helper/hash-handler';
 import { queryOne, update, resetEmail } from '@/service/user';
 import JsonResult, { ApiResponse } from '../utils/json-result';
 import { toSymmetric } from '@/utils/crypto-helper/gen-crypto';
@@ -43,6 +44,8 @@ export class MeController extends Controller {
    */
   @Post('reset-pwd')
   public async resetPwd(@Body() params: { newPwd: string; aseKeyEncrypt: string }): ApiResponse {
+    const user = reqCtx.get<User>('user');
+
     console.log(params.newPwd);
     console.log(params.aseKeyEncrypt);
     const aseKeyStr = decryptByAsymmetric(params.aseKeyEncrypt);
@@ -54,7 +57,15 @@ export class MeController extends Controller {
     console.log('KeyObject导出的Buffer长度:', aseKey.export().length);
 
     const newPwd = decryptBySymmetric(params.newPwd, aseKey);
-    console.log('解密后的新密码:', newPwd);
-    return JsonResult.success();
+
+    let result;
+    if (user.salt) {
+      const { hash } = toHash(newPwd, user.salt);
+      result = await update({ password: hash }, user.id);
+    } else {
+      const { hash, salt } = toHash(newPwd);
+      result = await update({ salt, password: hash }, user.id);
+    }
+    return JsonResult.success(result);
   }
 }

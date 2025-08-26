@@ -9,7 +9,7 @@ const asyncLocalStorage = new AsyncLocalStorage<Map<string, any>>();
     const store = asyncLocalStorage.getStore();
     if (store) store.set(key, value);
   },
-  get: (key: string) => {
+  get: <T = any>(key: string): T | undefined => {
     const store = asyncLocalStorage.getStore();
     return store ? store.get(key) : undefined;
   },
