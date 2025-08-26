@@ -78,7 +78,7 @@
 			},
 			"ApiResponse_User_": {
 				"$ref": "#/components/schemas/JsonResultType_User_",
-				"description": "控制器方法返回类型的通用别名\n用于简化 Promise<JsonResultType<T>> 的写法"
+				"description": "控制器方法返回类型的通用别名\r\n用于简化 Promise<JsonResultType<T>> 的写法"
 			},
 			"JsonResultType__token-string--me-User__": {
 				"properties": {
@@ -115,7 +115,7 @@
 			},
 			"ApiResponse__token-string--me-User__": {
 				"$ref": "#/components/schemas/JsonResultType__token-string--me-User__",
-				"description": "控制器方法返回类型的通用别名\n用于简化 Promise<JsonResultType<T>> 的写法"
+				"description": "控制器方法返回类型的通用别名\r\n用于简化 Promise<JsonResultType<T>> 的写法"
 			},
 			"LoginParams": {
 				"properties": {
@@ -158,7 +158,7 @@
 			},
 			"ApiResponse": {
 				"$ref": "#/components/schemas/JsonResultType_any_",
-				"description": "控制器方法返回类型的通用别名\n用于简化 Promise<JsonResultType<T>> 的写法"
+				"description": "控制器方法返回类型的通用别名\r\n用于简化 Promise<JsonResultType<T>> 的写法"
 			},
 			"RepoOrDirOrFile": {
 				"properties": {
@@ -209,7 +209,7 @@
 			},
 			"ApiResponse_RepoOrDirOrFile-Array_": {
 				"$ref": "#/components/schemas/JsonResultType_RepoOrDirOrFile-Array_",
-				"description": "控制器方法返回类型的通用别名\n用于简化 Promise<JsonResultType<T>> 的写法"
+				"description": "控制器方法返回类型的通用别名\r\n用于简化 Promise<JsonResultType<T>> 的写法"
 			},
 			"DefaultSelection_Prisma._36_repoPayload_": {
 				"properties": {
@@ -259,7 +259,7 @@
 			},
 			"ApiResponse_Repo_": {
 				"$ref": "#/components/schemas/JsonResultType_Repo_",
-				"description": "控制器方法返回类型的通用别名\n用于简化 Promise<JsonResultType<T>> 的写法"
+				"description": "控制器方法返回类型的通用别名\r\n用于简化 Promise<JsonResultType<T>> 的写法"
 			},
 			"Prisma.repoCreateInput": {
 				"properties": {
@@ -284,7 +284,7 @@
 			},
 			"ApiResponse_any_": {
 				"$ref": "#/components/schemas/JsonResultType_any_",
-				"description": "控制器方法返回类型的通用别名\n用于简化 Promise<JsonResultType<T>> 的写法"
+				"description": "控制器方法返回类型的通用别名\r\n用于简化 Promise<JsonResultType<T>> 的写法"
 			},
 			"Prisma.StringFieldUpdateOperationsInput": {
 				"properties": {
@@ -450,7 +450,7 @@
 			},
 			"ApiResponse_Favorite-Array_": {
 				"$ref": "#/components/schemas/JsonResultType_Favorite-Array_",
-				"description": "控制器方法返回类型的通用别名\n用于简化 Promise<JsonResultType<T>> 的写法"
+				"description": "控制器方法返回类型的通用别名\r\n用于简化 Promise<JsonResultType<T>> 的写法"
 			},
 			"JsonResultType_Favorite_": {
 				"properties": {
@@ -475,7 +475,7 @@
 			},
 			"ApiResponse_Favorite_": {
 				"$ref": "#/components/schemas/JsonResultType_Favorite_",
-				"description": "控制器方法返回类型的通用别名\n用于简化 Promise<JsonResultType<T>> 的写法"
+				"description": "控制器方法返回类型的通用别名\r\n用于简化 Promise<JsonResultType<T>> 的写法"
 			},
 			"Pick_Prisma.favoriteCreateInput.Exclude_keyofPrisma.favoriteCreateInput.uid__": {
 				"properties": {
@@ -556,7 +556,7 @@
 						}
 					}
 				},
-				"description": "支持多种登录方式。\n首次登录请用邮箱验证码登录方式，进去之后再设置密码，以后便可以用账密方式登录了！\n\n| 登录方式 | 字段 | 说明 |\n|----------|----------|------|\n| 账号密码 | username, password | 账密登录 |\n| 邮箱验证码 | email, code | 邮箱 + 验证码登录 |",
+				"description": "支持多种登录方式。\r\n首次登录请用邮箱验证码登录方式，进去之后再设置密码，以后便可以用账密方式登录了！\r\n\r\n| 登录方式 | 字段 | 说明 |\r\n|----------|----------|------|\r\n| 账号密码 | username, password | 账密登录 |\r\n| 邮箱验证码 | email, code | 邮箱 + 验证码登录 |",
 				"summary": "登录",
 				"tags": [
 					"root"

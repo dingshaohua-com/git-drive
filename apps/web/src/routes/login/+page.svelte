@@ -7,6 +7,9 @@
   import { slide } from 'svelte/transition';
   import type { LoginParams } from '$/api/model/loginParams';
   import '../../api/global-api'; // 确保全局 API 已初始化
+  import {encryptAll} from "@dingshaohua.com/hybrid-crypto/browser";
+  import { loadFile } from '$/utils/common';
+
 
   
 
@@ -24,14 +27,18 @@
     event.preventDefault();
     defaultModal = true;
 
-    try {
-      await auth.login(formData);
-      goto('/home', { replaceState: true });
-    } catch (error: any) {
-      toast.error(error);
-    } finally {
-      defaultModal = false;
-    }
+       const publicKeyText = await loadFile('./publicKey.pem');
+
+    const res = await encryptAll(formData.password, publicKeyText)
+    console.log(res);
+    // try {
+    //   await auth.login(formData);
+    //   goto('/home', { replaceState: true });
+    // } catch (error: any) {
+    //   toast.error(error);
+    // } finally {
+    //   defaultModal = false;
+    // }
   };
 
   // 发送验证码
