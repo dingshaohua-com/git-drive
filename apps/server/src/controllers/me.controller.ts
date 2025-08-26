@@ -2,8 +2,9 @@ import reqCtx from '@/middleware/req-ctx';
 import { user as User, Prisma } from '@prisma/client';
 import { queryOne, update, resetEmail } from '@/service/user';
 import JsonResult, { ApiResponse } from '../utils/json-result';
-import { decrypt, decryptByAesStr } from '@/utils/crypto-helper';
+import { toSymmetric } from '@/utils/crypto-helper/gen-crypto';
 import { Controller, Get, Post, Body, Route, Header, Tags, Hidden, Put } from 'tsoa';
+import { decryptByAsymmetric, decryptBySymmetric } from '@/utils/crypto-helper/decrypt-encrypt';
 
 @Route('api/me')
 @Tags('me')
@@ -43,13 +44,17 @@ export class MeController extends Controller {
   @Post('reset-pwd')
   public async resetPwd(@Body() params: { newPwd: string; aseKeyEncrypt: string }): ApiResponse {
     console.log(params.newPwd);
-     console.log(params.aseKeyEncrypt);
-    const aseKeyStr = decrypt(params.aseKeyEncrypt);
-    
-    // const newPwd = decryptByAesStr(params.newPwd, aseKeyStr);
+    console.log(params.aseKeyEncrypt);
+    const aseKeyStr = decryptByAsymmetric(params.aseKeyEncrypt);
+    console.log('解密后的密钥字符串:', aseKeyStr);
+    console.log('密钥字符串长度:', aseKeyStr.length);
 
-    // console.log(newPwd);
+    const aseKey = toSymmetric(aseKeyStr);
+    console.log('生成的KeyObject:', aseKey);
+    console.log('KeyObject导出的Buffer长度:', aseKey.export().length);
 
+    const newPwd = decryptBySymmetric(params.newPwd, aseKey);
+    console.log('解密后的新密码:', newPwd);
     return JsonResult.success();
   }
 }
