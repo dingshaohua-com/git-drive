@@ -91,7 +91,7 @@
     <!-- <img class="w-20 mx-auto rounded-full" src={logoImg} alt="" /> -->
     <div class="pt-1 h-6">
       {#if quickLoginType === 'password'}
-        <div class="text-red-300 text-xs text-center">若首次使用 请选邮箱/手机，进入后再设密码即可</div>
+        <div class="text-red-300 text-xs text-center">首次使用请选邮箱，后再设密码即可</div>
       {/if}
     </div>
 
@@ -128,7 +128,7 @@
     <div class="mt-5">
       <div class="flex items-center justify-center mb-4">
         <div class="flex-1 h-px bg-gray-200"></div>
-        <span class="px-3 text-sm text-gray-500">登录方式</span>
+        <span class="px-3 text-sm text-gray-500">登录方式{#if quickLoginType === 'password'}<a href="/forgot-pwd" class="text-sm text-blue-500 hover:text-blue-600">（忘记密码？）</a>{/if}</span>
         <div class="flex-1 h-px bg-gray-200"></div>
       </div>
 

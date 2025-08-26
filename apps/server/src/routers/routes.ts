@@ -340,7 +340,7 @@ export function RegisterRoutes(router: KoaRouter,opts?:{multer?:ReturnType<typeo
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsRootController_logout: Record<string, TsoaRoute.ParameterSchema> = {
-                authorization: {"in":"header","name":"Authorization","required":true,"dataType":"string"},
+                author: {"in":"header","name":"authorization","required":true,"dataType":"string"},
         };
         router.post('/api/logout',
             ...(fetchMiddlewares<Middleware>(RootController)),

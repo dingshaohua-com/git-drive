@@ -59,8 +59,10 @@ export class RootController extends Controller {
    * @summary 登出
    */
   @Post('logout')
-  public async logout(@Header('Authorization') authorization: string): ApiResponse {
-    const token = authorization.replace('Bearer ', '');
+  public async logout(@Header('authorization') author: string): ApiResponse {
+    const token = author.replace('Bearer ', '');
+    console.log(777888, token);
+    
     if (token) {
       // 删除 Redis 中的 token
       await redis.del(`token:${token}`);
