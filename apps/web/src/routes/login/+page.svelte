@@ -110,6 +110,10 @@
           <div>
             <input type="password" bind:value={formData.password} placeholder="请输入密码" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:outline-none" />
           </div>
+
+          <div class="text-right">
+            <a href="/forgot-pwd" class="text-sm text-blue-500 hover:text-blue-600">忘记密码？</a>
+          </div>
         {/if}
 
         {#if quickLoginType === 'email'}
