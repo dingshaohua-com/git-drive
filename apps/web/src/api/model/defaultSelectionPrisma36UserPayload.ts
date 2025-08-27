@@ -9,6 +9,7 @@
  */
 
 export interface DefaultSelectionPrisma36UserPayload {
+  salt: string;
   avatar: string;
   nickname: string;
   des: string;

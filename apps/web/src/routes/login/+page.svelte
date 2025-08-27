@@ -7,11 +7,8 @@
   import { slide } from 'svelte/transition';
   import type { LoginParams } from '$/api/model/loginParams';
   import '../../api/global-api'; // 确保全局 API 已初始化
-  import {encryptAll} from "@dingshaohua.com/hybrid-crypto/browser";
+  import { encryptAll } from '@dingshaohua.com/hybrid-crypto/browser';
   import { loadFile } from '$/utils/common';
-
-
-  
 
   let defaultModal = $state(false);
   let quickLoginType = $state<QuickLoginType | null>('email');
@@ -19,7 +16,7 @@
   let countdown = $state(0);
   let formData = $state<LoginParams>({
     email: '960423114@qq.com',
-    code: '960912'
+    code: '960912',
   });
 
   // 登录
@@ -27,18 +24,18 @@
     event.preventDefault();
     defaultModal = true;
 
-       const publicKeyText = await loadFile('./publicKey.pem');
-
-    const res = await encryptAll(formData.password, publicKeyText)
-    console.log(res);
-    // try {
-    //   await auth.login(formData);
-    //   goto('/home', { replaceState: true });
-    // } catch (error: any) {
-    //   toast.error(error);
-    // } finally {
-    //   defaultModal = false;
-    // }
+    const publicKeyText = await loadFile('./publicKey.pem');
+    const res = await encryptAll(formData.password, publicKeyText);
+    console.log(998877, formData);
+    
+    try {
+      await auth.login({account: formData.account, password: res.contentEncrypt, aseKeyEncrypt: res.aseKeyEncrypt });
+      goto('/home', { replaceState: true });
+    } catch (error: any) {
+      toast.error(error);
+    } finally {
+      defaultModal = false;
+    }
   };
 
   // 发送验证码
@@ -135,7 +132,9 @@
     <div class="mt-5">
       <div class="flex items-center justify-center mb-4">
         <div class="flex-1 h-px bg-gray-200"></div>
-        <span class="px-3 text-sm text-gray-500">登录方式{#if quickLoginType === 'password'}<a href="/forgot-pwd" class="text-sm text-blue-500 hover:text-blue-600">（忘记密码？）</a>{/if}</span>
+        <span class="px-3 text-sm text-gray-500"
+          >登录方式{#if quickLoginType === 'password'}<a href="/forgot-pwd" class="text-sm text-blue-500 hover:text-blue-600">（忘记密码？）</a>{/if}</span
+        >
         <div class="flex-1 h-px bg-gray-200"></div>
       </div>
 
@@ -146,7 +145,6 @@
         <button onclick={() => switchQuickLoginType('email')} class="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer transition-all {quickLoginType === 'email' ? 'bg-blue-500 text-white shadow-lg' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}">
           <i class="ri-mail-line"></i>
         </button>
-      
       </div>
     </div>
   </div>

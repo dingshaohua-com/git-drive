@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@dingshaohua.com/hybrid-crypto':
+        specifier: 0.0.1-alpha.11
+        version: 0.0.1-alpha.11
     devDependencies:
       chalk:
         specifier: ^5.6.0
@@ -114,9 +118,6 @@ importers:
 
   apps/web:
     dependencies:
-      '@dingshaohua.com/hybrid-crypto':
-        specifier: 0.0.1-alpha.6
-        version: 0.0.1-alpha.6
       '@repo/config-prettier':
         specifier: workspace:*
         version: link:../../packages/config-prettier
@@ -238,8 +239,8 @@ packages:
   '@asyncapi/specs@6.10.0':
     resolution: {integrity: sha512-vB5oKLsdrLUORIZ5BXortZTlVyGWWMC1Nud/0LtgxQ3Yn2738HigAD6EVqScvpPsDUI/bcLVsYEXN4dtXQHVng==}
 
-  '@dingshaohua.com/hybrid-crypto@0.0.1-alpha.6':
-    resolution: {integrity: sha512-ofQ1T6UZmVS8ene077EyZxwKKrIQkujoqMu1y22NwjZnBU9JRRhq5kI9MCC1mqkOCVfXCDvXyJ3R4Apl5+wfaQ==}
+  '@dingshaohua.com/hybrid-crypto@0.0.1-alpha.11':
+    resolution: {integrity: sha512-Z/7HEgWPX7V36xDQeBAM4q5JWZgqluolEzSVaS2EO87BNWHxivL1xmZ8xuRBcvbfdLQqZJO8Dt6BRXkBFnuV6w==}
 
   '@esbuild/aix-ppc64@0.25.9':
     resolution: {integrity: sha512-OaGtL73Jck6pBKjNIe24BnFE6agGl+6KxDtTfHhy1HmhthfKouEcOhqpSL64K4/0WCtbKFLOdzD/44cJ4k9opA==}
@@ -3766,7 +3767,7 @@ snapshots:
     dependencies:
       '@types/json-schema': 7.0.15
 
-  '@dingshaohua.com/hybrid-crypto@0.0.1-alpha.6':
+  '@dingshaohua.com/hybrid-crypto@0.0.1-alpha.11':
     dependencies:
       '@types/node': 24.3.0
       crypto: 1.0.1

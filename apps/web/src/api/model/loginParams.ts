@@ -9,6 +9,7 @@
  */
 
 export interface LoginParams {
+  aseKeyEncrypt?: string;
   code?: string;
   phone?: string;
   email?: string;

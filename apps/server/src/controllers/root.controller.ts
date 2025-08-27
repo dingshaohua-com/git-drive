@@ -4,12 +4,13 @@ import redis from '@/utils/redis-helper';
 import { queryOne } from '@/service/user';
 import reqCtx from '@/middleware/req-ctx';
 import LoginParams from '../types/login.dto';
-import { user as User } from '@prisma/client';
 import { login, sendCode } from '@/service/root';
 import swaggerJson from '../static/swagger.json';
-import JsonResult, { ApiResponse } from '../utils/json-result';
-import { Controller, Get, Post, Body, Route, Header, Tags, Hidden, BodyProp } from 'tsoa';
 import NormalError from '@/exception/normal-err';
+import { decryptAll } from '@dingshaohua.com/hybrid-crypto';
+import JsonResult, { ApiResponse } from '../utils/json-result';
+import { user as User, sys_conf as SysConf } from '@prisma/client';
+import { Controller, Get, Post, Body, Route, Header, Tags, Hidden, BodyProp } from 'tsoa';
 
 @Route('api')
 @Tags('root')
@@ -48,9 +49,10 @@ export class RootController extends Controller {
    */
   @Post('login')
   public async login(@Body() requestBody: LoginParams): ApiResponse<{ token: string; me: User }> {
+    const user = reqCtx.get<User>('user');
+
     const token = await login(requestBody);
-    const userId = reqCtx.get('userId');
-    const me = await queryOne({ id: userId });
+    const me = await queryOne({ id: user.id });
     return JsonResult.success({ token, me });
   }
 
@@ -62,7 +64,7 @@ export class RootController extends Controller {
   public async logout(@Header('authorization') author: string): ApiResponse {
     const token = author.replace('Bearer ', '');
     console.log(777888, token);
-    
+
     if (token) {
       // 删除 Redis 中的 token
       await redis.del(`token:${token}`);

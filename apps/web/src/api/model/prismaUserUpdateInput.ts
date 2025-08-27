@@ -7,6 +7,7 @@
   这是一个基于 Koa + TSOA 的后端 API 服务
  * OpenAPI spec version: 1.0.0
  */
+import type { PrismaUserUpdateInputSalt } from './prismaUserUpdateInputSalt';
 import type { PrismaUserUpdateInputAvatar } from './prismaUserUpdateInputAvatar';
 import type { PrismaUserUpdateInputNickname } from './prismaUserUpdateInputNickname';
 import type { PrismaUserUpdateInputDes } from './prismaUserUpdateInputDes';
@@ -16,6 +17,8 @@ import type { PrismaUserUpdateInputPassword } from './prismaUserUpdateInputPassw
 import type { PrismaUserUpdateInputEmail } from './prismaUserUpdateInputEmail';
 
 export interface PrismaUserUpdateInput {
+  /** @nullable */
+  salt?: PrismaUserUpdateInputSalt;
   /** @nullable */
   avatar?: PrismaUserUpdateInputAvatar;
   /** @nullable */

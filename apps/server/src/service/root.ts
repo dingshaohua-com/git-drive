@@ -1,22 +1,43 @@
 import genToken from '@/utils/gen-token';
 import redis from '@/utils/redis-helper';
+import reqCtx from '@/middleware/req-ctx';
+import pwdVerify from '@/utils/pwd-verify';
 import { getLoginType } from '@/utils/common';
 import { PrismaClient } from '@prisma/client';
 import { sendMail } from '@/utils/email-helper';
 import NormalError from '@/exception/normal-err';
-import reqCtx from '@/middleware/req-ctx';
+import { decryptAll } from '@dingshaohua.com/hybrid-crypto';
+import { user as User, sys_conf as SysConf } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 export const login = async (params): Promise<string> => {
-  const sysConf = reqCtx.get('sysConf');
+  const currentUser = reqCtx.get<User>('user');
+  // 解密传输过来加密的密码
+  const sysConf = reqCtx.get<SysConf>('sysConf');
+  const contentAndKey = {
+    contentEncrypt: params.password,
+    aseKeyEncrypt: params.aseKeyEncrypt,
+  };
+  const content = decryptAll(contentAndKey, sysConf.privateKey);
+
+  console.log(content);
+
   const loginType = getLoginType(params);
   const codeTemp = Number(params.code);
   delete params.code;
 
-  const user = await prisma.user.findFirst({ where: params });
+  const user = await prisma.user.findFirst({
+    where: {
+      email: params.account,
+    },
+  });
   if (loginType === 'account') {
     if (user) {
+      const res = pwdVerify({ password: params.password, aseKeyEncrypt: params.aseKeyEncrypt }, user);
+      if (!res) {
+        throw new NormalError('密码错误！');
+      }
       return genToken({ id: user.id });
     } else {
       throw Error('暂未注册，请先注册！');
@@ -46,7 +67,7 @@ export const login = async (params): Promise<string> => {
 };
 
 export const sendCode = async (params) => {
-  const { email, phone, type="login" } = params;
+  const { email, phone, type = 'login' } = params;
   if (email) {
     // 检查上次验证码是否还在有效期内
     const existingCode = await redis.get(`email-${type}:${email}`);

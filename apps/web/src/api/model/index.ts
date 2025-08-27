@@ -44,6 +44,7 @@ export * from './prismaUserUpdateInputEmail';
 export * from './prismaUserUpdateInputNickname';
 export * from './prismaUserUpdateInputPassword';
 export * from './prismaUserUpdateInputRole';
+export * from './prismaUserUpdateInputSalt';
 export * from './prismaUserUpdateInputUsername';
 export * from './repo';
 export * from './repoAddFolderBody';

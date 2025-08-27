@@ -9,5 +9,6 @@
  */
 
 export type MeResetPwdBody = {
+  aseKeyEncrypt: string;
   newPwd: string;
 };

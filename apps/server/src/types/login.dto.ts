@@ -50,5 +50,6 @@ type LoginParams = {
   email?: string;
   phone?: string;
   code?: string;
+  aseKeyEncrypt?: string;
 };
 export default LoginParams;
