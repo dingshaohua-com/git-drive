@@ -11,7 +11,7 @@
   import { loadFile } from '$/utils/common';
 
   let defaultModal = $state(false);
-  let quickLoginType = $state<QuickLoginType | null>('email');
+  let quickLoginType = $state<QuickLoginType | null>('password');
   let isCodeSent = $state(false);
   let countdown = $state(0);
   let formData = $state<LoginParams>({
@@ -94,9 +94,9 @@
   <div class="bg-white rounded-xl md:shadow-[0_4px_8px_-4px_rgba(0,0,0,.13),0_6px_16px_0_rgba(0,0,0,.08),0_12px_24px_16px_rgba(0,0,0,.04)] p-10 w-full max-w-sm text-sm">
     <!-- <img class="w-20 mx-auto rounded-full" src={logoImg} alt="" /> -->
     <div class="pt-1 h-6">
-      {#if quickLoginType === 'password'}
-        <div class="text-red-300 text-xs text-center">首次使用请选邮箱，后再设密码即可</div>
-      {/if}
+      <!-- {#if quickLoginType === 'password'}
+        <div class="text-red-300 text-xs text-center">首次请先使用请选邮箱，后再设密码即可</div>
+      {/if} -->
     </div>
 
     <div class="space-y-6">
@@ -109,10 +109,6 @@
 
           <div>
             <input type="password" bind:value={formData.password} placeholder="请输入密码" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:outline-none" />
-          </div>
-
-          <div class="text-right">
-            <a href="/forgot-pwd" class="text-sm text-blue-500 hover:text-blue-600">忘记密码？</a>
           </div>
         {/if}
 
