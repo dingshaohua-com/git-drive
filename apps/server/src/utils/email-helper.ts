@@ -1,5 +1,9 @@
 import nodemailer from "nodemailer";
 
+
+
+const isDev = process.env.NODE_ENV === 'development';
+
 // Create a test account or replace with real credentials.
 const transporter = nodemailer.createTransport({
     host: "smtp.qq.com",
@@ -18,8 +22,9 @@ export const sendMail = (to, verifyCode, type) => {
     }
     let html = `您的验证码为：<b>${verifyCode}</b>，有效期为1分钟，请妥善保管 👧`;
     if(type === 'resetPwd'){
+        const webUrl =  isDev?'http://localhost:3004':'https://drive.dingshaohua.com';
         html = `您正在重置密码，请点击以下链接完成重置：
-        <a href="https://www.dingshaohua.com/reset-pwd?email=${to}&code=${verifyCode}">https://www.dingshaohua.com/reset-pwd?email=${to}&code=${verifyCode}</a>
+        <a href="${webUrl}/reset-pwd?email=${to}&code=${verifyCode}">${webUrl}/reset-pwd?email=${to}&code=${verifyCode}</a>
         `;
     }
     const params = {

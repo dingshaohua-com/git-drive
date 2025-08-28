@@ -97,15 +97,12 @@ export class RootController extends Controller {
     return JsonResult.success();
   }
 
-
    /**
    * @summary 重置密码
    */
   @Post('reset-pwd')
   public async resetPwd(@Body() params: { password: string; aseKeyEncrypt: string, email: string, code:string }): ApiResponse {
     const result = await resetPwd(params);
-     return JsonResult.success(result);
-   
+    return JsonResult.success(result);
   }
-
 }

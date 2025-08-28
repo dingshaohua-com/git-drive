@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "tsx ./src/app.ts",
-    "dev": "npm run clean && npm run gen:tsoa && concurrently \"npm run gen-watch:tsoa\" \"npm run dev-watch\"",
-    "dev-watch": "npx kill-port 3003 && tsx watch --clear-screen=false --include ./src/*.ts ./src/app.ts",
+    "start": "cross-env NODE_ENV=production tsx ./src/app.ts",
+    "dev": " npm run clean && npm run gen:tsoa && concurrently \"npm run gen-watch:tsoa\" \"npm run dev-watch\"",
+    "dev-watch": "npx kill-port 3003 && cross-env NODE_ENV=development tsx watch --clear-screen=false --include ./src/*.ts ./src/app.ts",
     "gen:prisma": "tsx ./bin/prisma.ts",
     "gen:tsoa": "tsoa spec-and-routes",
     "gen-watch:tsoa": "npm run clean && npx chokidar \"src/controllers/**\" \"src/types/**\" -c \"npm run gen:tsoa\"",
