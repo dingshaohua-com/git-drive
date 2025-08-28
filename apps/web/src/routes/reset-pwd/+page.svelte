@@ -54,7 +54,7 @@
     defaultModal = true;
 
     try {
-       const publicKeyText = await loadFile('./publicKey.pem');
+      const publicKeyText = await loadFile('./publicKey.pem');
       const res = await encryptAll(formData.newPassword, publicKeyText)
       await api.root.resetPwd({ email, code, password: res.contentEncrypt, aseKeyEncrypt:res.aseKeyEncrypt});
       toast.success('密码重置成功!');

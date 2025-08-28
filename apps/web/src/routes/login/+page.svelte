@@ -26,7 +26,6 @@
 
     const publicKeyText = await loadFile('./publicKey.pem');
     const res = await encryptAll(formData.password, publicKeyText);
-    console.log(998877, formData);
     
     try {
       await auth.login({account: formData.account, password: res.contentEncrypt, aseKeyEncrypt: res.aseKeyEncrypt });

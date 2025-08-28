@@ -2,7 +2,8 @@
   import { Button, Label, Input } from 'flowbite-svelte';
   import { me } from '$/stores/me';
   import toast from '$/utils/toast';
-  import {encryptAll} from "$/utils/crypto-helper/decrypt-encrypt"
+  import { encryptAll } from '@dingshaohua.com/hybrid-crypto/browser';
+  import { loadFile } from '$/utils/common';
 
   // 密码修改表单
   let passwordForm = $state({
@@ -54,16 +55,18 @@
       const requestData = { newPassword: passwordForm.newPassword };
       // if ($me.hasPwd) requestData.oldPassword = passwordForm.oldPassword;
 
-      const res = await encryptAll(requestData.newPassword);
+      const publicKeyText = await loadFile('../../publicKey.pem');
+
+      const res = await encryptAll(requestData.newPassword, publicKeyText);
       console.log(res);
-      
-      requestData.newPassword = res.contentEncrypt;
-      api.me.resetPwd({newPwd: requestData.newPassword, aseKeyEncrypt: res.aseKeyEncrypt});
+
+      // requestData.newPassword = res.contentEncrypt;
+      // api.me.resetPwd({newPwd: requestData.newPassword, aseKeyEncrypt: res.aseKeyEncrypt});
 
       // await api.me.put(requestData);
       // passwordForm = { oldPassword: '', newPassword: '' };
       // toast.success($me.hasPwd ? '密码修改成功' : '密码设置成功');
-      await me.sync();
+      // await me.sync();
     } catch (error) {
       toast.error($me.hasPwd ? '密码修改失败' : '密码设置失败');
     } finally {
@@ -106,7 +109,7 @@
       await me.sync();
       emailForm = { newEmail: '', verificationCode: '' };
       toast.success('邮箱更新成功');
-    }finally {
+    } finally {
       isUpdatingEmail = false;
     }
   };
