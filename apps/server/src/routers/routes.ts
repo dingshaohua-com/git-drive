@@ -399,6 +399,66 @@ export function RegisterRoutes(router: KoaRouter,opts?:{multer?:ReturnType<typeo
             });
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsRootController_sendResetPwdLink: Record<string, TsoaRoute.ParameterSchema> = {
+                params: {"in":"body","name":"params","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"email":{"dataType":"string","required":true}}},
+        };
+        router.post('/api/send-reset-pwd-link',
+            ...(fetchMiddlewares<Middleware>(RootController)),
+            ...(fetchMiddlewares<Middleware>(RootController.prototype.sendResetPwdLink)),
+
+            async function RootController_sendResetPwdLink(context: Context, next: Next) {
+
+            let validatedArgs: any[] = [];
+            try {
+              validatedArgs = templateService.getValidatedArgs({ args: argsRootController_sendResetPwdLink, context, next });
+            } catch (err) {
+              const error = err as any;
+              error.message ||= JSON.stringify({ fields: error.fields });
+              context.status = error.status;
+              context.throw(context.status, error.message, error);
+            }
+
+            const controller = new RootController();
+
+            return templateService.apiHandler({
+              methodName: 'sendResetPwdLink',
+              controller,
+              context,
+              validatedArgs,
+              successStatus: undefined,
+            });
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsRootController_resetPwd: Record<string, TsoaRoute.ParameterSchema> = {
+                params: {"in":"body","name":"params","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"code":{"dataType":"string","required":true},"email":{"dataType":"string","required":true},"aseKeyEncrypt":{"dataType":"string","required":true},"password":{"dataType":"string","required":true}}},
+        };
+        router.post('/api/reset-pwd',
+            ...(fetchMiddlewares<Middleware>(RootController)),
+            ...(fetchMiddlewares<Middleware>(RootController.prototype.resetPwd)),
+
+            async function RootController_resetPwd(context: Context, next: Next) {
+
+            let validatedArgs: any[] = [];
+            try {
+              validatedArgs = templateService.getValidatedArgs({ args: argsRootController_resetPwd, context, next });
+            } catch (err) {
+              const error = err as any;
+              error.message ||= JSON.stringify({ fields: error.fields });
+              context.status = error.status;
+              context.throw(context.status, error.message, error);
+            }
+
+            const controller = new RootController();
+
+            return templateService.apiHandler({
+              methodName: 'resetPwd',
+              controller,
+              context,
+              validatedArgs,
+              successStatus: undefined,
+            });
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsRepoController_getList: Record<string, TsoaRoute.ParameterSchema> = {
         };
         router.get('/api/repo/list',
@@ -704,36 +764,6 @@ export function RegisterRoutes(router: KoaRouter,opts?:{multer?:ReturnType<typeo
 
             return templateService.apiHandler({
               methodName: 'resetEmail',
-              controller,
-              context,
-              validatedArgs,
-              successStatus: undefined,
-            });
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        const argsMeController_resetPwd: Record<string, TsoaRoute.ParameterSchema> = {
-                params: {"in":"body","name":"params","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"aseKeyEncrypt":{"dataType":"string","required":true},"newPwd":{"dataType":"string","required":true}}},
-        };
-        router.post('/api/me/reset-pwd',
-            ...(fetchMiddlewares<Middleware>(MeController)),
-            ...(fetchMiddlewares<Middleware>(MeController.prototype.resetPwd)),
-
-            async function MeController_resetPwd(context: Context, next: Next) {
-
-            let validatedArgs: any[] = [];
-            try {
-              validatedArgs = templateService.getValidatedArgs({ args: argsMeController_resetPwd, context, next });
-            } catch (err) {
-              const error = err as any;
-              error.message ||= JSON.stringify({ fields: error.fields });
-              context.status = error.status;
-              context.throw(context.status, error.message, error);
-            }
-
-            const controller = new MeController();
-
-            return templateService.apiHandler({
-              methodName: 'resetPwd',
               controller,
               context,
               validatedArgs,

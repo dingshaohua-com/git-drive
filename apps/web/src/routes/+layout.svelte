@@ -15,7 +15,7 @@
     // 当前路径（不要写默认的，必须用地方传，否则会失去响应式）
     // const currentPath = page.url.pathname;
     // 不需要登录的页面路径
-    const publicPaths = ['/', '/login','/forgot-pwd'];
+    const publicPaths = ['/', '/login','/forgot-pwd', '/reset-pwd'];
     return publicPaths.includes(path);
   };
 </script>

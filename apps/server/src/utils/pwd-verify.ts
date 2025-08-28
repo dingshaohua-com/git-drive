@@ -6,7 +6,6 @@ import { user as User, sys_conf as SysConf } from '@prisma/client';
 type PweVerifyParams = {
   password: string;
   aseKeyEncrypt: string;
-  salt: string;
 };
 const pwdVerify = (params: PweVerifyParams, user: User) => {
   // 解密传输过来加密的密码

@@ -11,13 +11,23 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-export const sendMail = (to, content, type) => {
+export const sendMail = (to, verifyCode, type) => {
+    const typeLabel = {
+        login: '登录验证码',
+        resetPwd: '重置密码',
+    }
+    let html = `您的验证码为：<b>${verifyCode}</b>，有效期为1分钟，请妥善保管 👧`;
+    if(type === 'resetPwd'){
+        html = `您正在重置密码，请点击以下链接完成重置：
+        <a href="https://www.dingshaohua.com/reset-pwd?email=${to}&code=${verifyCode}">https://www.dingshaohua.com/reset-pwd?email=${to}&code=${verifyCode}</a>
+        `;
+    }
     const params = {
         from: '"丁丁文档📕" <960423114@qq.com>',
         to, // "bar@example.com, baz@example.com"
-        subject: type==='login'?"登录验证码":'重置密码',
+        subject: typeLabel[type],
         text: "验证码", // plain‑text body
-        html: `您的验证码为：<b>${content}</b>，有效期为1分钟，请妥善保管 👧`, // HTML body
+        html // HTML body
     }
     return transporter.sendMail(params);
 }

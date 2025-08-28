@@ -8,7 +8,9 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type MeResetPwdBody = {
+export type RootResetPwdBody = {
+  code: string;
+  email: string;
   aseKeyEncrypt: string;
-  newPwd: string;
+  password: string;
 };

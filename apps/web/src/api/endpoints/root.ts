@@ -11,7 +11,9 @@ import type {
   JsonResultTypeAny,
   JsonResultTypeTokenStringMeUser,
   LoginParams,
-  RootSendCodeBody
+  RootResetPwdBody,
+  RootSendCodeBody,
+  RootSendResetPwdLinkBody
 } from '../model';
 
 import { customAxiosInstance } from '../api.base';
@@ -67,6 +69,35 @@ export const sendCode = (
     },
       options);
     }
+  /**
+ * 发送重置密码链接 接口
+ * @summary 发送重置密码链接
+ */
+export const sendResetPwdLink = (
+    rootSendResetPwdLinkBody: RootSendResetPwdLinkBody,
+ options?: SecondParameter<typeof customAxiosInstance>,) => {
+      return customAxiosInstance<JsonResultTypeAny>(
+      {url: `/api/send-reset-pwd-link`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: rootSendResetPwdLinkBody
+    },
+      options);
+    }
+  /**
+ * @summary 重置密码
+ */
+export const resetPwd = (
+    rootResetPwdBody: RootResetPwdBody,
+ options?: SecondParameter<typeof customAxiosInstance>,) => {
+      return customAxiosInstance<JsonResultTypeAny>(
+      {url: `/api/reset-pwd`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: rootResetPwdBody
+    },
+      options);
+    }
   export type LoginResult = NonNullable<Awaited<ReturnType<typeof login>>>
 export type LogoutResult = NonNullable<Awaited<ReturnType<typeof logout>>>
 export type SendCodeResult = NonNullable<Awaited<ReturnType<typeof sendCode>>>
+export type SendResetPwdLinkResult = NonNullable<Awaited<ReturnType<typeof sendResetPwdLink>>>
+export type ResetPwdResult = NonNullable<Awaited<ReturnType<typeof resetPwd>>>

@@ -55,11 +55,6 @@
           重置链接已发送到您的邮箱，请查收邮件并按照指引重置密码
         {/if}
       </p>
-      {#if !isLinkSent}
-        <p class="text-gray-500 text-xs mt-2">
-          链接 3 分钟内有效，请谨慎使用
-        </p>
-      {/if}
     </div>
 
     {#if !isLinkSent}

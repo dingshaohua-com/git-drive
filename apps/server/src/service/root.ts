@@ -6,23 +6,14 @@ import { getLoginType } from '@/utils/common';
 import { PrismaClient } from '@prisma/client';
 import { sendMail } from '@/utils/email-helper';
 import NormalError from '@/exception/normal-err';
-import { decryptAll } from '@dingshaohua.com/hybrid-crypto';
+import { decryptAll, toHash } from '@dingshaohua.com/hybrid-crypto';
 import { user as User, sys_conf as SysConf } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export const login = async (params): Promise<string> => {
-  const currentUser = reqCtx.get<User>('user');
+export const login = async (params): Promise<{token:string, me:User}> => {
   // 解密传输过来加密的密码
   const sysConf = reqCtx.get<SysConf>('sysConf');
-  const contentAndKey = {
-    contentEncrypt: params.password,
-    aseKeyEncrypt: params.aseKeyEncrypt,
-  };
-  const content = decryptAll(contentAndKey, sysConf.privateKey);
-
-  console.log(content);
-
   const loginType = getLoginType(params);
   const codeTemp = Number(params.code);
   delete params.code;
@@ -38,7 +29,10 @@ export const login = async (params): Promise<string> => {
       if (!res) {
         throw new NormalError('密码错误！');
       }
-      return genToken({ id: user.id });
+      return {
+        me: user,
+        token: await genToken({ id: user.id })
+      };
     } else {
       throw Error('暂未注册，请先注册！');
     }
@@ -56,12 +50,18 @@ export const login = async (params): Promise<string> => {
     }
 
     if (user) {
-      return genToken({ id: user.id });
+       return {
+        me: user,
+        token: await genToken({ id: user.id })
+      };
     } else {
       const newUser = await prisma.user.create({
         data: params,
       });
-      return genToken({ id: newUser.id });
+       return {
+        me: newUser,
+        token: await genToken({ id: newUser.id })
+      };
     }
   }
 };
@@ -91,3 +91,63 @@ export const sendCode = async (params) => {
     // todo
   }
 };
+
+
+export const resetPwd = async (params) => {
+  const { email, code, password, aseKeyEncrypt } = params;
+
+  // 1. 验证邮箱验证码
+  const redisKey = `email-resetPwd:${email}`;
+  const storedCode = await redis.get(redisKey);
+
+  if (!storedCode || Number(storedCode) !== Number(code)) {
+    throw new NormalError('验证码错误或已过期！');
+  }
+
+  // 2. 查找用户
+  const user = await prisma.user.findFirst({
+    where: { email }
+  });
+
+  if (!user) {
+    throw new NormalError('用户不存在！');
+  }
+
+  // 3. 解密新密码
+  const sysConf = reqCtx.get<SysConf>('sysConf');
+  const contentAndKey = {
+    contentEncrypt: password,
+    aseKeyEncrypt: aseKeyEncrypt,
+  };
+  const decryptedPassword = decryptAll(contentAndKey, sysConf.privateKey);
+
+  // 4. 生成哈希密码
+  let hashResult: { hash: string; salt?: string };
+  if (user.salt) {
+    // 如果用户已有 salt，使用现有的 salt
+    hashResult = toHash(decryptedPassword, user.salt);
+  } else {
+    // 如果用户没有 salt，生成新的 salt
+    hashResult = toHash(decryptedPassword);
+  }
+
+  // 5. 更新用户密码
+  const updateData: any = {
+    password: hashResult.hash
+  };
+
+  // 如果是新生成的 salt，也要更新
+  if (!user.salt && hashResult.salt) {
+    updateData.salt = hashResult.salt;
+  }
+
+  await prisma.user.update({
+    where: { id: user.id },
+    data: updateData
+  });
+
+  // 6. 删除已使用的验证码
+  await redis.del(redisKey);
+
+  return { message: '密码重置成功' };
+}

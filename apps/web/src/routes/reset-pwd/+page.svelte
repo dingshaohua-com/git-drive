@@ -1,74 +1,43 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { page } from '$app/state';
   import toast, { error } from '$/utils/toast';
   import { Modal, Spinner } from 'flowbite-svelte';
   import { slide } from 'svelte/transition';
+  import { onMount } from 'svelte';
   import '$/api/global-api'; // 确保全局 API 已初始化
+  import {encryptAll} from "@dingshaohua.com/hybrid-crypto/browser"
+  import { loadFile } from '$/utils/common';
 
   let defaultModal = $state(false);
-  let isCodeSent = $state(false);
-  let countdown = $state(0);
+
+  // 从URL参数获取邮箱和验证码
+  let email = $derived(page.url.searchParams.get('email') || '');
+  let code = $derived(page.url.searchParams.get('code') || '');
+
   let formData = $state({
-    email: '',
-    code: '',
     newPassword: ''
   });
 
-  // 发送验证码
-  const sendCode = async () => {
-    if (!formData.email) {
-      error('请输入邮箱地址');
-      return;
+  // 检查URL参数是否完整
+  onMount(() => {
+    if (!email || !code) {
+      error('缺少必要的参数，请通过邮件链接访问此页面');
+      goto('/login', { replaceState: true });
     }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      error('请输入有效的邮箱地址');
-      return;
-    }
-
-    // 立即开始倒计时
-    isCodeSent = true;
-    let count = 60;
-    countdown = count;
-    const timer = setInterval(() => {
-      count--;
-      countdown = count;
-      if (count === 0) {
-        clearInterval(timer);
-        isCodeSent = false;
-      }
-    }, 1000);
-
-    try {
-      // 这里应该调用发送重置密码验证码的API
-      await api.root.sendCode({ email: formData.email, type: 'resetPwd' });
-      toast.success('验证码已发送到您的邮箱');
-    } catch (e: any) {
-      error(e || '验证码发送失败');
-      clearInterval(timer);
-      isCodeSent = false;
-      countdown = 0;
-    }
-  };
+  });
 
   // 重置密码
   const resetPassword = async (event: Event) => {
     event.preventDefault();
 
-    if (!formData.email) {
-      error('请输入邮箱地址');
+    if (!email) {
+      error('邮箱参数缺失');
       return;
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      error('请输入有效的邮箱地址');
-      return;
-    }
-
-    if (!formData.code) {
-      error('请输入验证码');
+    if (!code) {
+      error('验证码参数缺失');
       return;
     }
 
@@ -85,9 +54,10 @@
     defaultModal = true;
 
     try {
-      // 这里应该调用重置密码的API
-      // await api.resetPassword({ email: formData.email, code: formData.code, newPassword: formData.newPassword });
-      toast.success('密码重置成功，请使用新密码登录');
+       const publicKeyText = await loadFile('./publicKey.pem');
+      const res = await encryptAll(formData.newPassword, publicKeyText)
+      await api.root.resetPwd({ email, code, password: res.contentEncrypt, aseKeyEncrypt:res.aseKeyEncrypt});
+      toast.success('密码重置成功!');
       goto('/login', { replaceState: true });
     } catch (e: any) {
       error(e || '密码重置失败');
@@ -110,37 +80,15 @@
       </p>
     </div>
 
+    <!-- 显示邮箱信息 -->
+    <div class="mb-6 p-4 bg-gray-50 rounded-lg">
+      <p class="text-sm text-gray-600">
+        为邮箱 <span class="font-medium text-gray-800">{email}</span> 重置密码
+      </p>
+    </div>
+
     <!-- 统一表单 -->
     <form onsubmit={resetPassword} class="space-y-4">
-      <!-- 邮箱输入 -->
-      <div>
-        <input
-          type="email"
-          bind:value={formData.email}
-          placeholder="请输入邮箱地址"
-          required
-          class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
-        />
-      </div>
-
-      <!-- 验证码输入 -->
-      <div class="flex">
-        <input
-          bind:value={formData.code}
-          placeholder="请输入验证码"
-          required
-          class="flex-1 px-4 py-3 rounded-l-lg border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
-        />
-        <button
-          type="button"
-          onclick={sendCode}
-          disabled={isCodeSent}
-          class="cursor-pointer w-24 bg-blue-500 text-white rounded-r-lg hover:bg-blue-600 disabled:bg-gray-400 px-2 text-sm"
-        >
-          {isCodeSent ? `${countdown}s` : '发送验证码'}
-        </button>
-      </div>
-
       <!-- 新密码输入 -->
       <div>
         <input

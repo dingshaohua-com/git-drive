@@ -38,34 +38,4 @@ export class MeController extends Controller {
     const results = await resetEmail(params);
     return JsonResult.success(results);
   }
-
-  /**
-   * @summary 重置密码
-   */
-  @Post('reset-pwd')
-  public async resetPwd(@Body() params: { newPwd: string; aseKeyEncrypt: string }): ApiResponse {
-    const user = reqCtx.get<User>('user');
-
-    // console.log(params.newPwd);
-    // console.log(params.aseKeyEncrypt);
-    // const aseKeyStr = decryptByAsymmetric(params.aseKeyEncrypt);
-    // console.log('解密后的密钥字符串:', aseKeyStr);
-    // console.log('密钥字符串长度:', aseKeyStr.length);
-
-    // const aseKey = toSymmetric(aseKeyStr);
-    // console.log('生成的KeyObject:', aseKey);
-    // console.log('KeyObject导出的Buffer长度:', aseKey.export().length);
-
-    // const newPwd = decryptBySymmetric(params.newPwd, aseKey);
-
-    // let result;
-    // if (user.salt) {
-    //   const { hash } = toHash(newPwd, user.salt);
-    //   result = await update({ password: hash }, user.id);
-    // } else {
-    //   const { hash, salt } = toHash(newPwd);
-    //   result = await update({ salt, password: hash }, user.id);
-    // }
-    return JsonResult.success(result);
-  }
 }

@@ -4,7 +4,7 @@ import redis from '@/utils/redis-helper';
 import { queryOne } from '@/service/user';
 import reqCtx from '@/middleware/req-ctx';
 import LoginParams from '../types/login.dto';
-import { login, sendCode } from '@/service/root';
+import { login, resetPwd, sendCode } from '@/service/root';
 import swaggerJson from '../static/swagger.json';
 import NormalError from '@/exception/normal-err';
 import { decryptAll } from '@dingshaohua.com/hybrid-crypto';
@@ -49,11 +49,8 @@ export class RootController extends Controller {
    */
   @Post('login')
   public async login(@Body() requestBody: LoginParams): ApiResponse<{ token: string; me: User }> {
-    const user = reqCtx.get<User>('user');
-
-    const token = await login(requestBody);
-    const me = await queryOne({ id: user.id });
-    return JsonResult.success({ token, me });
+    const result = await login(requestBody);
+    return JsonResult.success(result);
   }
 
   /**
@@ -88,4 +85,27 @@ export class RootController extends Controller {
     await sendCode(params);
     return JsonResult.success();
   }
+
+  /**
+   * 发送重置密码链接 接口
+   * @summary 发送重置密码链接
+   */
+  @Post('send-reset-pwd-link')
+  public async sendResetPwdLink(@Body() params: { email: string }): ApiResponse {
+    // 如果是重置邮箱，则需要校验原邮箱是否已经被注册
+    await sendCode({...params, type: 'resetPwd'});
+    return JsonResult.success();
+  }
+
+
+   /**
+   * @summary 重置密码
+   */
+  @Post('reset-pwd')
+  public async resetPwd(@Body() params: { password: string; aseKeyEncrypt: string, email: string, code:string }): ApiResponse {
+    const result = await resetPwd(params);
+     return JsonResult.success(result);
+   
+  }
+
 }
