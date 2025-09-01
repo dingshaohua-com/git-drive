@@ -14,7 +14,7 @@ export class RepoController extends Controller {
    */
   @Get('list')
   public async getList(): ApiResponse<RepoOrDirOrFile[]> {
-    const result = await queryList('');
+    const result = await queryList();
     return JsonResult.success(result);
   }
 

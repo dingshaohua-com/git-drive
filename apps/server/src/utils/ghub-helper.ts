@@ -1,6 +1,8 @@
 import axios from 'axios';
 import reqCtx from '@/middleware/req-ctx';
 import { PrismaClient } from '@prisma/client';
+import { Octokit } from '@octokit/rest';
+import { sys_conf as SysConf, user as User } from '@prisma/client';
 
 // 配置
 const GITHUB_TOKEN = '';
@@ -51,7 +53,7 @@ export const removePrefix = () => {
 export const filterPrefix = (params: { attr?: string; val?: string; list }) => {
   const user = reqCtx.get('user');
   const preDefault = user.username + '-';
-  const { attr='name', val = preDefault, list } = params;
+  const { attr = 'name', val = preDefault, list } = params;
   return list.filter((item: any) => item[attr].startsWith(val));
 };
 
@@ -61,3 +63,31 @@ export const filterPrefix = (params: { attr?: string; val?: string; list }) => {
 //   const lower = searchWord.toLowerCase();
 //   result.data = result.data.filter((repo: any) => repo.name.toLowerCase().includes(lower));
 // }
+
+// 初始化 Octokit
+let octokitTemp;
+export const getOctokit = () => {
+  const sysConf = reqCtx.get<SysConf>('sysConf');
+  const token = sysConf.git_token;
+  const octokit = new Octokit({
+    auth: token,
+    userAgent: 'Koa-GitHub-API-Client',
+    // previews: ['jean-grey', 'symmetra'], // 启用预览功能
+    // timeZone: 'Europe/Amsterdam', // 设置时区
+    baseUrl: 'https://api.github.com',
+
+    log: {
+      debug: () => { },
+      info: () => { },
+      warn: console.warn,
+      error: console.error,
+    },
+    request: {
+      agent: undefined,
+      fetch: undefined,
+      timeout: 0,
+    },
+  });
+  if (!octokitTemp) octokitTemp = octokit;
+  return octokitTemp;
+};

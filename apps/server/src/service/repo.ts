@@ -6,51 +6,8 @@ import reqCtx from '@/middleware/req-ctx';
 import type { RepoOrDirOrFile } from '../types/repo.dto';
 import { BRANCH, filterPrefix, getGhubApi, OWNER } from '@/utils/ghub-helper';
 import { sys_conf as SysConf, user as User } from '@prisma/client';
+import { getOctokit } from "@/utils/ghub-helper"
 
-// 初始化 Octokit
-let octokitTemp;
-const getOctokit = () => {
-  const sysConf = reqCtx.get<SysConf>('sysConf');
-  const token = sysConf.git_token;
-  const octokit = new Octokit({
-    auth: token,
-    userAgent: 'Koa-GitHub-API-Client',
-    // previews: ['jean-grey', 'symmetra'], // 启用预览功能
-    // timeZone: 'Europe/Amsterdam', // 设置时区
-    baseUrl: 'https://api.github.com',
-
-    log: {
-      debug: () => {},
-      info: () => {},
-      warn: console.warn,
-      error: console.error,
-    },
-    request: {
-      agent: undefined,
-      fetch: undefined,
-      timeout: 0,
-    },
-  });
-  if (!octokitTemp) octokitTemp = octokit;
-  return octokitTemp;
-};
-
-/**
- * 获取当前账号下的仓库列表，支持名称模糊搜索
- * @param {string} [keyword] 仓库名关键字（可选）
- * @returns {Promise<any[]>}
- */
-export const queryList = async (keyword: string = ''): Promise<RepoOrDirOrFile[]> => {
-  const octokit = getOctokit();
-  const user = reqCtx.get<User>('user');
-  const sysConf = reqCtx.get<SysConf>('sysConf');
-  const result = await octokit.rest.repos.listForUser({
-    username: sysConf.git_uname,
-  });
-  // 拼接过滤条件
- result.data = filterPrefix({list:result.data});
-  return result.data;
-};
 
 /**
  * 创建 GitHub 仓库
@@ -59,7 +16,7 @@ export const queryList = async (keyword: string = ''): Promise<RepoOrDirOrFile[]
  * @param {boolean} [isPrivate] 是否私有
  * @returns {Promise<any>}
  */
-export const createGithubRepo = async (repoName: string, description: string = '') => {
+export const createGithubRepo = async (repoName: string) => {
   const octokit = getOctokit();
   const user = reqCtx.get<User>('user');
   const result = await octokit.rest.repos.createForAuthenticatedUser({
@@ -68,38 +25,48 @@ export const createGithubRepo = async (repoName: string, description: string = '
   return result.data;
 };
 
+
+/**
+ * 获取当前账号下的仓库列表
+ * @param {string} [keyword] 仓库名关键字（可选）
+ * @returns {Promise<any[]>}
+ */
+export const queryList = async (): Promise<RepoOrDirOrFile[]> => {
+  const octokit = getOctokit();
+  const sysConf = reqCtx.get<SysConf>('sysConf');
+  let { data: listForUser } = await octokit.rest.repos.listForUser({
+    username: sysConf.git_uname,
+  });
+  // 过滤当前用户的仓库
+  listForUser = filterPrefix({ list: listForUser });
+  // 组装vo数据
+  const result = listForUser.map((repo: any) => ({
+    type: 'repo',
+    name: repo.name,
+    url: `https://file.dingshaohua.com/${repo.name}`,
+  }));
+  return result;
+};
+
+
 export const queryOne = async (repo: string, path: string): Promise<RepoOrDirOrFile[]> => {
-  const user = reqCtx.get('user');
-  const api = await getGhubApi();
-  const url = `/repos/${OWNER}/${repo}/contents/${path}`;
-  try {
-    const res = await api.get(url, {
-      headers: {
-        Accept: 'application/vnd.github+json',
-        'User-Agent': 'Node.js',
-      },
-    });
+  const octokit = getOctokit();
+  const sysConf = reqCtx.get<SysConf>('sysConf');
+  const { data } = await octokit.rest.repos.getContent({
+    owner: sysConf.git_uname,
+    repo,
+    path
+    // ref: 'main',   // 可选，指定分支/标签/提交
+  });
 
-    // res.data.forEach((item: any) => {
-    //   delete item._links;
-    //   item.down_url = toProxyUrl(item.download_url);
-    // });
-
-    const finalRepoName = `${user.username}-${repo}`;
-    const result = res.data.map((item: any) => ({
-      type: item.type,
-      name: item.name,
-      size: item.size,
-      url: `https://file.dingshaohua.com/${repo}/${item.path}`,
-    }));
-    return result;
-  } catch (e: any) {
-    if (e.response && e.response.status === 404 && e.response.data?.message === 'This repository is empty.') {
-      // 返回空数组或自定义提示
-      return [];
-    }
-    throw e;
-  }
+  // 处理下数据
+  const result = data.map((item: any) => ({
+    type: item.type,
+    name: item.name,
+    size: item.size,
+    url: `https://file.dingshaohua.com/${repo}/${item.path}`,
+  }));
+  return result;
 };
 
 export const uploadFile = async (file: File, pathTemp: string, repo: string) => {
