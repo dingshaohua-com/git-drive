@@ -16,7 +16,7 @@
     }
     addLoading = true;
     try {
-      await api.repo.add({repoName, description:repoDesc}),
+      await api.repo.create({rname: repoName}),
       visible = false;
     } catch (e) {
       console.error(e);

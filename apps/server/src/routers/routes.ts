@@ -126,9 +126,19 @@ const models: TsoaRoute.Models = {
         "type": {"ref":"JsonResultType_Repo_","validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Prisma.repoCreateInput": {
+    "Prisma.IntFieldUpdateOperationsInput": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"rname":{"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"enum","enums":[null]}]},"uid":{"dataType":"double","required":true},"id":{"dataType":"double","required":true}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"divide":{"dataType":"double"},"multiply":{"dataType":"double"},"decrement":{"dataType":"double"},"increment":{"dataType":"double"},"set":{"dataType":"double"}},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Prisma.NullableStringFieldUpdateOperationsInput": {
+        "dataType": "refAlias",
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"set":{"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"enum","enums":[null]}]}},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Prisma.repoUpdateInput": {
+        "dataType": "refAlias",
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"rname":{"dataType":"union","subSchemas":[{"ref":"Prisma.NullableStringFieldUpdateOperationsInput"},{"dataType":"string"},{"dataType":"enum","enums":[null]}]},"uid":{"dataType":"union","subSchemas":[{"ref":"Prisma.IntFieldUpdateOperationsInput"},{"dataType":"double"}]},"id":{"dataType":"union","subSchemas":[{"ref":"Prisma.IntFieldUpdateOperationsInput"},{"dataType":"double"}]}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ApiResponse_any_": {
@@ -139,11 +149,6 @@ const models: TsoaRoute.Models = {
     "Prisma.StringFieldUpdateOperationsInput": {
         "dataType": "refAlias",
         "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"set":{"dataType":"string"}},"validators":{}},
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Prisma.NullableStringFieldUpdateOperationsInput": {
-        "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"set":{"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"enum","enums":[null]}]}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Prisma.userUpdateInput": {
@@ -489,7 +494,7 @@ export function RegisterRoutes(router: KoaRouter,opts?:{multer?:ReturnType<typeo
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsRepoController_create: Record<string, TsoaRoute.ParameterSchema> = {
-                repo: {"in":"body","name":"repo","required":true,"ref":"Prisma.repoCreateInput"},
+                repo: {"in":"body","name":"repo","required":true,"ref":"Prisma.repoUpdateInput"},
         };
         router.post('/api/repo',
             ...(fetchMiddlewares<Middleware>(RepoController)),

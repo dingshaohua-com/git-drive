@@ -37,3 +37,27 @@ export const getGhubApi = async () => {
   }
   return ghubApiInstance;
 };
+
+export const appendPrefix = (repoName: string) => {
+  const user = reqCtx.get('user');
+  return user.username + '-' + repoName;
+};
+
+export const removePrefix = () => {
+  const user = reqCtx.get('user');
+  return user.username + '-';
+};
+
+export const filterPrefix = (params: { attr?: string; val?: string; list }) => {
+  const user = reqCtx.get('user');
+  const preDefault = user.username + '-';
+  const { attr='name', val = preDefault, list } = params;
+  return list.filter((item: any) => item[attr].startsWith(val));
+};
+
+// // 拼接过滤条件
+// const searchWord = user.username + '-' + keyword;
+// if (searchWord) {
+//   const lower = searchWord.toLowerCase();
+//   result.data = result.data.filter((repo: any) => repo.name.toLowerCase().includes(lower));
+// }

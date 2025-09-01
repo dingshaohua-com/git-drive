@@ -23,7 +23,7 @@ export class RepoController extends Controller {
    * @summary 创建
    */
   @Post()
-  public async create(@Body() repo: Prisma.repoCreateInput): ApiResponse<Repo> {
+  public async create(@Body() repo: Prisma.repoUpdateInput): ApiResponse<Repo> {
     const results = await createGithubRepo(repo.rname);
     return JsonResult.success(results);
   }

@@ -1,56 +1,9 @@
 import * as fs from 'fs';
 import { File } from 'tsoa';
 import { Buffer } from 'buffer';
-import { Octokit } from '@octokit/rest';
 import reqCtx from '@/middleware/req-ctx';
 import type { RepoOrDirOrFile } from '../types/repo.dto';
-import { BRANCH, filterPrefix, getGhubApi, OWNER } from '@/utils/ghub-helper';
-import { sys_conf as SysConf, user as User } from '@prisma/client';
-
-// 初始化 Octokit
-let octokitTemp;
-const getOctokit = () => {
-  const sysConf = reqCtx.get<SysConf>('sysConf');
-  const token = sysConf.git_token;
-  const octokit = new Octokit({
-    auth: token,
-    userAgent: 'Koa-GitHub-API-Client',
-    // previews: ['jean-grey', 'symmetra'], // 启用预览功能
-    // timeZone: 'Europe/Amsterdam', // 设置时区
-    baseUrl: 'https://api.github.com',
-
-    log: {
-      debug: () => {},
-      info: () => {},
-      warn: console.warn,
-      error: console.error,
-    },
-    request: {
-      agent: undefined,
-      fetch: undefined,
-      timeout: 0,
-    },
-  });
-  if (!octokitTemp) octokitTemp = octokit;
-  return octokitTemp;
-};
-
-/**
- * 获取当前账号下的仓库列表，支持名称模糊搜索
- * @param {string} [keyword] 仓库名关键字（可选）
- * @returns {Promise<any[]>}
- */
-export const queryList = async (keyword: string = ''): Promise<RepoOrDirOrFile[]> => {
-  const octokit = getOctokit();
-  const user = reqCtx.get<User>('user');
-  const sysConf = reqCtx.get<SysConf>('sysConf');
-  const result = await octokit.rest.repos.listForUser({
-    username: sysConf.git_uname,
-  });
-  // 拼接过滤条件
- result.data = filterPrefix({list:result.data});
-  return result.data;
-};
+import { BRANCH, getGhubApi, OWNER } from '@/utils/ghub-helper';
 
 /**
  * 创建 GitHub 仓库
@@ -60,12 +13,39 @@ export const queryList = async (keyword: string = ''): Promise<RepoOrDirOrFile[]
  * @returns {Promise<any>}
  */
 export const createGithubRepo = async (repoName: string, description: string = '') => {
-  const octokit = getOctokit();
-  const user = reqCtx.get<User>('user');
-  const result = await octokit.rest.repos.createForAuthenticatedUser({
-    name: user.username + '/' + repoName,
+  const user = reqCtx.get('user');
+  const api = await getGhubApi();
+  const res = await api.post(`/user/repos`, {
+    name: user.username + '-' + repoName,
+    description,
+    private: false,
   });
-  return result.data;
+  return res.data;
+};
+
+/**
+ * 获取当前账号下的仓库列表，支持名称模糊搜索
+ * @param {string} [keyword] 仓库名关键字（可选）
+ * @returns {Promise<any[]>}
+ */
+export const queryList = async (keyword: string = ''): Promise<RepoOrDirOrFile[]> => {
+  const user = reqCtx.get('user');
+  const searchWord = user.username + '-' + keyword;
+  const api = await getGhubApi();
+  // 获取所有仓库（默认最多100个，如需更多可做分页）
+  const res = await api.get('/user/repos?per_page=100');
+  let repos = res.data;
+  if (searchWord) {
+    const lower = searchWord.toLowerCase();
+    console.log('仓库列表', lower);
+    repos = repos.filter((repo: any) => repo.name.toLowerCase().includes(lower));
+  }
+  const result = repos.map((repo: any) => ({
+    type: 'repo',
+    name: repo.name,
+    url: `https://file.dingshaohua.com/${repo.name}`,
+  }));
+  return result;
 };
 
 export const queryOne = async (repo: string, path: string): Promise<RepoOrDirOrFile[]> => {
