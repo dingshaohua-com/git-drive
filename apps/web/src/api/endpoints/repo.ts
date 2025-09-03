@@ -8,10 +8,11 @@
  * OpenAPI spec version: 1.0.0
  */
 import type {
+  GetInfoRequest,
   JsonResultTypeAny,
   JsonResultTypeRepo,
   JsonResultTypeRepoOrDirOrFileArray,
-  PrismaRepoCreateInput,
+  PrismaRepoUpdateInput,
   RepoAddFolderBody,
   RepoGetParams,
   RepoRemoveParams,
@@ -26,6 +27,16 @@ import { customAxiosInstance } from '../api.base';
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
+  export const getInfo = (
+    getInfoRequest: GetInfoRequest,
+ options?: SecondParameter<typeof customAxiosInstance>,) => {
+      return customAxiosInstance<JsonResultTypeAny>(
+      {url: `/api/repo/info`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: getInfoRequest
+    },
+      options);
+    }
   /**
  * 获取所有仓库信息
  * @summary 列表
@@ -43,12 +54,12 @@ export const getList = (
  * @summary 创建
  */
 export const create = (
-    prismaRepoCreateInput: PrismaRepoCreateInput,
+    prismaRepoUpdateInput: PrismaRepoUpdateInput,
  options?: SecondParameter<typeof customAxiosInstance>,) => {
       return customAxiosInstance<JsonResultTypeRepo>(
       {url: `/api/repo`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
-      data: prismaRepoCreateInput
+      data: prismaRepoUpdateInput
     },
       options);
     }
@@ -124,7 +135,8 @@ export const rename = (
     },
       options);
     }
-  export type GetListResult = NonNullable<Awaited<ReturnType<typeof getList>>>
+  export type GetInfoResult = NonNullable<Awaited<ReturnType<typeof getInfo>>>
+export type GetListResult = NonNullable<Awaited<ReturnType<typeof getList>>>
 export type CreateResult = NonNullable<Awaited<ReturnType<typeof create>>>
 export type RemoveResult = NonNullable<Awaited<ReturnType<typeof remove>>>
 export type GetResult = NonNullable<Awaited<ReturnType<typeof get>>>

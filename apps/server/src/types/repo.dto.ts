@@ -4,3 +4,9 @@ export type RepoOrDirOrFile = {
   size?: number;
   url: string;
 };
+
+
+export type GetInfoRequest = {
+  path: string;
+};
+

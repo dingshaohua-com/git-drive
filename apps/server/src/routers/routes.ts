@@ -81,24 +81,14 @@ const models: TsoaRoute.Models = {
         "type": {"ref":"JsonResultType_any_","validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "RepoOrDirOrFile": {
+    "ApiResponse_any_": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"url":{"dataType":"string","required":true},"size":{"dataType":"double"},"name":{"dataType":"string","required":true},"type":{"dataType":"string","required":true}},"validators":{}},
+        "type": {"ref":"JsonResultType_any_","validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "JsonResultType_RepoOrDirOrFile-Array_": {
-        "dataType": "refObject",
-        "properties": {
-            "code": {"dataType":"double","required":true},
-            "msg": {"dataType":"string","required":true},
-            "data": {"dataType":"array","array":{"dataType":"refAlias","ref":"RepoOrDirOrFile"},"required":true},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ApiResponse_RepoOrDirOrFile-Array_": {
+    "GetInfoRequest": {
         "dataType": "refAlias",
-        "type": {"ref":"JsonResultType_RepoOrDirOrFile-Array_","validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"path":{"dataType":"string","required":true}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "DefaultSelection_Prisma._36_repoPayload_": {
@@ -139,11 +129,6 @@ const models: TsoaRoute.Models = {
     "Prisma.repoUpdateInput": {
         "dataType": "refAlias",
         "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"rname":{"dataType":"union","subSchemas":[{"ref":"Prisma.NullableStringFieldUpdateOperationsInput"},{"dataType":"string"},{"dataType":"enum","enums":[null]}]},"uid":{"dataType":"union","subSchemas":[{"ref":"Prisma.IntFieldUpdateOperationsInput"},{"dataType":"double"}]},"id":{"dataType":"union","subSchemas":[{"ref":"Prisma.IntFieldUpdateOperationsInput"},{"dataType":"double"}]}},"validators":{}},
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ApiResponse_any_": {
-        "dataType": "refAlias",
-        "type": {"ref":"JsonResultType_any_","validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Prisma.StringFieldUpdateOperationsInput": {
@@ -464,17 +449,18 @@ export function RegisterRoutes(router: KoaRouter,opts?:{multer?:ReturnType<typeo
             });
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        const argsRepoController_getList: Record<string, TsoaRoute.ParameterSchema> = {
+        const argsRepoController_getInfo: Record<string, TsoaRoute.ParameterSchema> = {
+                params: {"in":"body","name":"params","required":true,"ref":"GetInfoRequest"},
         };
-        router.get('/api/repo/list',
+        router.post('/api/repo/info',
             ...(fetchMiddlewares<Middleware>(RepoController)),
-            ...(fetchMiddlewares<Middleware>(RepoController.prototype.getList)),
+            ...(fetchMiddlewares<Middleware>(RepoController.prototype.getInfo)),
 
-            async function RepoController_getList(context: Context, next: Next) {
+            async function RepoController_getInfo(context: Context, next: Next) {
 
             let validatedArgs: any[] = [];
             try {
-              validatedArgs = templateService.getValidatedArgs({ args: argsRepoController_getList, context, next });
+              validatedArgs = templateService.getValidatedArgs({ args: argsRepoController_getInfo, context, next });
             } catch (err) {
               const error = err as any;
               error.message ||= JSON.stringify({ fields: error.fields });
@@ -485,7 +471,7 @@ export function RegisterRoutes(router: KoaRouter,opts?:{multer?:ReturnType<typeo
             const controller = new RepoController();
 
             return templateService.apiHandler({
-              methodName: 'getList',
+              methodName: 'getInfo',
               controller,
               context,
               validatedArgs,
@@ -547,37 +533,6 @@ export function RegisterRoutes(router: KoaRouter,opts?:{multer?:ReturnType<typeo
 
             return templateService.apiHandler({
               methodName: 'remove',
-              controller,
-              context,
-              validatedArgs,
-              successStatus: undefined,
-            });
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        const argsRepoController_get: Record<string, TsoaRoute.ParameterSchema> = {
-                repo: {"in":"query","name":"repo","required":true,"dataType":"string"},
-                path: {"in":"query","name":"path","required":true,"dataType":"string"},
-        };
-        router.get('/api/repo',
-            ...(fetchMiddlewares<Middleware>(RepoController)),
-            ...(fetchMiddlewares<Middleware>(RepoController.prototype.get)),
-
-            async function RepoController_get(context: Context, next: Next) {
-
-            let validatedArgs: any[] = [];
-            try {
-              validatedArgs = templateService.getValidatedArgs({ args: argsRepoController_get, context, next });
-            } catch (err) {
-              const error = err as any;
-              error.message ||= JSON.stringify({ fields: error.fields });
-              context.status = error.status;
-              context.throw(context.status, error.message, error);
-            }
-
-            const controller = new RepoController();
-
-            return templateService.apiHandler({
-              methodName: 'get',
               controller,
               context,
               validatedArgs,

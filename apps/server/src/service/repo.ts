@@ -3,11 +3,57 @@ import { File } from 'tsoa';
 import { Buffer } from 'buffer';
 import { Octokit } from '@octokit/rest';
 import reqCtx from '@/middleware/req-ctx';
+import { getOctokit } from '@/utils/ghub-helper';
 import type { RepoOrDirOrFile } from '../types/repo.dto';
-import { BRANCH, filterPrefix, getGhubApi, OWNER } from '@/utils/ghub-helper';
 import { sys_conf as SysConf, user as User } from '@prisma/client';
-import { getOctokit } from "@/utils/ghub-helper"
+import { BRANCH, filterPrefix, getGhubApi, OWNER } from '@/utils/ghub-helper';
 
+export const getInfo = async (path: string) => {
+  const octokit = getOctokit();
+  const sysConf = reqCtx.get<SysConf>('sysConf');
+
+  let result;
+  if (path === '/') {
+    let { data: listForUser } = await octokit.rest.repos.listForUser({
+      username: sysConf.git_uname,
+    });
+    // 过滤当前用户的仓库
+    listForUser = filterPrefix({ list: listForUser });
+    // 组装vo数据
+    result = listForUser.map((repo: any) => ({
+      type: 'repo',
+      name: repo.name,
+      url: `${sysConf.git_url}/${repo.name}`,
+    }));
+  } else {
+    try {
+      const urlGroup = path.split('/');
+      const [_, repo] = urlGroup;
+      path = urlGroup.slice(2).join('/');
+
+      const { data } = await octokit.rest.repos.getContent({
+        owner: sysConf.git_uname,
+        repo,
+        path,
+        // ref: 'main',   // 可选，指定分支/标签/提交
+      });
+
+      // 处理下数据
+      result = data.map((item: any) => ({
+        type: item.type,
+        name: item.name,
+        size: item.size,
+        url: `${sysConf.git_url}/${repo}/${item.path}`,
+      }));
+    } catch (e) {
+      if (e.response && e.response.status === 404 && e.response.data?.message === 'This repository is empty.') {
+        result = [];
+      }
+    }
+  }
+
+  return result;
+};
 
 /**
  * 创建 GitHub 仓库
@@ -26,48 +72,6 @@ export const createGithubRepo = async (repoName: string) => {
 };
 
 
-/**
- * 获取当前账号下的仓库列表
- * @param {string} [keyword] 仓库名关键字（可选）
- * @returns {Promise<any[]>}
- */
-export const queryList = async (): Promise<RepoOrDirOrFile[]> => {
-  const octokit = getOctokit();
-  const sysConf = reqCtx.get<SysConf>('sysConf');
-  let { data: listForUser } = await octokit.rest.repos.listForUser({
-    username: sysConf.git_uname,
-  });
-  // 过滤当前用户的仓库
-  listForUser = filterPrefix({ list: listForUser });
-  // 组装vo数据
-  const result = listForUser.map((repo: any) => ({
-    type: 'repo',
-    name: repo.name,
-    url: `https://file.dingshaohua.com/${repo.name}`,
-  }));
-  return result;
-};
-
-
-export const queryOne = async (repo: string, path: string): Promise<RepoOrDirOrFile[]> => {
-  const octokit = getOctokit();
-  const sysConf = reqCtx.get<SysConf>('sysConf');
-  const { data } = await octokit.rest.repos.getContent({
-    owner: sysConf.git_uname,
-    repo,
-    path
-    // ref: 'main',   // 可选，指定分支/标签/提交
-  });
-
-  // 处理下数据
-  const result = data.map((item: any) => ({
-    type: item.type,
-    name: item.name,
-    size: item.size,
-    url: `https://file.dingshaohua.com/${repo}/${item.path}`,
-  }));
-  return result;
-};
 
 export const uploadFile = async (file: File, pathTemp: string, repo: string) => {
   const { filename: newFilename, path: filepath } = file;

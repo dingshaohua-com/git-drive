@@ -1,6 +1,6 @@
 
 import toast from './toast';
-import { parseCustomUrl } from '$/routes/all/helper';
+// import { parseCustomUrl } from '$/routes/all/helper';
 
 export interface UploadOptions {
   path?: string;
@@ -20,23 +20,23 @@ export const uploadFile = async (file: File, options: UploadOptions = {}) => {
   console.log(onProgress);
   
 
-  try {
-    const { repo, path: filePath } = parseCustomUrl(path);
-    // const formData = new FormData();
-    // formData.append('file', file);
-    // formData.append('repo', repo);
-    // formData.append('path', filePath);
+  // try {
+  //   const { repo, path: filePath } = parseCustomUrl(path);
+  //   // const formData = new FormData();
+  //   // formData.append('file', file);
+  //   // formData.append('repo', repo);
+  //   // formData.append('path', filePath);
 
-    const res = await api.repo.uploadFile({ repo, path: filePath, file });
-    toast.success('上传成功');
-    onSuccess?.(res);
-    return res;
-  } catch (error) {
-    const errorMsg = error?.message || '上传出错';
-    toast.error(errorMsg);
-    onError?.(errorMsg);
-    throw error;
-  }
+  //   const res = await api.repo.uploadFile({ repo, path: filePath, file });
+  //   toast.success('上传成功');
+  //   onSuccess?.(res);
+  //   return res;
+  // } catch (error) {
+  //   const errorMsg = error?.message || '上传出错';
+  //   toast.error(errorMsg);
+  //   onError?.(errorMsg);
+  //   throw error;
+  // }
 };
 
 /**

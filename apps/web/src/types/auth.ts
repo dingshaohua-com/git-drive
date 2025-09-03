@@ -22,3 +22,4 @@ export type SendCodeRequest = {
   email?: string;
   phone?: string;
 };
+

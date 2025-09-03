@@ -23,6 +23,7 @@ model repo {
 model sys_conf {
   id         Int     @id @default(autoincrement())
   git_uname  String? @db.VarChar(255)
+  git_url    String? @db.VarChar(255)
   git_token  String  @db.VarChar(255)
   vcode      Int?
   publicKey  String? @db.Text

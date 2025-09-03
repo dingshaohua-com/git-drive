@@ -8,9 +8,10 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface PrismaRepoCreateInput {
-  /** @nullable */
-  rname?: string | null;
-  uid: number;
-  id: number;
+export interface PrismaIntFieldUpdateOperationsInput {
+  divide?: number;
+  multiply?: number;
+  decrement?: number;
+  increment?: number;
+  set?: number;
 }

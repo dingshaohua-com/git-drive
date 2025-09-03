@@ -1,20 +1,17 @@
 import { Prisma, repo as Repo } from '@prisma/client';
-import type { RepoOrDirOrFile } from '../types/repo.dto';
+import type { RepoOrDirOrFile, GetInfoRequest } from '../types/repo.dto';
 import JsonResult, { ApiResponse } from '../utils/json-result';
-import { addFolder, queryOne, uploadFile, rename } from '@/service/repo';
-import { createGithubRepo, queryList, remove } from '@/service/repo';
+import { addFolder, uploadFile, rename, getInfo } from '@/service/repo';
+import { createGithubRepo, remove } from '@/service/repo';
 import { Controller, Get, Post, Body, Route, Tags, Delete, Query, BodyProp, FormField, UploadedFile, File } from 'tsoa';
 
 @Route('api/repo')
 @Tags('repo')
 export class RepoController extends Controller {
-  /**
-   * 获取所有仓库信息
-   * @summary 列表
-   */
-  @Get('list')
-  public async getList(): ApiResponse<RepoOrDirOrFile[]> {
-    const result = await queryList();
+
+  @Post('info')
+  public async getInfo(@Body() params: GetInfoRequest): ApiResponse<any> {
+    const result = await getInfo(params.path);
     return JsonResult.success(result);
   }
 
@@ -35,16 +32,6 @@ export class RepoController extends Controller {
   @Delete()
   public async remove(@Query() repo: string, @Query() path: string): ApiResponse<Repo> {
     const result = await remove(repo as string, path as string);
-    return JsonResult.success(result);
-  }
-
-  /**
-   * 获取仓库信息
-   * @summary 查询
-   */
-  @Get()
-  public async get(@Query() repo: string, @Query() path: string): ApiResponse<RepoOrDirOrFile[]> {
-    const result = await queryOne(repo, path);
     return JsonResult.success(result);
   }
 
