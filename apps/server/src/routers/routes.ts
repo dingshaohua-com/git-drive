@@ -541,10 +541,10 @@ export function RegisterRoutes(router: KoaRouter,opts?:{multer?:ReturnType<typeo
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsRepoController_addFolder: Record<string, TsoaRoute.ParameterSchema> = {
-                repo: {"in":"body-prop","name":"repo","required":true,"dataType":"string"},
                 path: {"in":"body-prop","name":"path","required":true,"dataType":"string"},
+                name: {"in":"body-prop","name":"name","required":true,"dataType":"string"},
         };
-        router.post('/api/repo/add-folder',
+        router.post('/api/repo/folder',
             ...(fetchMiddlewares<Middleware>(RepoController)),
             ...(fetchMiddlewares<Middleware>(RepoController.prototype.addFolder)),
 
@@ -564,6 +564,37 @@ export function RegisterRoutes(router: KoaRouter,opts?:{multer?:ReturnType<typeo
 
             return templateService.apiHandler({
               methodName: 'addFolder',
+              controller,
+              context,
+              validatedArgs,
+              successStatus: undefined,
+            });
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsRepoController_updateFolder: Record<string, TsoaRoute.ParameterSchema> = {
+                path: {"in":"body-prop","name":"path","required":true,"dataType":"string"},
+                name: {"in":"body-prop","name":"name","required":true,"dataType":"string"},
+        };
+        router.put('/api/repo/folder',
+            ...(fetchMiddlewares<Middleware>(RepoController)),
+            ...(fetchMiddlewares<Middleware>(RepoController.prototype.updateFolder)),
+
+            async function RepoController_updateFolder(context: Context, next: Next) {
+
+            let validatedArgs: any[] = [];
+            try {
+              validatedArgs = templateService.getValidatedArgs({ args: argsRepoController_updateFolder, context, next });
+            } catch (err) {
+              const error = err as any;
+              error.message ||= JSON.stringify({ fields: error.fields });
+              context.status = error.status;
+              context.throw(context.status, error.message, error);
+            }
+
+            const controller = new RepoController();
+
+            return templateService.apiHandler({
+              methodName: 'updateFolder',
               controller,
               context,
               validatedArgs,

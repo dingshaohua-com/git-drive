@@ -9,6 +9,6 @@
  */
 
 export type RepoAddFolderBody = {
-  repo: string;
   path: string;
+  name: string;
 };

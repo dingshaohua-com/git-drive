@@ -1,19 +1,25 @@
 import * as fs from 'fs';
 import { File } from 'tsoa';
 import { Buffer } from 'buffer';
-import { Octokit } from '@octokit/rest';
 import reqCtx from '@/middleware/req-ctx';
 import { getOctokit } from '@/utils/ghub-helper';
 import type { RepoOrDirOrFile } from '../types/repo.dto';
 import { sys_conf as SysConf, user as User } from '@prisma/client';
-import { BRANCH, filterPrefix, getGhubApi, OWNER } from '@/utils/ghub-helper';
+import { BRANCH, filterPrefix, getGhubApi } from '@/utils/ghub-helper';
+import { parse‌Url } from '@/utils/ghub-helper';
 
-export const getInfo = async (path: string) => {
+
+/**
+ * 根据路径获取当前下的资源列表
+ * @param {string} path 路径
+ * @returns {Promise<any>}
+ */
+export const getInfo = async (pathParam: string) => {
   const octokit = getOctokit();
   const sysConf = reqCtx.get<SysConf>('sysConf');
 
   let result;
-  if (path === '/') {
+  if (pathParam === '/') {
     let { data: listForUser } = await octokit.rest.repos.listForUser({
       username: sysConf.git_uname,
     });
@@ -27,15 +33,11 @@ export const getInfo = async (path: string) => {
     }));
   } else {
     try {
-      const urlGroup = path.split('/');
-      const [_, repo] = urlGroup;
-      path = urlGroup.slice(2).join('/');
-
+      const { path, repo } = parse‌Url(pathParam);
       const { data } = await octokit.rest.repos.getContent({
-        owner: sysConf.git_uname,
+        owner:sysConf.git_uname,
         repo,
         path,
-        // ref: 'main',   // 可选，指定分支/标签/提交
       });
 
       // 处理下数据
@@ -74,6 +76,7 @@ export const createGithubRepo = async (repoName: string) => {
 
 
 export const uploadFile = async (file: File, pathTemp: string, repo: string) => {
+  const sysConf = reqCtx.get<SysConf>('sysConf');
   const { filename: newFilename, path: filepath } = file;
   const api = await getGhubApi();
   const path = pathTemp ? pathTemp + '/' : pathTemp;
@@ -81,7 +84,7 @@ export const uploadFile = async (file: File, pathTemp: string, repo: string) => 
   // 读取文件并转 base64
   const fileBuffer = fs.readFileSync(filepath);
   const base64Content = fileBuffer.toString('base64');
-  const url = `/repos/${OWNER}/${repo}/contents/${path}${newFilename}`;
+  const url = `/repos/${sysConf.git_uname}/${repo}/contents/${path}${newFilename}`;
   console.info('上传的地址', pathTemp, path, url);
   const params = {
     message: `upload file ${newFilename}`,
@@ -103,29 +106,48 @@ export const uploadFile = async (file: File, pathTemp: string, repo: string) => 
  * @param {string} path 文件夹路径：/仓库名/xxx/xxx
  * @returns {Promise<any>}
  */
-export const addFolder = async (path, repo) => {
-  const api = await getGhubApi();
+export const addFolder = async (pathParam: string, name: string) => {
+  const sysConf = reqCtx.get<SysConf>('sysConf');
+  const { path, repo } = parse‌Url(pathParam);
+  const octokit = getOctokit();
+  const filePath = `${path}/${name}/.gitkeep`.replace(/^\/+/, ''); // 移除开头的 /;
+  console.log('创建文件夹', filePath);
+  
+  const base64Content = Buffer.from('', 'utf-8').toString('base64');
 
-  // 确保路径以 .gitkeep 结尾
-  const filePath = path + '/.gitkeep';
-  const content = ''; // 空内容
-  const base64Content = Buffer.from(content, 'utf-8').toString('base64');
-
-  const url = `/repos/${OWNER}/${repo}/contents/${filePath}`;
-  const params = {
+  const { data } = await octokit.rest.repos.createOrUpdateFileContents({
+    owner:sysConf.git_uname,
+    repo,
+    path: filePath,
     message: `Create folder: ${path}`,
     content: base64Content,
-    branch: BRANCH,
-  };
+  });
 
-  try {
-    const res = await api.put(url, params);
-    return { success: true, path: filePath, data: res.data };
-  } catch (error: any) {
-    console.error('GitHub create folder error:', error.response?.data || error.message);
-    throw new Error(`创建文件夹失败: ${error.response?.data?.message || error.message}`);
-  }
-};
+  return { success: true, path: filePath, data };
+}
+// export const addFolder = async (path, repo) => {
+//   const api = await getGhubApi();
+
+//   // 确保路径以 .gitkeep 结尾
+//   const filePath = path + '/.gitkeep';
+//   const content = ''; // 空内容
+//   const base64Content = Buffer.from(content, 'utf-8').toString('base64');
+
+//   const url = `/repos/${sysConf.git_uname}/${repo}/contents/${filePath}`;
+//   const params = {
+//     message: `Create folder: ${path}`,
+//     content: base64Content,
+//     branch: BRANCH,
+//   };
+
+//   try {
+//     const res = await api.put(url, params);
+//     return { success: true, path: filePath, data: res.data };
+//   } catch (error: any) {
+//     console.error('GitHub create folder error:', error.response?.data || error.message);
+//     throw new Error(`创建文件夹失败: ${error.response?.data?.message || error.message}`);
+//   }
+// };
 
 /**
  * 删除 GitHub 仓库中的文件或文件夹
@@ -135,11 +157,12 @@ export const addFolder = async (path, repo) => {
  */
 export const remove = async (repoName: string, filePath: string) => {
   const api = await getGhubApi();
+   const sysConf = reqCtx.get<SysConf>('sysConf');
 
   // 如果 filePath 为空或者是根路径，则删除整个仓库
   if (!filePath || filePath === '/' || filePath === '') {
     try {
-      const url = `/repos/${OWNER}/${repoName}`;
+      const url = `/repos/${sysConf.git_uname}/${repoName}`;
       await api.delete(url);
       return { message: `Successfully deleted repository ${repoName}` };
     } catch (error: any) {
@@ -150,7 +173,7 @@ export const remove = async (repoName: string, filePath: string) => {
 
   try {
     // 先获取路径信息
-    const getUrl = `/repos/${OWNER}/${repoName}/contents/${filePath}`;
+    const getUrl = `/repos/${sysConf.git_uname}/${repoName}/contents/${filePath}`;
     const getRes = await api.get(getUrl);
 
     // 如果是文件夹（数组），递归删除所有文件
@@ -162,7 +185,7 @@ export const remove = async (repoName: string, filePath: string) => {
             sha: item.sha,
             branch: BRANCH,
           };
-          return api.delete(`/repos/${OWNER}/${repoName}/contents/${item.path}`, { data: params });
+          return api.delete(`/repos/${sysConf.git_uname}/${repoName}/contents/${item.path}`, { data: params });
         } else if (item.type === 'dir') {
           // 递归删除子文件夹
           return remove(repoName, item.path);
@@ -198,9 +221,10 @@ export const remove = async (repoName: string, filePath: string) => {
  */
 export const deleteRepo = async (repoName: string) => {
   const api = await getGhubApi();
+   const sysConf = reqCtx.get<SysConf>('sysConf');
 
   try {
-    const url = `/repos/${OWNER}/${repoName}`;
+    const url = `/repos/${sysConf.git_uname}/${repoName}`;
     const res = await api.delete(url);
     return { message: `Successfully deleted repository ${repoName}` };
   } catch (error: any) {
@@ -214,6 +238,7 @@ export const deleteRepo = async (repoName: string) => {
  */
 export const rename = async (path: string, repo: string, newName: string, oldName: string) => {
   const api = await getGhubApi();
+   const sysConf = reqCtx.get<SysConf>('sysConf');
 
   // 构建完整的原路径和新路径
   const oldPath = path ? `${path}/${oldName}` : oldName;
@@ -221,7 +246,7 @@ export const rename = async (path: string, repo: string, newName: string, oldNam
 
   try {
     // 获取原文件信息
-    const getRes = await api.get(`/repos/${OWNER}/${repo}/contents/${oldPath}`);
+    const getRes = await api.get(`/repos/${sysConf.git_uname}/${repo}/contents/${oldPath}`);
 
     if (Array.isArray(getRes.data)) {
       // 文件夹重命名：递归复制所有内容到新路径，然后删除旧文件夹
@@ -231,15 +256,15 @@ export const rename = async (path: string, repo: string, newName: string, oldNam
 
           if (item.type === 'file') {
             // 获取文件内容并复制到新位置
-            const fileRes = await api.get(`/repos/${OWNER}/${repo}/contents/${item.path}`);
-            await api.put(`/repos/${OWNER}/${repo}/contents/${itemNewPath}`, {
+            const fileRes = await api.get(`/repos/${sysConf.git_uname}/${repo}/contents/${item.path}`);
+            await api.put(`/repos/${sysConf.git_uname}/${repo}/contents/${itemNewPath}`, {
               message: `重命名文件 ${item.path} 为 ${itemNewPath}`,
               content: fileRes.data.content,
               branch: BRANCH,
             });
           } else if (item.type === 'dir') {
             // 递归处理子文件夹
-            const subRes = await api.get(`/repos/${OWNER}/${repo}/contents/${item.path}`);
+            const subRes = await api.get(`/repos/${sysConf.git_uname}/${repo}/contents/${item.path}`);
             await copyFolderContents(subRes.data);
           }
         }
@@ -250,13 +275,13 @@ export const rename = async (path: string, repo: string, newName: string, oldNam
       return { message: `文件夹 ${oldName} 重命名为 ${newName}` };
     } else {
       // 文件重命名：创建新文件，删除旧文件
-      await api.put(`/repos/${OWNER}/${repo}/contents/${newPath}`, {
+      await api.put(`/repos/${sysConf.git_uname}/${repo}/contents/${newPath}`, {
         message: `重命名 ${oldName} 为 ${newName}`,
         content: getRes.data.content,
         branch: BRANCH,
       });
 
-      await api.delete(`/repos/${OWNER}/${repo}/contents/${oldPath}`, {
+      await api.delete(`/repos/${sysConf.git_uname}/${repo}/contents/${oldPath}`, {
         data: {
           message: `删除旧文件 ${oldName}`,
           sha: getRes.data.sha,

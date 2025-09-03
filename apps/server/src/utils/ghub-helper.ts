@@ -91,3 +91,12 @@ export const getOctokit = () => {
   if (!octokitTemp) octokitTemp = octokit;
   return octokitTemp;
 };
+
+
+// 解析url：比如 /one/20250727_232814179.png  => {repo: 'one', path: '/20250727_232814179.png'}
+export const parse‌Url = (path: string) => {
+  const urlGroup = path.split('/');
+  const [_, repo] = urlGroup;
+  path = urlGroup.slice(2).join('/');
+  return { repo, path };
+}

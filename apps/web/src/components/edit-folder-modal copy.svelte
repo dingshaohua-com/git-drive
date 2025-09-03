@@ -1,10 +1,9 @@
 <script lang="ts">
-  import { parseCustomUrl } from '$/routes/all/helper';
   import toast from '$/utils/toast';
   import { Button, fileupload, Modal } from 'flowbite-svelte';
   import { checkNormalStr } from '$/utils/form-check';
 
-  let { visible = $bindable(), currentPath = '', onSuccess, data } = $props();
+  let { visible = $bindable(), currentPath = '', onSuccess } = $props();
   let addError = $state('');
   let addLoading = $state(false);
   let folderName = $state('');

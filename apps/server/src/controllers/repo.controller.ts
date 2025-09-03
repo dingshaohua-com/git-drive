@@ -3,7 +3,7 @@ import type { RepoOrDirOrFile, GetInfoRequest } from '../types/repo.dto';
 import JsonResult, { ApiResponse } from '../utils/json-result';
 import { addFolder, uploadFile, rename, getInfo } from '@/service/repo';
 import { createGithubRepo, remove } from '@/service/repo';
-import { Controller, Get, Post, Body, Route, Tags, Delete, Query, BodyProp, FormField, UploadedFile, File } from 'tsoa';
+import { Controller, Get, Post, Body, Route, Tags, Delete, Query, BodyProp, FormField, UploadedFile, File, Put } from 'tsoa';
 
 @Route('api/repo')
 @Tags('repo')
@@ -39,9 +39,19 @@ export class RepoController extends Controller {
    * 创建文件夹到 repo 中
    * @summary 创建文件夹
    */
-  @Post('/add-folder')
-  public async addFolder(@BodyProp() repo: string, @BodyProp() path: string): ApiResponse<any> {
-    const result = await addFolder(path, repo);
+  @Post('/folder')
+  public async addFolder(@BodyProp() path: string, @BodyProp() name: string): ApiResponse<any> {
+    const result = await addFolder(path, name);
+    return JsonResult.success(result);
+  }
+
+  /**
+ * 创建文件夹到 repo 中
+ * @summary 创建文件夹
+ */
+  @Put('/folder')
+  public async updateFolder(@BodyProp() path: string, @BodyProp() name: string): ApiResponse<any> {
+    const result = await addFolder(path);
     return JsonResult.success(result);
   }
 
@@ -55,10 +65,10 @@ export class RepoController extends Controller {
     return JsonResult.success(result);
   }
 
-   /**
-   * 上传文件到 repo 中
-   * @summary 上传文件
-   */
+  /**
+  * 上传文件到 repo 中
+  * @summary 上传文件
+  */
   @Post('/rename')
   public async rename(@BodyProp() path: string, @BodyProp() repo: string, @BodyProp() newName: string, @BodyProp() oldName: string): ApiResponse<any> {
     const result = await rename(path, repo, newName, oldName)

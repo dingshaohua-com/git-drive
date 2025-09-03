@@ -1,6 +1,6 @@
 <script lang="ts">
   import EditRepoModal from '$/components/edit-repo-modal.svelte';
-  import CreateFolderModal from '$/components/create-folder-modal.svelte';
+  import CreateFolderModal from '$/components/edit-folder-modal.svelte';
   import Navigation from '$/components/navbar.svelte';
   import ContextMenu from '$/components/context-menu.svelte';
   import { formatFileSize, getFileIcon, parseCustomUrl, buildCustomUrl, getParentCustomUrl, getDisplayRepoName } from './helper';

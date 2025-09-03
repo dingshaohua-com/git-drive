@@ -8,9 +8,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface RepoOrDirOrFile {
-  url: string;
-  size?: number;
+export type RepoUpdateFolderBody = {
+  path: string;
   name: string;
-  type: string;
-}
+};

@@ -5,6 +5,7 @@
   import { getIcon } from '$/utils/file-icon';
   import { triggerFileUpload } from '$/utils/file-uploader';
   import EditRepoModal from '$/components/edit-repo-modal.svelte';
+    import EditFolderModal from '$/components/edit-folder-modal.svelte';
 
   let currentPath = $state('/');
   let currentPathArray = $derived(convertPathToArray(currentPath));
@@ -33,10 +34,14 @@
 
   let showFavoriteModal = $state(false);
   let showEditRepoModal = $state(false);
-  let showCreateFolderModal = $state(false);
+  let showEditFolderModal = $state(false);
   const createRepo = () => {
     showEditRepoModal = true;
   };
+
+  const handleFolderSave = ()=>{
+
+  }
 
   function triggerUpload() {
     // loading = true;
@@ -72,7 +77,7 @@
                     title="新建文件夹"
                     class="cursor-pointer p-1 rounded hover:bg-green-100 transition-colors"
                     onclick={() => {
-                      showCreateFolderModal = true;
+                      showEditFolderModal = true;
                     }}
                   >
                     <i class="ri-folder-add-line text-xl text-green-600"></i>
@@ -112,3 +117,4 @@
 </div>
 <FilePreviewModal bind:visible={showFilePreviewModal} data={previewData} />
 <EditRepoModal bind:visible={showEditRepoModal} onSuccess={() => syncInfo(currentPath)} />
+<EditFolderModal bind:visible={showEditFolderModal} currentPath={currentPath} onSuccess={handleFolderSave} data={null}/>

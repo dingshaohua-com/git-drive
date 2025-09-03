@@ -11,12 +11,11 @@ import type {
   GetInfoRequest,
   JsonResultTypeAny,
   JsonResultTypeRepo,
-  JsonResultTypeRepoOrDirOrFileArray,
   PrismaRepoUpdateInput,
   RepoAddFolderBody,
-  RepoGetParams,
   RepoRemoveParams,
   RepoRenameBody,
+  RepoUpdateFolderBody,
   RepoUploadFileBody
 } from '../model';
 
@@ -34,18 +33,6 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
       {url: `/api/repo/info`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: getInfoRequest
-    },
-      options);
-    }
-  /**
- * 获取所有仓库信息
- * @summary 列表
- */
-export const getList = (
-    
- options?: SecondParameter<typeof customAxiosInstance>,) => {
-      return customAxiosInstance<JsonResultTypeRepoOrDirOrFileArray>(
-      {url: `/api/repo/list`, method: 'GET'
     },
       options);
     }
@@ -77,19 +64,6 @@ export const remove = (
       options);
     }
   /**
- * 获取仓库信息
- * @summary 查询
- */
-export const get = (
-    params: RepoGetParams,
- options?: SecondParameter<typeof customAxiosInstance>,) => {
-      return customAxiosInstance<JsonResultTypeRepoOrDirOrFileArray>(
-      {url: `/api/repo`, method: 'GET',
-        params
-    },
-      options);
-    }
-  /**
  * 创建文件夹到 repo 中
  * @summary 创建文件夹
  */
@@ -97,9 +71,23 @@ export const addFolder = (
     repoAddFolderBody: RepoAddFolderBody,
  options?: SecondParameter<typeof customAxiosInstance>,) => {
       return customAxiosInstance<JsonResultTypeAny>(
-      {url: `/api/repo/add-folder`, method: 'POST',
+      {url: `/api/repo/folder`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: repoAddFolderBody
+    },
+      options);
+    }
+  /**
+ * 创建文件夹到 repo 中
+ * @summary 创建文件夹
+ */
+export const updateFolder = (
+    repoUpdateFolderBody: RepoUpdateFolderBody,
+ options?: SecondParameter<typeof customAxiosInstance>,) => {
+      return customAxiosInstance<JsonResultTypeAny>(
+      {url: `/api/repo/folder`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: repoUpdateFolderBody
     },
       options);
     }
@@ -136,10 +124,9 @@ export const rename = (
       options);
     }
   export type GetInfoResult = NonNullable<Awaited<ReturnType<typeof getInfo>>>
-export type GetListResult = NonNullable<Awaited<ReturnType<typeof getList>>>
 export type CreateResult = NonNullable<Awaited<ReturnType<typeof create>>>
 export type RemoveResult = NonNullable<Awaited<ReturnType<typeof remove>>>
-export type GetResult = NonNullable<Awaited<ReturnType<typeof get>>>
 export type AddFolderResult = NonNullable<Awaited<ReturnType<typeof addFolder>>>
+export type UpdateFolderResult = NonNullable<Awaited<ReturnType<typeof updateFolder>>>
 export type UploadFileResult = NonNullable<Awaited<ReturnType<typeof uploadFile>>>
 export type RenameResult = NonNullable<Awaited<ReturnType<typeof rename>>>
